@@ -3,3 +3,4 @@ dist/
 public/
 components.d.ts
 CHANGELOG.md
+.github/workflows/upstream-sync.yml
