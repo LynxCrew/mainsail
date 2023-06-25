@@ -7,7 +7,8 @@
             :style="webcamStyle"
             autoplay
             muted
-            playsinline />
+            playsinline
+            @playing="updateAspectRatio" />
         <v-row v-if="status !== 'connected'">
             <v-col class="_webcam_webrtc_output text-center d-flex flex-column justify-center align-center">
                 <v-progress-circular v-if="status === 'connecting'" indeterminate color="primary" class="mb-3" />
@@ -156,6 +157,10 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
 
     mounted() {
         this.startStream()
+    }
+
+    updateAspectRatio() {
+        this.aspectRatio = this.stream.videoWidth / this.stream.videoHeight
     }
 
     beforeDestroy() {
