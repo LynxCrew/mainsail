@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="d-flex justify-center">
         <video
             v-show="status === 'connected'"
             ref="stream"
@@ -51,6 +51,8 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
         const output = {
             transform: 'none',
             aspectRatio: 16 / 9,
+            maxHeight: window.innerHeight - 155 + 'px',
+            maxWidth: 'auto',
         }
 
         let transforms = ''
@@ -58,7 +60,10 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
         if ('flipX' in this.camSettings && this.camSettings.flipY) transforms += ' scaleY(-1)'
         if (transforms.trimStart().length) output.transform = transforms.trimStart()
 
-        if (this.aspectRatio) output.aspectRatio = this.aspectRatio
+        if (this.aspectRatio) {
+            output.aspectRatio = this.aspectRatio
+            output.maxWidth = (window.innerHeight - 155) * this.aspectRatio + 'px'
+        }
 
         return output
     }
@@ -178,6 +183,7 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
 <style scoped>
 .webcamStream {
     width: 100%;
+    background: lightgray;
 }
 
 ._webcam_webrtc_output {
