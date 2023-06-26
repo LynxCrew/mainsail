@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-center">
+    <div style="position: relative" class="d-flex justify-center">
         <video
             v-show="status === 'connected'"
             ref="stream"
@@ -181,6 +181,7 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
 </script>
 
 <style scoped>
+
 .webcamStream {
     width: 100%;
     background: lightgray;
