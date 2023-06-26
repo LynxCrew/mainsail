@@ -44,11 +44,11 @@
                                 small
                                 class="px-2 minwidth-0"
                                 :disabled="printerIsPrinting"
-                                :color="homedAxes.includes('xyz') ? 'primary' : 'warning'"
+                                :color="homedAxes.includes('xyz') ? 'primary' : 'highlight'"
                                 :loading="loadings.includes('homeAll')"
                                 :title="$t('Heightmap.TitleHomeAll')"
                                 @click="homePrinter">
-                                <v-icon :color="homedAxes.includes('xyz') ? 'primary' : 'warning'" small>
+                                <v-icon :color="homedAxes.includes('xyz') ? 'primary' : 'highlight'" small>
                                     {{ mdiHome }}
                                 </v-icon>
                             </v-btn>

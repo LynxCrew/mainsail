@@ -143,6 +143,10 @@ export default class App extends Mixins(BaseMixin) {
         return this.$vuetify?.theme?.currentTheme?.warning?.toString() ?? '#ff8300'
     }
 
+    get highlightColor(): string {
+        return this.$vuetify?.theme?.currentTheme?.highlight?.toString() ?? '#ff8300'
+    }
+
     get primaryTextColor(): string {
         let splits = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(this.primaryColor)
         if (splits) {
@@ -162,6 +166,7 @@ export default class App extends Mixins(BaseMixin) {
             '--v-btn-text-primary': this.primaryTextColor,
             '--color-primary': this.primaryColor,
             '--color-warning': this.warningColor,
+            '--color-highlight': this.highlightColor,
             '--panel-toolbar-icon-btn-width': panelToolbarHeight + 'px',
             '--panel-toolbar-text-btn-height': panelToolbarHeight + 'px',
             '--topbar-icon-btn-width': topbarHeight + 'px',

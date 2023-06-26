@@ -13,45 +13,47 @@
                         <rect x="0" y="0" width="62" height="62" style="fill: none" />
                         <g id="home_buttons" transform="matrix(0.804902,0,0,1,0.0430241,0)">
                             <!-- HOME X BUTTON -->
-                            <a :class="xHomeClass" @click="doHomeX">
-                                <g
-                                    id="home_x"
-                                    transform="matrix(0.707107,-0.707107,0.707107,0.707107,-1.41799,4.05689)">
-                                    <g
-                                        id="home_button_x"
-                                        class="home_button"
-                                        transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
-                                        <path :d="pathHomeButtonTop" />
-                                    </g>
-                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)">
-                                        <text x="3.789px" y="6.089px">X</text>
-                                    </g>
-                                    <g
-                                        id="Icon"
-                                        class="home_icon"
-                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)">
-                                        <path :d="homeIcon" style="fill-rule: nonzero" />
-                                    </g>
-                                </g>
-                            </a>
-                            <!-- HOME Y BUTTON -->
                             <a :class="yHomeClass" @click="doHomeY">
                                 <g
                                     id="home_y"
-                                    transform="matrix(0.707107,0.707107,-0.707107,0.707107,57.8807,-1.41799)">
+                                    transform="matrix(0.707107,-0.707107,0.707107,0.707107,-1.41799,4.05689)">
                                     <g
                                         id="home_button_y"
                                         class="home_button"
                                         transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
                                         <path :d="pathHomeButtonTop" />
                                     </g>
-                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)">
-                                        <text x="3.789px" y="6.089px">Y</text>
+                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                        <text x="3.789px" y="6.089px" style="font-weight: bold">Y</text>
+                                    </g>
+                                    <g
+                                        id="Icon"
+                                        class="home_icon"
+                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                        stroke-width="0.0">
+                                        <path :d="homeIcon" style="fill-rule: nonzero" />
+                                    </g>
+                                </g>
+                            </a>
+                            <!-- HOME Y BUTTON -->
+                            <a :class="xHomeClass" @click="doHomeX">
+                                <g
+                                    id="home_x"
+                                    transform="matrix(0.707107,0.707107,-0.707107,0.707107,57.8807,-1.41799)">
+                                    <g
+                                        id="home_button_x"
+                                        class="home_button"
+                                        transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
+                                        <path :d="pathHomeButtonTop" />
+                                    </g>
+                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                        <text x="3.789px" y="6.089px" style="font-weight: bold">X</text>
                                     </g>
                                     <g
                                         id="icon"
                                         class="home_icon"
-                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)">
+                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                        stroke-width="0.0">
                                         <path :d="homeIcon" style="fill-rule: nonzero" />
                                     </g>
                                 </g>
@@ -67,13 +69,14 @@
                                         transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
                                         <path :d="pathHomeButtonBottom" />
                                     </g>
-                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)">
-                                        <text x="3.93px" y="6.089px">Z</text>
+                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                        <text x="3.93px" y="6.089px" style="font-weight: bold">Z</text>
                                     </g>
                                     <g
                                         id="icon1"
                                         class="home_icon"
-                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)">
+                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                        stroke-width="0.0">
                                         <path :d="homeIcon" style="fill-rule: nonzero" />
                                     </g>
                                 </g>
@@ -89,13 +92,14 @@
                                         transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
                                         <path :d="pathHomeButtonBottom" />
                                     </g>
-                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)">
-                                        <text x="2.3px" y="6.089px">XY</text>
+                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                        <text x="2.3px" y="6.089px" style="font-weight: bold">XY</text>
                                     </g>
                                     <g
                                         id="icon2"
                                         class="home_icon"
-                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)">
+                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                        stroke-width="0.0">
                                         <path :d="homeIcon" style="fill-rule: nonzero" />
                                     </g>
                                 </g>
@@ -108,13 +112,14 @@
                                     <g
                                         id="home_button_all"
                                         class="home_button"
-                                        transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
+                                        transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)" stroke-width="0.0">
                                         <path :d="pathHomeButtonBottom" />
                                     </g>
                                     <g
                                         id="icon3"
                                         class="home_icon"
-                                        transform="matrix(0.29377,0,0,0.29377,0.346087,1.64241)">
+                                        transform="matrix(0.29377,0,0,0.29377,0.346087,1.64241)"
+                                        stroke-width="0.0">
                                         <path :d="homeIcon" style="fill-rule: nonzero" />
                                     </g>
                                 </g>
@@ -124,7 +129,7 @@
                                 <g id="home_all_center" class="home_button">
                                     <circle id="home_button_all_center" cx="31" cy="31" r="5" />
                                 </g>
-                                <g id="icon4" class="home-icon" transform="scale(0.3) translate(91.25,91.25)">
+                                <g id="icon4" class="home-icon" transform="scale(0.3) translate(91.25,91.25)" stroke-width="0.0">
                                     <!-- transform="matrix(0.29377,0,0,0.29377,0.346087,1.64241)"-->
                                     <path :d="homeIcon" style="fill-rule: nonzero" />
                                 </g>
@@ -244,7 +249,17 @@
                                         {{ stepsZ.length >= 0 ? stepsZ[0] : '--' }}
                                     </text>
                                 </g>
+                                <g transform="matrix(1,0,0,1,0.483899,21.80)">
+                                    <text x="30.7px" y="19.056px" text-anchor="middle">
+                                        {{ stepsZ.length >= 0 ? stepsZ[0] : '--' }}
+                                    </text>
+                                </g>
                                 <g transform="matrix(1,0,0,1,0.220227,-1.95729)">
+                                    <text x="30.7px" y="19.056px" text-anchor="middle">
+                                        {{ stepsZ.length >= 1 ? stepsZ[1] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,27.83712)">
                                     <text x="30.7px" y="19.056px" text-anchor="middle">
                                         {{ stepsZ.length >= 1 ? stepsZ[1] : '--' }}
                                     </text>
@@ -254,7 +269,17 @@
                                         {{ stepsZ.length >= 2 ? stepsZ[2] : '--' }}
                                     </text>
                                 </g>
+                                <g transform="matrix(1,0,0,1,0.220227,33.87424)">
+                                    <text x="30.7px" y="19.056px" text-anchor="middle">
+                                        {{ stepsZ.length >= 2 ? stepsZ[2] : '--' }}
+                                    </text>
+                                </g>
                                 <g transform="matrix(1,0,0,1,0.220227,-14.0315)">
+                                    <text x="30.7px" y="19.056px" text-anchor="middle">
+                                        {{ stepsZ.length >= 3 ? stepsZ[3] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,39.91133)">
                                     <text x="30.7px" y="19.056px" text-anchor="middle">
                                         {{ stepsZ.length >= 3 ? stepsZ[3] : '--' }}
                                     </text>
@@ -479,18 +504,81 @@
                                         {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
                                     </text>
                                 </g>
+                                <g transform="matrix(1,0,0,1,4.28,61.1)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
+                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.483899,21.80)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,57.883899,0.3083)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 90deg">
+                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
+                                    </text>
+                                </g>
+
                                 <g transform="matrix(1,0,0,1,0.220227,-1.95729)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
                                     </text>
                                 </g>
+                                <g transform="matrix(1,0,0,1,-1.75712,61.1)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
+                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,27.83712)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,63.921019,0.3083)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 90deg">
+                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
+                                    </text>
+                                </g>
+
                                 <g transform="matrix(1,0,0,1,0.220227,-7.99441)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
                                     </text>
                                 </g>
+                                <g transform="matrix(1,0,0,1,-7.79424,61.1)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
+                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,33.87424)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,69.958139,0.3083)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 90deg">
+                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
+                                    </text>
+                                </g>
+
                                 <g transform="matrix(1,0,0,1,0.220227,-14.0315)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,-13.83133,61.1)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
+                                        {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,39.91133)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,75.995229,0.3083)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 90deg">
                                         {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
                                     </text>
                                 </g>
@@ -523,7 +611,7 @@
                     </a>
                     <a v-else id="stepper_off" :class="motorsOffClass" @click="doSend('M84')">
                         <circle id="stepper_off_button" cx="70.92" cy="31" r="5" />
-                        <g id="stepper_off_icon" transform="scale(0.3) translate(224,91)">
+                        <g id="stepper_off_icon" transform="scale(0.3) translate(224,91)" stroke-width="0.0">
                             <path :d="engineOffIcon" />
                         </g>
                     </a>
@@ -693,7 +781,7 @@ export default class CircleControl extends Mixins(BaseMixin, ControlMixin) {
 
     get motorsOffClass() {
         let classes = []
-        classes.push(this.homedAxes !== '' ? 'primary' : 'warning')
+        classes.push(this.homedAxes !== '' ? 'primary' : 'highlight')
         if (this.isPrinting) classes.push('disabled')
 
         return classes
@@ -772,7 +860,7 @@ svg g#home_buttons text {
 
 svg g.home_button,
 svg a#home_all_center {
-    fill: var(--color-warning);
+    fill: var(--color-highlight);
     transition: opacity 250ms;
 }
 
@@ -797,7 +885,7 @@ svg a#stepper_off {
 
 svg a#tilt_adjust.warning,
 svg a#stepper_off.warning {
-    fill: var(--color-warning);
+    fill: var(--color-highlight);
 }
 
 svg a#tilt_adjust.primary,

@@ -184,7 +184,6 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
 
 .webcamStream {
     width: 100%;
-    background: lightgray;
 }
 
 ._webcam_webrtc_output {
