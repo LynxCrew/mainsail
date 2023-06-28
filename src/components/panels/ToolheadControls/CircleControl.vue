@@ -497,20 +497,10 @@
                                     </a>
                                 </g>
                             </g>
-                            <!-- XY STEP BUTTON TEXT -->
-                            <g id="stepsXY" :class="stepTextClass">
-                                <g transform="matrix(1,0,0,1,0.483899,4.07983)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
-                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
-                                    </text>
-                                </g>
+                            <!-- X STEP BUTTON TEXT -->
+                            <g id="stepsX" :class="xStepClass">
                                 <g transform="matrix(1,0,0,1,4.28,61.1)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
-                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
-                                    </text>
-                                </g>
-                                <g transform="matrix(1,0,0,1,0.483899,21.80)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
                                     </text>
                                 </g>
@@ -520,18 +510,8 @@
                                     </text>
                                 </g>
 
-                                <g transform="matrix(1,0,0,1,0.220227,-1.95729)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
-                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
-                                    </text>
-                                </g>
                                 <g transform="matrix(1,0,0,1,-1.75712,61.1)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
-                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
-                                    </text>
-                                </g>
-                                <g transform="matrix(1,0,0,1,0.220227,27.83712)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
                                     </text>
                                 </g>
@@ -541,18 +521,8 @@
                                     </text>
                                 </g>
 
-                                <g transform="matrix(1,0,0,1,0.220227,-7.99441)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
-                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
-                                    </text>
-                                </g>
                                 <g transform="matrix(1,0,0,1,-7.79424,61.1)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
-                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
-                                    </text>
-                                </g>
-                                <g transform="matrix(1,0,0,1,0.220227,33.87424)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
                                     </text>
                                 </g>
@@ -562,23 +532,60 @@
                                     </text>
                                 </g>
 
-                                <g transform="matrix(1,0,0,1,0.220227,-14.0315)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle">
-                                        {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
-                                    </text>
-                                </g>
                                 <g transform="matrix(1,0,0,1,-13.83133,61.1)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 270deg">
                                         {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
                                     </text>
                                 </g>
-                                <g transform="matrix(1,0,0,1,0.220227,39.91133)">
+                                <g transform="matrix(1,0,0,1,75.995229,0.3083)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 90deg">
+                                        {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
+                                    </text>
+                                </g>
+                            </g>
+
+                            <!-- Y STEP BUTTON TEXT -->
+                            <g id="stepsY" :class="yStepClass">
+                                <g transform="matrix(1,0,0,1,0.483899,4.07983)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.483899,21.80)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 0 ? stepsXY[0] : '--' }}
+                                    </text>
+                                </g>
+
+                                <g transform="matrix(1,0,0,1,0.220227,-1.95729)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,27.83712)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 1 ? stepsXY[1] : '--' }}
+                                    </text>
+                                </g>
+
+                                <g transform="matrix(1,0,0,1,0.220227,-7.99441)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
+                                    </text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0.220227,33.87424)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
+                                        {{ stepsXY.length >= 2 ? stepsXY[2] : '--' }}
+                                    </text>
+                                </g>
+
+                                <g transform="matrix(1,0,0,1,0.220227,-14.0315)">
                                     <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
                                     </text>
                                 </g>
-                                <g transform="matrix(1,0,0,1,75.995229,0.3083)">
-                                    <text x="30.5px" y="19.056px" text-anchor="middle" style="rotate: 90deg">
+                                <g transform="matrix(1,0,0,1,0.220227,39.91133)">
+                                    <text x="30.5px" y="19.056px" text-anchor="middle">
                                         {{ stepsXY.length >= 3 ? stepsXY[3] : '--' }}
                                     </text>
                                 </g>
@@ -706,12 +713,6 @@ export default class CircleControl extends Mixins(BaseMixin, ControlMixin) {
         return ['printing'].includes(this.printer_state)
     }
 
-    get stepTextClass() {
-        if (!this.homedAxes.includes('xy') || this.isPrinting) return ['disabled']
-
-        return []
-    }
-
     get xStepClass() {
         if (!this.homedAxes.includes('x') || this.isPrinting) return ['disabled']
 
@@ -837,13 +838,27 @@ svg .disabled a.step {
     pointer-events: none;
 }
 
-svg g#stepsZ,
-svg g#stepsXY {
+svg g#stepsX,
+svg g#stepsY,
+svg g#stepsZ {
     pointer-events: none;
     user-select: none;
     font-family: 'Roboto-Regular', 'Roboto', sans-serif;
     font-size: 3px;
     fill: white;
+}
+svg g#stepsX text,
+svg g#stepsY text,
+svg g#stepsZ text {
+    opacity: 1.0;
+    transition: opacity 750ms ease-out;
+}
+
+svg g#stepsX.disabled text,
+svg g#stepsY.disabled text,
+svg g#stepsZ.disabled text {
+    opacity: 0.0;
+    fill: rgba(255, 255, 255, 0.3);
 }
 
 svg a#tilt_adjust text {
@@ -861,7 +876,7 @@ svg g#home_buttons text {
 svg g.home_button,
 svg a#home_all_center {
     fill: var(--color-highlight);
-    transition: opacity 250ms;
+    transition: opacity 250ms, fill 750ms ease-out;
 }
 
 svg a.disabled {
@@ -871,11 +886,6 @@ svg a.disabled {
 svg a.disabled .home_button path,
 svg a.disabled circle {
     fill: rgb(92, 92, 92);
-}
-
-svg g#stepsXY.disabled text,
-svg g#stepsZ.disabled text {
-    fill: rgba(255, 255, 255, 0.3);
 }
 
 svg a#tilt_adjust,
