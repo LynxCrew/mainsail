@@ -32,6 +32,8 @@
                                         v-model="param.value"
                                         :label="param.name"
                                         :items="param.hints?.options"
+                                        :placeholder="param.default ?? ''"
+                                        :persistent-placeholder="true"
                                         hide-details
                                         outlined
                                         clearable
@@ -84,7 +86,7 @@
                     <v-icon>{{ mdiMenuDown }}</v-icon>
                 </v-btn>
                 <v-dialog v-model="paramsDialog">
-                    <panel :title="macro.name" :card-class="`macro-params-mobile-${macro.name}`" :margin-bottom="0">
+                    <panel :title="macro.name" :card-class="`macro-params-mobile-${macro.name}`" :margin-bottom="false">
                         <v-form ref="form">
                             <template #buttons>
                                 <v-btn icon tile @click="paramsDialog = false">
@@ -95,10 +97,12 @@
                                 <v-row>
                                     <v-col v-for="(param, key) in paramArray" :key="'param_mobile_' + key" :cols="6">
                                         <v-select
-                                            v-if="value.type == 'select'"
+                                            v-if="param.type == 'select'"
                                             v-model="param.value"
                                             :label="param.name"
                                             :items="param.hints?.options"
+                                            :placeholder="param.default ?? ''"
+                                            :persistent-placeholder="true"
                                             hide-details
                                             outlined
                                             clearable
@@ -178,26 +182,25 @@ export default class MacroButton extends Mixins(BaseMixin) {
         // Sort first with parameters that need values, then alphabetically.
         let params = this.params
         let paramList: string[] = Object.keys(params)
-        paramList.sort()
 
         function makeRules(param: PrinterStateMacroParam): any[] {
             let check_range = function (value: string, option: string, compare: Function): boolean {
                 let test = (param.hints ?? {})[option]
                 if (test == null || !value) return true
 
-                if (param.type == 'int') {
-                    return compare(value - test)
-                }
+                if (param.type == 'int') return compare(parseInt(value) - test)
+
                 if (param.type == 'float') return compare(parseFloat(value) - test)
+
                 return compare(value.length - test)
             }
             return [
                 (v: string) => !v || param.type != 'float' || !Number.isNaN(parseFloat(v)),
                 (v: string) => !v || param.type != 'int' || Number.isInteger(parseFloat(v)),
-                (v: string) => check_range(v, 'max', (d) => d <= 0),
-                (v: string) => check_range(v, 'min', (d) => d >= 0),
-                (v: string) => check_range(v, 'below', (d) => d < 0),
-                (v: string) => check_range(v, 'above', (d) => d > 0),
+                (v: string) => check_range(v, 'max', (d: number) => d <= 0),
+                (v: string) => check_range(v, 'min', (d: number) => d >= 0),
+                (v: string) => check_range(v, 'below', (d: number) => d < 0),
+                (v: string) => check_range(v, 'above', (d: number) => d > 0),
                 (v: string) => !!v || !!param?.default || !param?.hints?.required,
             ]
         }
@@ -206,9 +209,9 @@ export default class MacroButton extends Mixins(BaseMixin) {
         return paramList.map((name) => ({
             ...{
                 name: name,
-                fieldType: ['int', 'float'].includes(params[name].type) ? 'number' : null,
+                fieldType: ['int', 'float'].includes(params[name].type ?? '') ? 'number' : null,
                 rules: hasHints ? makeRules(params[name]) : undefined,
-                value: ['select', 'checkbox'].includes(params[name].type ?? '')
+                value: 'checkbox' == (params[name].type ?? '')
                     ? String(params[name].default ?? '')
                     : null,
             },
@@ -236,7 +239,7 @@ export default class MacroButton extends Mixins(BaseMixin) {
     declare readonly disabled: boolean
 
     @Ref('form')
-    declare readonly form
+    declare readonly form: { validate: () => any }
 
     get klipperMacro() {
         return this.$store.getters['printer/getMacro'](this.macro.name)
@@ -261,7 +264,7 @@ export default class MacroButton extends Mixins(BaseMixin) {
     }
 
     get paramsOverlayWidth() {
-        return 200 * this.paramCols
+        return 225 * this.paramCols
     }
 
     @Watch('klipperMacro', { deep: true, immediate: true })
@@ -288,7 +291,7 @@ export default class MacroButton extends Mixins(BaseMixin) {
             if (
                 param.value !== null &&
                 param.value !== '' &&
-                (!['select', 'checkbox'].includes(param.type) || param.value !== param.default)
+                (!['select', 'checkbox'].includes(param.type ?? '') || param.value !== param.default)
             ) {
                 let tmp: string = param.name
                 tmp += this.isGcodeStyle ? param.value : `=${param.value}`

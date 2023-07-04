@@ -178,6 +178,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
                 const name = prop.replace('gcode_macro ', '')
                 const variables = state[prop] ?? {}
                 const hints = variables?.front_end_hints
+                if (hints && 'hidden' in hints ? hints.hidden : name.startsWith('_')) return
 
                 const propLower = prop.toLowerCase()
                 const propSettings = settings[propLower]
