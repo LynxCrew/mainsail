@@ -36,15 +36,17 @@
                                         :persistent-placeholder="true"
                                         hide-details
                                         outlined
-                                        clearable
-                                        :clear-icon="mdiRefresh"
-                                        dense></v-select>
+                                        dense
+                                        :clearable="(param.hints?.clearable ?? true)"
+                                        :clear-icon="mdiRefresh"></v-select>
                                     <v-checkbox
                                         v-else-if="param.type == 'checkbox'"
                                         v-model="param.value"
                                         :label="param.name"
                                         :true-value="(param.hints?.options ?? [])[0] ?? 1"
                                         :false-value="(param.hints?.options ?? [])[1] ?? 0"
+                                        :indeterminate="param.value != param.hints?.options[0]
+                                                        && param.value != param.hints?.options[1]"
                                         hide-details
                                         outlined
                                         dense></v-checkbox>
@@ -60,7 +62,7 @@
                                         hide-spin-buttons
                                         outlined
                                         dense
-                                        clearable
+                                        :clearable="(param.hints?.clearable ?? true)"
                                         :clear-icon="mdiRefresh"
                                         @keyup.enter="sendWithParams"></v-text-field>
                                 </v-col>
@@ -105,15 +107,17 @@
                                             :persistent-placeholder="true"
                                             hide-details
                                             outlined
-                                            clearable
-                                            :clear-icon="mdiRefresh"
-                                            dense></v-select>
+                                            dense
+                                            :clearable="(param.hints?.clearable ?? true)"
+                                            :clear-icon="mdiRefresh"></v-select>
                                         <v-checkbox
                                             v-else-if="param.type == 'checkbox'"
                                             v-model="param.value"
                                             :label="param.name"
                                             :true-value="param.hints?.options[0] ?? 1"
                                             :false-value="param.hints?.options[1] ?? 0"
+                                            :indeterminate="param.value != param.hints?.options[0]
+                                                            && param.value != param.hints?.options[1]"
                                             hide-details
                                             outlined
                                             dense></v-checkbox>
@@ -129,7 +133,7 @@
                                             hide-details
                                             outlined
                                             dense
-                                            clearable
+                                            :clearable="(param.hints?.clearable ?? true)"
                                             :clear-icon="mdiRefresh"
                                             @keyup.enter="sendWithParams"></v-text-field>
                                     </v-col>
