@@ -3,7 +3,7 @@
         <v-btn
             small
             :color="color"
-            :class="paramArray.length ? 'macroWithParameters' : ''"
+            :class="paramArray.length ? 'rounded-r-0' : ''"
             :loading="loadings.includes('macro_' + macro.name)"
             :disabled="disabled || paramsRequired"
             @click="doSendMacro(macro.name)">
@@ -16,7 +16,7 @@
                         :disabled="disabled"
                         :color="color"
                         v-bind="attrs"
-                        class="minwidth-0 px-1 btnMacroMenu"
+                        class="minwidth-0 px-1 rounded-l-0"
                         small
                         v-on="on">
                         <v-icon>{{ mdiMenuDown }}</v-icon>
@@ -25,8 +25,8 @@
                 <v-card :max-width="paramsOverlayWidth">
                     <v-card-text class="py-2">
                         <v-form ref="form">
-                            <v-row class="my-2">
-                                <v-col v-for="(param, key) in paramArray" :key="'param_' + key" :cols="paramCssCols">
+                            <div class="my-5 d-grid pop-down" :style="{'grid-template-columns': 'repeat(' + paramCols + ', 1fr)'}">
+                                <div v-for="(param, key) in paramArray" :key="'param_' + key">
                                     <v-select
                                         v-if="param.type == 'select'"
                                         v-model="param.value"
@@ -37,6 +37,7 @@
                                         hide-details
                                         outlined
                                         dense
+                                        style="width:fit-content"
                                         :clearable="(param.hints?.clearable ?? true)"
                                         :clear-icon="mdiRefresh"></v-select>
                                     <v-checkbox
@@ -49,7 +50,8 @@
                                                         && param.value != param.hints?.options[1]"
                                         hide-details
                                         outlined
-                                        dense></v-checkbox>
+                                        dense
+                                        style="width:fit-content"></v-checkbox>
                                     <v-text-field
                                         v-else
                                         v-model="param.value"
@@ -62,11 +64,12 @@
                                         hide-spin-buttons
                                         outlined
                                         dense
+                                        style="width:fit-content"
                                         :clearable="(param.hints?.clearable ?? true)"
                                         :clear-icon="mdiRefresh"
                                         @keyup.enter="sendWithParams"></v-text-field>
-                                </v-col>
-                            </v-row>
+                                </div>
+                            </div>
                             <v-row class="my-2">
                                 <v-col class="py-0">
                                     <v-btn color="primary" class="text-uppercase" block @click="sendWithParams">
@@ -82,7 +85,7 @@
                 <v-btn
                     :disabled="disabled"
                     :color="color"
-                    class="minwidth-0 px-1 btnMacroMenu"
+                    class="minwidth-0 px-1 rounded-l-0"
                     small
                     @click="paramsDialog = true">
                     <v-icon>{{ mdiMenuDown }}</v-icon>
@@ -258,17 +261,11 @@ export default class MacroButton extends Mixins(BaseMixin) {
 
         const cols = Math.ceil(this.paramArray.length / 5)
 
-        if (cols > 4) return 4
-
-        return cols
-    }
-
-    get paramCssCols() {
-        return 12 / this.paramCols
+        return cols > 4 ? 4 : cols
     }
 
     get paramsOverlayWidth() {
-        return 225 * this.paramCols
+        return 750 * this.paramCols
     }
 
     @Watch('klipperMacro', { deep: true, immediate: true })
@@ -311,13 +308,9 @@ export default class MacroButton extends Mixins(BaseMixin) {
 </script>
 
 <style scoped>
-.btnMacroMenu {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.macroWithParameters {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+.pop-down {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 1.5rem;
 }
 </style>
