@@ -180,7 +180,7 @@ export interface PrinterStateBedMesh {
 }
 
 export interface PrinterStateMacroParam {
-    type: 'int' | 'float' | 'string' | 'select' | 'checkbox' | null
+    type: 'int' | 'float' | 'string' | 'select' | 'checkbox' | 'slider' | null
     default: string | null
     hints?: { [key: string]: any }
 }

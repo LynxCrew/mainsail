@@ -52,6 +52,19 @@
                                         outlined
                                         dense
                                         style="width:fit-content"></v-checkbox>
+                                    <v-slider
+                                        v-else-if="param.type == 'slider'"
+                                        v-model="param.value"
+                                        :label="param.name"
+                                        :max="param.hints?.max ?? 1"
+                                        :min="param.hints?.min ?? 0"
+                                        :step="param.hints?.step ?? 0"
+                                        :thumb-label="true"
+                                        show-ticks="always"
+                                        hide-details
+                                        outlined
+                                        dense
+                                        style="width:250px"></v-slider>
                                     <v-text-field
                                         v-else
                                         v-model="param.value"
@@ -218,7 +231,7 @@ export default class MacroButton extends Mixins(BaseMixin) {
                 name: name,
                 fieldType: ['int', 'float'].includes(params[name].type ?? '') ? 'number' : null,
                 rules: hasHints ? makeRules(params[name]) : undefined,
-                value: 'checkbox' == (params[name].type ?? '')
+                value: ('checkbox' == (params[name].type ?? '') || 'slider' == (params[name].type ?? ''))
                     ? String(params[name].default ?? '')
                     : null,
             },
@@ -292,7 +305,7 @@ export default class MacroButton extends Mixins(BaseMixin) {
             if (
                 param.value !== null &&
                 param.value !== '' &&
-                (!['select', 'checkbox'].includes(param.type ?? '') || param.value !== param.default)
+                (!['select', 'checkbox', 'slider'].includes(param.type ?? '') || param.value?.toString()) !== param.default
             ) {
                 let tmp: string = param.name
                 tmp += this.isGcodeStyle ? param.value : `=${param.value}`
