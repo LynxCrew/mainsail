@@ -137,6 +137,19 @@
                                             hide-details
                                             outlined
                                             dense></v-checkbox>
+                                        <v-slider
+                                            v-else-if="param.type == 'slider'"
+                                            v-model="param.value"
+                                            :label="param.name"
+                                            :max="param.hints?.max ?? 1"
+                                            :min="param.hints?.min ?? 0"
+                                            :step="param.hints?.step ?? 0"
+                                            :thumb-label="true"
+                                            show-ticks="always"
+                                            hide-details
+                                            outlined
+                                            dense
+                                            style="width:250px"></v-slider>
                                         <v-text-field
                                             v-else
                                             v-model="param.value"
