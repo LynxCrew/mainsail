@@ -10,7 +10,7 @@
             {{ alias ? alias : macro.name.replace(/_/g, ' ') }}
         </v-btn>
         <template v-if="paramArray.length">
-            <v-menu v-if="!isMobile" offset-y :close-on-content-click="false">
+            <v-menu v-if="!isMobile" v-model="paramsDialog" offset-y :close-on-content-click="false">
                 <template #activator="{ on, attrs }">
                     <v-btn
                         :disabled="disabled"
@@ -18,7 +18,8 @@
                         v-bind="attrs"
                         class="minwidth-0 px-1 rounded-l-0"
                         small
-                        v-on="on">
+                        v-on="on"
+                        @click="paramsDialog = true">
                         <v-icon>{{ mdiMenuDown }}</v-icon>
                     </v-btn>
                 </template>
@@ -85,7 +86,7 @@
                             </div>
                             <v-row class="my-2">
                                 <v-col class="py-0">
-                                    <v-btn color="primary" class="text-uppercase" block @click="sendWithParams">
+                                    <v-btn color="primary" class="text-uppercase" block @click="sendWithParams(); paramsDialog = false">
                                         {{ $t('Panels.MacrosPanel.Send') }}
                                     </v-btn>
                                 </v-col>
@@ -169,7 +170,7 @@
                                 </v-row>
                             </v-card-text>
                             <v-card-actions class="px-4 pb-4">
-                                <v-btn color="primary" class="text-uppercase" block @click="sendWithParams">
+                                <v-btn color="primary" class="text-uppercase" block @click="sendWithParams(); paramsDialog = false">
                                     {{ $t('Panels.MacrosPanel.Send') }}
                                 </v-btn>
                             </v-card-actions>
