@@ -81,7 +81,7 @@
                                         style="width:fit-content"
                                         :clearable="(param.hints?.clearable ?? true)"
                                         :clear-icon="mdiRefresh"
-                                        @keyup.enter="sendWithParams"></v-text-field>
+                                        @keyup.enter="sendWithParams(); paramsDialog = false"></v-text-field>
                                 </div>
                             </div>
                             <v-row class="my-2">
@@ -165,7 +165,7 @@
                                             dense
                                             :clearable="(param.hints?.clearable ?? true)"
                                             :clear-icon="mdiRefresh"
-                                            @keyup.enter="sendWithParams"></v-text-field>
+                                            @keyup.enter="sendWithParams(); paramsDialog = false"></v-text-field>
                                     </v-col>
                                 </v-row>
                             </v-card-text>
