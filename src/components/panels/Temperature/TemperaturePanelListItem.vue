@@ -233,7 +233,9 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     get rpm() {
         if (!('rpm' in this.printerObject)) return null
 
-        return parseInt(this.printerObject.rpm)
+        let rpmNumber = parseInt(this.printerObject.rpm)
+
+        return isNaN(rpmNumber) ? null : rpmNumber
     }
 
     get rpmClass() {

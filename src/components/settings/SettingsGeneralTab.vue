@@ -102,22 +102,11 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col class="pl-6">
-                            <template v-for="db in mainsailKeys">
-                                <v-checkbox
-                                    :key="db.name"
-                                    :label="db.label"
-                                    hide-details
-                                    class="mt-0"
-                                    @change="changeNamespace(db.name)" />
-                            </template>
-                            <v-checkbox
-                                v-if="availableNamespaces.includes('timelapse')"
-                                :label="$t('Settings.GeneralTab.DbTimelapseSettings')"
-                                hide-details
-                                class="mt-0"
-                                @change="changeNamespace('timelapse')" />
-                        </v-col>
+                        <checkbox-list
+                            :options="backupableNamespaces"
+                            select-all
+                            :select-all-label="$t('Settings.GeneralTab.Everything')"
+                            @update:selectedCheckboxes="onSelectBackupCheckboxes"></checkbox-list>
                     </v-row>
                     <v-row>
                         <v-col class="text-center">
@@ -207,16 +196,11 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col class="pl-6">
-                            <template v-for="db in restoreableNamespaces">
-                                <v-checkbox
-                                    :key="db.name"
-                                    :label="db.label"
-                                    hide-details
-                                    class="mt-0"
-                                    @change="changeNamespace(db.name)" />
-                            </template>
-                        </v-col>
+                        <checkbox-list
+                            :options="restoreableNamespaces"
+                            select-all
+                            :select-all-label="$t('Settings.GeneralTab.Everything')"
+                            @update:selectedCheckboxes="onSelectRestoreCheckboxes"></checkbox-list>
                     </v-row>
                     <v-row>
                         <v-col class="text-center">
@@ -239,9 +223,10 @@ import SettingsRow from '@/components/settings/SettingsRow.vue'
 import Panel from '@/components/ui/Panel.vue'
 import Vue from 'vue'
 import { mdiCloseThick, mdiHelpCircle } from '@mdi/js'
+import CheckboxList from '@/components/inputs/CheckboxList.vue'
 
 @Component({
-    components: { Panel, SettingsRow },
+    components: { Panel, SettingsRow, CheckboxList },
 })
 export default class SettingsGeneralTab extends Mixins(BaseMixin) {
     mdiHelpCircle = mdiHelpCircle
@@ -251,13 +236,14 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin) {
     private dialogResetMainsail = false
     private dialogRestoreMainsail = false
 
-    private dbCheckboxes: string[] = []
-
-    private restoreableNamespaces: { name: string; label: string }[] = []
+    private restoreableNamespaces: { value: string; label: string }[] = []
     private restoreObjects: any = {}
+    private restoreCheckboxes: string[] = []
 
+    private backupableNamespaces: { value: string; label: string }[] = []
     private mainsailKeys: { name: string; label: string }[] = []
     private availableNamespaces: string[] = []
+    private backupCheckboxes: string[] = []
 
     declare $refs: {
         uploadBackupFile: HTMLInputElement
@@ -511,40 +497,56 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin) {
         }
     }
 
-    changeNamespace(name: string) {
-        if (this.dbCheckboxes.includes(name)) {
-            const index = this.dbCheckboxes.indexOf(name)
-            if (index >= 0) this.dbCheckboxes.splice(index, 1)
-        } else this.dbCheckboxes.push(name)
+    onSelectBackupCheckboxes(backupCheckboxes: string[]) {
+        this.backupCheckboxes = backupCheckboxes
+    }
+    onSelectRestoreCheckboxes(restoreCheckboxes: string[]) {
+        this.restoreCheckboxes = restoreCheckboxes
     }
 
     async resetMainsail() {
-        await this.refreshNamespaces()
-        if (this.availableNamespaces.includes('mainsail')) await this.refreshMainsailKeys()
-        else this.mainsailKeys = []
+        await this.refreshBackupTargets()
 
-        this.dbCheckboxes = []
+        this.backupCheckboxes = []
         this.dialogResetMainsail = true
     }
 
     async resetMainsailAction() {
         await this.$store.dispatch('socket/addLoading', 'resetMainsail')
-        await this.$store.dispatch('gui/resetMoonrakerDB', this.dbCheckboxes)
+        await this.$store.dispatch('gui/resetMoonrakerDB', this.backupCheckboxes)
     }
 
     async backupDb() {
         await this.$store.dispatch('socket/addLoading', 'backupDbButton')
-        await this.refreshNamespaces()
-        if (this.availableNamespaces.includes('mainsail')) await this.refreshMainsailKeys()
-        else this.mainsailKeys = []
+        await this.refreshBackupTargets()
 
-        this.dbCheckboxes = []
+        this.backupCheckboxes = []
         this.dialogBackupMainsail = true
+    }
+
+    async refreshBackupTargets() {
+        await this.refreshNamespaces()
+        this.backupableNamespaces = []
+        if (this.availableNamespaces.includes('mainsail')) {
+            await this.refreshMainsailKeys()
+            this.backupableNamespaces.push(
+                ...this.mainsailKeys.map((k) => ({
+                    label: k.label,
+                    value: k.name,
+                }))
+            )
+        }
+        if (this.availableNamespaces.includes('timelapse')) {
+            this.backupableNamespaces.push({
+                value: 'timelapase',
+                label: this.$t('Settings.GeneralTab.DbTimelapseSettings').toString(),
+            })
+        }
     }
 
     async backupMainsail() {
         await this.$store.dispatch('socket/addLoading', 'backupMainsail')
-        await this.$store.dispatch('gui/backupMoonrakerDB', this.dbCheckboxes)
+        await this.$store.dispatch('gui/backupMoonrakerDB', this.backupCheckboxes)
         await this.$store.dispatch('socket/removeLoading', 'backupMainsail')
         this.dialogBackupMainsail = false
     }
@@ -567,14 +569,19 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin) {
 
                         Object.keys(this.restoreObjects).forEach((tmp: string) => {
                             const namespace = this.availableKeys.find((namespace) => namespace.name === tmp)
-                            const tmpNamespace = namespace ? namespace : { name: tmp, label: tmp }
+                            const tmpNamespace = namespace
+                                ? {
+                                    value: namespace.name,
+                                    label: namespace.label,
+                                }
+                                : { value: tmp, label: tmp }
 
                             this.restoreableNamespaces.push(tmpNamespace)
                         })
 
                         this.restoreableNamespaces = this.restoreableNamespaces.sort((a, b) => {
-                            if (a.name === 'general') return -1
-                            if (b.name === 'general') return 1
+                            if (a.value === 'general') return -1
+                            if (b.value === 'general') return 1
 
                             const stringA = a.label.toString().toLowerCase()
                             const stringB = b.label.toString().toLowerCase()
@@ -585,7 +592,7 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin) {
                             return 0
                         })
 
-                        this.dbCheckboxes = []
+                        this.backupCheckboxes = []
                         this.dialogRestoreMainsail = true
                     } catch (e) {
                         Vue.$toast.error(this.$t('Settings.GeneralTab.CannotReadJson') + '')
@@ -604,7 +611,7 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin) {
         this.$store.dispatch('socket/addLoading', 'restoreDbAction')
 
         this.$store.dispatch('gui/restoreMoonrakerDB', {
-            dbCheckboxes: this.dbCheckboxes,
+            dbCheckboxes: this.restoreCheckboxes,
             restoreObjects: this.restoreObjects,
         })
     }
