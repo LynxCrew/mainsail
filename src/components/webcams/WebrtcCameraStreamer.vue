@@ -21,6 +21,7 @@
 <script lang="ts">
 import { Component, Mixins, Prop, Ref, Watch } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
+import { GuiWebcamStateWebcam } from '@/store/gui/webcams/types'
 
 @Component
 export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
@@ -30,15 +31,12 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
     private aspectRatio: null | number = null
     private status: string = 'connecting'
 
-    @Prop({ required: true })
-    camSettings: any
-
+    @Prop({ required: true }) readonly camSettings!: GuiWebcamStateWebcam
     @Prop({ default: null }) declare readonly printerUrl: string | null
-
     @Ref() declare stream: HTMLVideoElement
 
     get url() {
-        const baseUrl = this.camSettings.urlStream
+        const baseUrl = this.camSettings.stream_url
         let url = new URL(baseUrl, this.printerUrl === null ? this.hostUrl.toString() : this.printerUrl)
         url.port = this.hostPort.toString()
 
@@ -56,8 +54,8 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
         }
 
         let transforms = ''
-        if ('flipX' in this.camSettings && this.camSettings.flipX) transforms += ' scaleX(-1)'
-        if ('flipX' in this.camSettings && this.camSettings.flipY) transforms += ' scaleY(-1)'
+        if ('flipX' in this.camSettings && this.camSettings.flip_horizontal) transforms += ' scaleX(-1)'
+        if ('flipX' in this.camSettings && this.camSettings.flip_vertical) transforms += ' scaleY(-1)'
         if (transforms.trimStart().length) output.transform = transforms.trimStart()
 
         if (this.aspectRatio) {
