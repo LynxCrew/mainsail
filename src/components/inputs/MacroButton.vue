@@ -3,49 +3,95 @@
         <v-btn
             small
             :color="color"
-            :class="paramArray.length ? 'macroWithParameters' : ''"
+            :class="paramArray.length ? 'rounded-r-0' : ''"
             :loading="loadings.includes('macro_' + macro.name)"
-            :disabled="disabled"
+            :disabled="disabled || paramsRequired"
             @click="doSendMacro(macro.name)">
             {{ alias ? alias : macro.name.replace(/_/g, ' ') }}
         </v-btn>
         <template v-if="paramArray.length">
-            <v-menu v-if="!isMobile" offset-y :close-on-content-click="false">
+            <v-menu v-if="!isMobile" v-model="paramsDialog" offset-y :close-on-content-click="false">
                 <template #activator="{ on, attrs }">
                     <v-btn
                         :disabled="disabled"
                         :color="color"
                         v-bind="attrs"
-                        class="minwidth-0 px-1 btnMacroMenu"
+                        class="minwidth-0 px-1 rounded-l-0"
                         small
-                        v-on="on">
+                        v-on="on"
+                        @click="paramsDialog = true">
                         <v-icon>{{ mdiMenuDown }}</v-icon>
                     </v-btn>
                 </template>
                 <v-card :max-width="paramsOverlayWidth">
                     <v-card-text class="py-2">
-                        <v-row class="my-2">
-                            <v-col v-for="(name, key) in paramArray" :key="'param_' + key" :cols="paramCssCols">
-                                <v-text-field
-                                    v-model="params[name].value"
-                                    :label="name"
-                                    :placeholder="params[name].default"
-                                    :persistent-placeholder="true"
-                                    hide-details
-                                    outlined
-                                    dense
-                                    clearable
-                                    :clear-icon="mdiRefresh"
-                                    @keyup.enter="sendWithParams"></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row class="my-2">
-                            <v-col class="py-0">
-                                <v-btn color="primary" class="text-uppercase" block @click="sendWithParams">
-                                    {{ $t('Panels.MacrosPanel.Send') }}
-                                </v-btn>
-                            </v-col>
-                        </v-row>
+                        <v-form ref="form">
+                            <div class="my-5 d-grid pop-down" :style="{'grid-template-columns': 'repeat(' + paramCols + ', 1fr)'}">
+                                <div v-for="(param, key) in paramArray" :key="'param_' + key">
+                                    <v-select
+                                        v-if="param.type == 'select'"
+                                        v-model="param.value"
+                                        :label="param.name"
+                                        :items="param.hints?.options"
+                                        :placeholder="param.default ?? ''"
+                                        :persistent-placeholder="true"
+                                        hide-details
+                                        outlined
+                                        dense
+                                        style="width:fit-content"
+                                        :clearable="(param.hints?.clearable ?? true)"
+                                        :clear-icon="mdiRefresh"></v-select>
+                                    <v-checkbox
+                                        v-else-if="param.type == 'checkbox'"
+                                        v-model="param.value"
+                                        :label="param.name"
+                                        :true-value="(param.hints?.options ?? [])[0] ?? 1"
+                                        :false-value="(param.hints?.options ?? [])[1] ?? 0"
+                                        :indeterminate="param.value != param.hints?.options[0]
+                                                        && param.value != param.hints?.options[1]"
+                                        hide-details
+                                        outlined
+                                        dense
+                                        style="width:fit-content"></v-checkbox>
+                                    <v-slider
+                                        v-else-if="param.type == 'slider'"
+                                        v-model="param.value"
+                                        :label="param.name"
+                                        :max="param.hints?.max ?? 1"
+                                        :min="param.hints?.min ?? 0"
+                                        :step="param.hints?.step ?? 0"
+                                        :thumb-label="true"
+                                        show-ticks="always"
+                                        hide-details
+                                        outlined
+                                        dense
+                                        style="width:250px"></v-slider>
+                                    <v-text-field
+                                        v-else
+                                        v-model="param.value"
+                                        :label="param.name"
+                                        :rules="param.rules"
+                                        :type="param.fieldType"
+                                        :placeholder="param.default ?? ''"
+                                        :persistent-placeholder="true"
+                                        hide-details
+                                        hide-spin-buttons
+                                        outlined
+                                        dense
+                                        style="width:fit-content"
+                                        :clearable="(param.hints?.clearable ?? true)"
+                                        :clear-icon="mdiRefresh"
+                                        @keyup.enter="sendWithParams(); paramsDialog = false"></v-text-field>
+                                </div>
+                            </div>
+                            <v-row class="my-2">
+                                <v-col class="py-0">
+                                    <v-btn color="primary" class="text-uppercase" block @click="sendWithParams(); paramsDialog = false">
+                                        {{ $t('Panels.MacrosPanel.Send') }}
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-form>
                     </v-card-text>
                 </v-card>
             </v-menu>
@@ -53,40 +99,82 @@
                 <v-btn
                     :disabled="disabled"
                     :color="color"
-                    class="minwidth-0 px-1 btnMacroMenu"
+                    class="minwidth-0 px-1 rounded-l-0"
                     small
                     @click="paramsDialog = true">
                     <v-icon>{{ mdiMenuDown }}</v-icon>
                 </v-btn>
                 <v-dialog v-model="paramsDialog">
-                    <panel :title="macro.name" :card-class="`macro-params-mobile-${macro.name}`" :margin-bottom="0">
-                        <template #buttons>
-                            <v-btn icon tile @click="paramsDialog = false">
-                                <v-icon>{{ mdiCloseThick }}</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-card-text>
-                            <v-row>
-                                <v-col v-for="(name, key) in paramArray" :key="'param_mobile_' + key" :cols="6">
-                                    <v-text-field
-                                        v-model="params[name].value"
-                                        :label="name"
-                                        :placeholder="params[name].default"
-                                        :persistent-placeholder="true"
-                                        hide-details
-                                        outlined
-                                        dense
-                                        clearable
-                                        :clear-icon="mdiRefresh"
-                                        @keyup.enter="sendWithParams"></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                        <v-card-actions class="px-4 pb-4">
-                            <v-btn color="primary" class="text-uppercase" block @click="sendWithParams">
-                                {{ $t('Panels.MacrosPanel.Send') }}
-                            </v-btn>
-                        </v-card-actions>
+                    <panel :title="macro.name" :card-class="`macro-params-mobile-${macro.name}`" :margin-bottom="false">
+                        <v-form ref="form">
+                            <template #buttons>
+                                <v-btn icon tile @click="paramsDialog = false">
+                                    <v-icon>{{ mdiCloseThick }}</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col v-for="(param, key) in paramArray" :key="'param_mobile_' + key" :cols="6">
+                                        <v-select
+                                            v-if="param.type == 'select'"
+                                            v-model="param.value"
+                                            :label="param.name"
+                                            :items="param.hints?.options"
+                                            :placeholder="param.default ?? ''"
+                                            :persistent-placeholder="true"
+                                            hide-details
+                                            outlined
+                                            dense
+                                            :clearable="(param.hints?.clearable ?? true)"
+                                            :clear-icon="mdiRefresh"></v-select>
+                                        <v-checkbox
+                                            v-else-if="param.type == 'checkbox'"
+                                            v-model="param.value"
+                                            :label="param.name"
+                                            :true-value="param.hints?.options[0] ?? 1"
+                                            :false-value="param.hints?.options[1] ?? 0"
+                                            :indeterminate="param.value != param.hints?.options[0]
+                                                            && param.value != param.hints?.options[1]"
+                                            hide-details
+                                            outlined
+                                            dense></v-checkbox>
+                                        <v-slider
+                                            v-else-if="param.type == 'slider'"
+                                            v-model="param.value"
+                                            :label="param.name"
+                                            :max="param.hints?.max ?? 1"
+                                            :min="param.hints?.min ?? 0"
+                                            :step="param.hints?.step ?? 0"
+                                            :thumb-label="true"
+                                            show-ticks="always"
+                                            hide-details
+                                            outlined
+                                            dense
+                                            style="width:250px"></v-slider>
+                                        <v-text-field
+                                            v-else
+                                            v-model="param.value"
+                                            :label="param.name"
+                                            :rules="param.rules"
+                                            :type="param.fieldType"
+                                            :placeholder="param.default ?? ''"
+                                            :persistent-placeholder="true"
+                                            hide-spin-buttons
+                                            hide-details
+                                            outlined
+                                            dense
+                                            :clearable="(param.hints?.clearable ?? true)"
+                                            :clear-icon="mdiRefresh"
+                                            @keyup.enter="sendWithParams(); paramsDialog = false"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                            <v-card-actions class="px-4 pb-4">
+                                <v-btn color="primary" class="text-uppercase" block @click="sendWithParams(); paramsDialog = false">
+                                    {{ $t('Panels.MacrosPanel.Send') }}
+                                </v-btn>
+                            </v-card-actions>
+                        </v-form>
                     </panel>
                 </v-dialog>
             </template>
@@ -96,20 +184,18 @@
 
 <script lang="ts">
 import Component from 'vue-class-component'
-import { Mixins, Prop, Watch } from 'vue-property-decorator'
+import { Mixins, Prop, Ref, Watch } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { GuiMacrosStateMacrogroupMacro } from '@/store/gui/macros/types'
 import { mdiCloseThick, mdiMenuDown, mdiRefresh } from '@mdi/js'
 import Panel from '@/components/ui/Panel.vue'
+import { PrinterStateMacroParam } from '@/store/printer/types'
 
-interface param {
-    type: 'int' | 'double' | 'string' | null
-    default: string | number | null
-    value: string | number | null
-}
-
-interface params {
-    [key: string]: param
+interface NamedUiParam extends PrinterStateMacroParam {
+    value?: string | number | null
+    name: string
+    fieldType?: string | null
+    rules: any[] | undefined
 }
 
 @Component({
@@ -123,9 +209,56 @@ export default class MacroButton extends Mixins(BaseMixin) {
     mdiMenuDown = mdiMenuDown
     mdiRefresh = mdiRefresh
 
-    private paramArray: string[] = []
-    private params: params = {}
+    private params: { [key: string]: PrinterStateMacroParam } = {}
     private paramsDialog = false
+
+    get paramArray(): NamedUiParam[] {
+        // Sort first with parameters that need values, then alphabetically.
+        let params = this.params
+        let paramList: string[] = Object.keys(params)
+
+        function makeRules(param: PrinterStateMacroParam): any[] {
+            let check_range = function (value: string, option: string, compare: Function): boolean {
+                let test = (param.hints ?? {})[option]
+                if (test == null || !value) return true
+
+                if (param.type == 'int') return compare(parseInt(value) - test)
+
+                if (param.type == 'float') return compare(parseFloat(value) - test)
+
+                return compare(value.length - test)
+            }
+            return [
+                (v: string) => !v || param.type != 'float' || !Number.isNaN(parseFloat(v)),
+                (v: string) => !v || param.type != 'int' || Number.isInteger(parseFloat(v)),
+                (v: string) => check_range(v, 'max', (d: number) => d <= 0),
+                (v: string) => check_range(v, 'min', (d: number) => d >= 0),
+                (v: string) => check_range(v, 'below', (d: number) => d < 0),
+                (v: string) => check_range(v, 'above', (d: number) => d > 0),
+                (v: string) => !!v || !!param?.default || !param?.hints?.required,
+            ]
+        }
+
+        let hasHints: boolean = this.klipperMacro.variables?.front_end_hints
+        return paramList.map((name) => ({
+            ...{
+                name: name,
+                fieldType: ['int', 'float'].includes(params[name].type ?? '') ? 'number' : null,
+                rules: hasHints ? makeRules(params[name]) : undefined,
+                value: ('checkbox' == (params[name].type ?? '') || 'slider' == (params[name].type ?? ''))
+                    ? String(params[name].default ?? '')
+                    : null,
+            },
+            ...params[name],
+        }))
+    }
+
+    get paramsRequired(): boolean {
+        for (const [, param] of Object.entries(this.params)) {
+            if (param?.hints?.required && !param?.default) return true
+        }
+        return false
+    }
 
     @Prop({ required: true })
     declare readonly macro: GuiMacrosStateMacrogroupMacro
@@ -138,6 +271,9 @@ export default class MacroButton extends Mixins(BaseMixin) {
 
     @Prop({ default: false })
     declare readonly disabled: boolean
+
+    @Ref('form')
+    declare readonly form: { validate: () => any }
 
     get klipperMacro() {
         return this.$store.getters['printer/getMacro'](this.macro.name)
@@ -152,40 +288,20 @@ export default class MacroButton extends Mixins(BaseMixin) {
 
         const cols = Math.ceil(this.paramArray.length / 5)
 
-        if (cols > 4) return 4
-
-        return cols
-    }
-
-    get paramCssCols() {
-        return 12 / this.paramCols
+        return cols > 4 ? 4 : cols
     }
 
     get paramsOverlayWidth() {
-        return 200 * this.paramCols
+        return 750 * this.paramCols
     }
 
-    @Watch('klipperMacro')
+    @Watch('klipperMacro', { deep: true, immediate: true })
     klipperMacroChange() {
         this.refreshParams()
     }
 
     refreshParams() {
-        this.paramArray.splice(0, this.paramArray.length)
-        this.params = {}
-
-        if (this.klipperMacro?.params !== null) {
-            Object.keys(this.klipperMacro.params).forEach((name: string) => {
-                if (!name.startsWith('_')) {
-                    this.paramArray.push(name)
-                    this.params[name] = {
-                        type: this.klipperMacro.params[name].type,
-                        default: this.klipperMacro.params[name].default,
-                        value: '',
-                    }
-                }
-            })
-        }
+        this.$set(this, 'params', this.klipperMacro?.params ?? {})
     }
 
     doSendMacro(gcode: string) {
@@ -197,11 +313,16 @@ export default class MacroButton extends Mixins(BaseMixin) {
     }
 
     sendWithParams() {
+        if (!this.form.validate()) return
         let params: string[] = []
-        this.paramArray.forEach((paramname: string) => {
-            if (this.params[paramname].value !== null && this.params[paramname].value !== '') {
-                let tmp: string = paramname
-                tmp += this.isGcodeStyle ? this.params[paramname].value : `=${this.params[paramname].value}`
+        this.paramArray.forEach((param) => {
+            if (
+                param.value !== null &&
+                param.value !== '' &&
+                (!['select', 'checkbox', 'slider'].includes(param.type ?? '') || param.value?.toString()) !== param.default
+            ) {
+                let tmp: string = param.name
+                tmp += this.isGcodeStyle ? param.value : `=${param.value}`
 
                 params.push(tmp)
             }
@@ -210,21 +331,13 @@ export default class MacroButton extends Mixins(BaseMixin) {
         const gcode = this.macro.name + ' ' + params.join(' ')
         this.doSendMacro(gcode)
     }
-
-    mounted() {
-        this.refreshParams()
-    }
 }
 </script>
 
 <style scoped>
-.btnMacroMenu {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.macroWithParameters {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+.pop-down {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 1.5rem;
 }
 </style>

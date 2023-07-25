@@ -109,7 +109,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeAll')"
-                                        :color="homedAxes.includes('xyz') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('xyz') ? 'primary' : 'highlight'"
                                         height="30"
                                         tile
                                         class="w-100"
@@ -148,7 +148,7 @@
                                     <v-btn
                                         v-else
                                         :disabled="['printing'].includes(printer_state)"
-                                        :color="homedAxes !== '' ? 'primary' : 'warning'"
+                                        :color="homedAxes !== '' ? 'primary' : 'highlight'"
                                         height="30"
                                         dense
                                         tile
@@ -164,7 +164,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeX')"
-                                        :color="homedAxes.includes('x') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('x') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -176,7 +176,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeY')"
-                                        :color="homedAxes.includes('y') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('y') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -188,7 +188,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeY')"
-                                        :color="homedAxes.includes('xy') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('xy') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -200,7 +200,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeZ')"
-                                        :color="homedAxes.includes('z') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('z') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -221,7 +221,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeAll')"
-                                        :color="homedAxes.includes('xyz') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('xyz') ? 'primary' : 'highlight'"
                                         height="30"
                                         tile
                                         class="w-100"
@@ -260,7 +260,7 @@
                                     <v-btn
                                         v-else
                                         :disabled="['printing'].includes(printer_state)"
-                                        :color="homedAxes !== '' ? 'primary' : 'warning'"
+                                        :color="homedAxes !== '' ? 'primary' : 'highlight'"
                                         height="30"
                                         dense
                                         tile
@@ -276,7 +276,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeX')"
-                                        :color="homedAxes.includes('x') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('x') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -288,7 +288,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeY')"
-                                        :color="homedAxes.includes('y') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('y') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -300,7 +300,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeY')"
-                                        :color="homedAxes.includes('xy') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('xy') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
@@ -312,7 +312,7 @@
                                     <v-btn
                                         :disabled="['printing'].includes(printer_state)"
                                         :loading="loadings.includes('homeZ')"
-                                        :color="homedAxes.includes('z') ? 'primary' : 'warning'"
+                                        :color="homedAxes.includes('z') ? 'primary' : 'highlight'"
                                         tile
                                         height="30"
                                         class="btnMinWidthAuto w-100"
