@@ -157,7 +157,14 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
     }
 
     get localVersion() {
-        const version = this.repo.version ?? '?'
+        let version = this.repo.version ?? '?'
+        while (version.split(".").length < 3) {
+            let str = version.split('-')
+            version = str[0].concat('.0')
+            for (let i = 1; i < str.length; i++) {
+                version = version.concat('-').concat(str[i])
+            }
+        }
 
         if (!semver.valid(version)) return null
 
@@ -165,7 +172,14 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
     }
 
     get remoteVersion() {
-        const version = this.repo.remote_version ?? '?'
+        let version = this.repo.remote_version ?? '?'
+        while (version.split(".").length < 3) {
+            let str = version.split('-')
+            version = str[0].concat('.0')
+            for (let i = 1; i < str.length; i++) {
+                version = version.concat('-').concat(str[i])
+            }
+        }
 
         if (!semver.valid(version)) return null
 
