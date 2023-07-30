@@ -22,9 +22,10 @@
 import { Component, Mixins, Prop, Ref, Watch } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { GuiWebcamStateWebcam } from '@/store/gui/webcams/types'
+import WebcamMixin from '@/components/mixins/webcam'
 
 @Component
-export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
+export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin) {
     private pc: RTCPeerConnection | null = null
     private useStun = false
     private remote_pc_id: string | null = null
@@ -47,7 +48,11 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin) {
 
     get webcamStyle() {
         const output = {
-            transform: 'none',
+            transform: this.generateTransform(
+                this.camSettings.flip_horizontal ?? false,
+                this.camSettings.flip_vertical ?? false,
+                this.camSettings.rotation ?? 0
+            ),
             aspectRatio: 16 / 9,
             maxHeight: window.innerHeight - 155 + 'px',
             maxWidth: 'auto',
