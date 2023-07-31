@@ -58,11 +58,6 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin)
             maxWidth: 'auto',
         }
 
-        let transforms = ''
-        if ('flipX' in this.camSettings && this.camSettings.flip_horizontal) transforms += ' scaleX(-1)'
-        if ('flipX' in this.camSettings && this.camSettings.flip_vertical) transforms += ' scaleY(-1)'
-        if (transforms.trimStart().length) output.transform = transforms.trimStart()
-
         if (this.aspectRatio) {
             output.aspectRatio = this.aspectRatio
             output.maxWidth = (window.innerHeight - 155) * this.aspectRatio + 'px'
