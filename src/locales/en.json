@@ -1077,6 +1077,8 @@
             "HideSaveConfigButtonForBedMeshDescription": "Hide SAVE_CONFIG, if only bed_mesh changes are pending to be saved in Klipper.",
             "HideUpdateWarnings": "Hide Update Warnings",
             "HideUpdateWarningsDescription": "This option will hide all update warnings in the update manager.",
+            "HideUpdateAnomalies": "Hide Update Anomalies",
+            "HideUpdateAnomaliesDescription": "This option will hide all update anomalies in the update manager.",
             "LockSliders": "Lock sliders on touchscreen devices",
             "LockSlidersDelay": "Slider lock delay",
             "LockSlidersDelayDescription": "Sliders will lock after a given delay. If set to 0 or left blank, sliders will only lock on page change/reload.",

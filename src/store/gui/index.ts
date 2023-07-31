@@ -167,6 +167,7 @@ export const getDefaultState = (): GuiState => {
             boolScrewsTiltAdjustDialog: true,
             tempchartHeight: 250,
             hideUpdateWarnings: false,
+            hideUpdateAnomalies: false,
         },
         view: {
             blockFileUpload: false,

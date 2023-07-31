@@ -117,6 +117,7 @@ export interface GuiState {
         boolScrewsTiltAdjustDialog: boolean
         tempchartHeight: number
         hideUpdateWarnings: boolean
+        hideUpdateAnomalies: boolean
     }
     view: {
         blockFileUpload: boolean

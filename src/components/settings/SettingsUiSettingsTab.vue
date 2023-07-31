@@ -214,6 +214,12 @@
                     :dynamic-slot-width="true">
                     <v-switch v-model="hideUpdateWarnings" hide-details class="mt-0" />
                 </settings-row>
+                <settings-row
+                    :title="$t('Settings.UiSettingsTab.HideUpdateAnomalies')"
+                    :sub-title="$t('Settings.UiSettingsTab.HideUpdateAnomaliesDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="hideUpdateAnomalies" hide-details class="mt-0" />
+                </settings-row>
             </v-card-text>
         </v-card>
     </div>
@@ -452,6 +458,15 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
     set hideUpdateWarnings(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideUpdateWarnings', value: newVal })
     }
+
+    get hideUpdateAnomalies() {
+        return this.$store.state.gui.uiSettings.hideUpdateAnomalies ?? false
+    }
+
+    set hideUpdateAnomalies(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideUpdateAnomalies', value: newVal })
+    }
+
 
     clearColorObject(color: any): string {
         if (typeof color === 'object' && 'hex' in color) color = color.hex

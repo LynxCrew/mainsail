@@ -20,7 +20,7 @@
             </v-col>
             <v-col class="col-auto pr-6 text-right" align-self="center">
                 <v-chip
-                    v-if="anomalies.length > 0"
+                    v-if="anomalies.length > 0 && !hideUpdateAnomalies"
                     small
                     label
                     outlined
@@ -344,6 +344,10 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
 
     get hideUpdateWarning() {
         return this.$store.state.gui.uiSettings.hideUpdateWarnings ?? false
+    }
+
+    get hideUpdateAnomalies() {
+        return this.$store.state.gui.uiSettings.hideUpdateAnomalies ?? false
     }
 
     clickUpdate() {
