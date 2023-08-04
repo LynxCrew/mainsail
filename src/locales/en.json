@@ -681,6 +681,7 @@
                 "Temperature": "current temperature"
             },
             "Headline": "Temperatures",
+            "HideMcuHostSensors": "Hide Host/MCU Sensors",
             "Max": "max",
             "Min": "min",
             "Name": "Name",
@@ -1117,6 +1118,7 @@
             "IconPrinter": "Printer",
             "Ipstream": "IP Camera",
             "Hlsstream": "HLS Stream",
+            "HideFps": "Hide FPS counter",
             "WebrtcJanus": "WebRTC (janus-gateway)",
             "Mjpegstreamer": "MJPEG-Streamer",
             "MjpegstreamerAdaptive": "Adaptive MJPEG-Streamer (experimental)",
