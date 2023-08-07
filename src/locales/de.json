@@ -1076,7 +1076,7 @@
             "HideSaveConfigButtonForBedMeshDescription": "SAVE_CONFIG nicht anzeigen, wenn nur das Speichern eines bed_mesh in Klipper aussteht.",
             "HideUpdateWarnings": "Aktualisierungswarnungen ausblenden",
             "HideUpdateWarningsDescription": "Mit dieser Option werden alle Aktualisierungswarnungen im Aktualisierungsmanager ausgeblendet.",
-            "HideUpdateAnomalies": "Anomaliewarnung im Repo ausblenden",
+            "HideUpdateAnomalies": "Anomaliewarnungen im Repo ausblenden",
             "HideUpdateAnomaliesDescription": "Mit dieser Option werden alle Anomaliewarnungen im Aktualisierungsmanager ausgeblendet.",
             "LockSliders": "Sperre Schieberegler auf Touchscreen Geräten",
             "LockSlidersDelay": "Verzögerung der Sperre für Schieberegler",
