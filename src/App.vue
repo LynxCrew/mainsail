@@ -82,6 +82,7 @@ export default class App extends Mixins(BaseMixin) {
     get naviDrawer(): boolean {
         return this.$store.state.naviDrawer
     }
+    
     get navigationStyle() {
         return this.$store.state.gui.uiSettings.navigationStyle
     }
@@ -311,14 +312,17 @@ export default class App extends Mixins(BaseMixin) {
 @import './assets/styles/sidebar.scss';
 @import './assets/styles/utils.scss';
 @import './assets/styles/updateManager.scss';
+
 :root {
     --app-height: 100%;
 }
+
 #content {
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
 }
+
 /*noinspection CssUnusedSymbol*/
 .v-btn:not(.v-btn--outlined).primary {
     /*noinspection CssUnresolvedCustomProperty*/

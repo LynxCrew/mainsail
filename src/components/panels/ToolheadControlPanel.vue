@@ -168,6 +168,7 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
     get isPrinting() {
         return ['printing'].includes(this.printer_state)
     }
+    
     get axisControlVisible() {
         return !(this.isPrinting && (this.$store.state.gui.control.hideDuringPrint ?? false))
     }

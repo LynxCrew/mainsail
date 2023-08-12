@@ -27,7 +27,7 @@
                     color="info"
                     class="minwidth-0 px-1 mr-2"
                     @click="toggleAnomalies = !toggleAnomalies">
-                    <v-icon small>{{ mdiInformation }}</v-icon>
+                    <v-icon small>{{ toggleAnomalies ? mdiInformationOutline : mdiInformation }}</v-icon>
                 </v-chip>
                 <template v-if="!isValid">
                     <v-menu :offset-y="true">
@@ -85,12 +85,12 @@
                 <v-alert
                     v-for="(message, index) in warnings"
                     :key="'warnings_' + index"
-                    text
                     dense
-                    border="left"
+                    text
                     color="orange"
+                    border="left"
                     :icon="mdiCloseCircle">
-                    {{ message }}
+                    <p class="text--disabled mb-0">{{ message }}</p>
                 </v-alert>
             </v-col>
         </v-row>
@@ -99,10 +99,10 @@
                 <v-alert
                     v-for="(message, index) in anomalies"
                     :key="'anomalies_' + index"
-                    text
                     dense
+                    text
+                    color="grey"
                     border="left"
-                    color="info"
                     :icon="mdiInformation">
                     {{ message }}
                 </v-alert>
@@ -131,9 +131,11 @@ import {
     mdiCheck,
     mdiHelpCircleOutline,
     mdiInformation,
+    mdiInformationOutline,
     mdiMenuDown,
     mdiProgressUpload,
     mdiReload,
+    mdiUpdate,
 } from '@mdi/js'
 import semver from 'semver'
 import GitCommitsList from '@/components/panels/Machine/UpdatePanel/GitCommitsList.vue'
@@ -146,6 +148,8 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
     mdiMenuDown = mdiMenuDown
     mdiReload = mdiReload
     mdiCloseCircle = mdiCloseCircle
+    mdiUpdate = mdiUpdate
+    mdiInformationOutline = mdiInformationOutline
 
     boolShowCommitList = false
     boolShowUpdateHint = false

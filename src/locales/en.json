@@ -874,6 +874,7 @@
             "DbConsoleHistory": "Console History",
             "DbHistoryJobs": "History Jobs",
             "DbHistoryTotals": "History Totals",
+            "DBNavigation": "Navigation",
             "DbTimelapseSettings": "Timelapse Settings",
             "DbView": "View Settings",
             "EstimateValues": {
@@ -1107,6 +1108,7 @@
             "EditCrowsnestConf": "Edit crowsnest.conf",
             "EditWebcam": "Edit Webcam",
             "FlipWebcam": "Flip webcam image:",
+            "HideFps": "Hide FPS counter",
             "Horizontally": "horizontally",
             "IconBed": "Bed",
             "IconCam": "Cam",

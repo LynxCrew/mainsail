@@ -69,7 +69,7 @@
                     :title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINT')"
                     :sub-title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINTDescription')"
                     :dynamic-slot-width="true">
-                    <v-switch v-model="displayCancelPrint" hide-details class="mt-0"></v-switch>
+                    <v-switch v-model="displayCancelPrint" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
@@ -147,7 +147,7 @@
                     :dynamic-slot-width="true">
                     <v-switch v-model="boolHideUploadAndPrintButton" hide-details class="mt-0" />
                 </settings-row>
-
+                <v-divider class="my-2" />
                 <settings-row
                     :title="$t('Settings.UiSettingsTab.PowerDeviceName')"
                     :sub-title="$t('Settings.UiSettingsTab.PowerDeviceNameDescription')"

@@ -272,8 +272,10 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
             this.webcam.extra_data = {
                 hideFps: newVal,
             }
+
             return
         }
+
         // @ts-ignore
         this.webcam.extra_data.hideFps = newVal
     }
