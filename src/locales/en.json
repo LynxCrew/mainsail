@@ -133,6 +133,7 @@
         "TryAgain": "try again"
     },
     "Console": {
+        "Autoscroll": "Autoscroll",
         "CommandList": "Command list",
         "Empty": "Empty",
         "HideTemperatures": "Hide temperatures",
@@ -223,6 +224,9 @@
         "RefreshCurrentDirectory": "Refresh current Directory",
         "Rename": "Rename",
         "RenameDirectory": "Rename Directory",
+        "Move": "Move",
+        "MoveFile": "Move File",
+        "MoveDirectory": "Move Directory",
         "RenameFile": "Rename File",
         "ScanMeta": "Scan Metadata",
         "ScanMetaSuccess": "Successfully scanned metadata from: {filename}.",
@@ -426,8 +430,11 @@
             "Name": "Name",
             "RefreshDirectory": "Refresh Directory",
             "Rename": "Rename",
+            "Move": "Move",
             "RenameDirectory": "Rename Directory",
+            "MoveDirectory": "Move Directory",
             "RenameFile": "Rename File",
+            "MoveFile": "Move File",
             "Root": "Root",
             "SetupCurrentList": "Setup current list",
             "ShowFile": "Show file",
@@ -588,6 +595,7 @@
             "Send": "send"
         },
         "MiniconsolePanel": {
+            "Autoscroll": "Autoscroll",
             "Headline": "Console",
             "HideTemperatures": "Hide temperatures",
             "HideTimelapse": "Hide Timelapse",
