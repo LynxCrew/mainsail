@@ -19,6 +19,10 @@ export default class ControlMixin extends Vue {
         return this.$store.state.gui.control?.feedrateZ ?? 10
     }
 
+    get lynxLayout(): boolean {
+        return this.$store.state.gui.control.lynxLayout ?? false
+    }
+
     get existsQGL() {
         return this.$store.getters['printer/existsQGL']
     }
@@ -50,13 +54,13 @@ export default class ControlMixin extends Vue {
     get colorQuadGantryLevel() {
         const status = this.$store.state.printer.quad_gantry_level?.applied ?? true
 
-        return status ? 'primary' : 'warning'
+        return status ? 'highlight' : 'primary'
     }
 
     get colorZTilt() {
         const status = this.$store.state.printer.z_tilt?.applied ?? true
 
-        return status ? 'primary' : 'warning'
+        return status ? 'highlight' : 'primary'
     }
 
     get defaultActionButton() {
@@ -114,8 +118,13 @@ export default class ControlMixin extends Vue {
     }
 
     doZtilt() {
-        this.$store.dispatch('server/addEvent', { message: 'Z_TILT_ADJUST', type: 'command' })
-        this.$socket.emit('printer.gcode.script', { script: 'Z_TILT_ADJUST' }, { loading: 'zTilt' })
+        if (this.lynxLayout) {
+            this.$store.dispatch('server/addEvent', {message: 'ADJUST_Z_TILT', type: 'command'})
+            this.$socket.emit('printer.gcode.script', {script: 'ADJUST_Z_TILT'}, {loading: 'zTilt'})
+        } else {
+            this.$store.dispatch('server/addEvent', {message: 'Z_TILT_ADJUST', type: 'command'})
+            this.$socket.emit('printer.gcode.script', {script: 'Z_TILT_ADJUST'}, {loading: 'zTilt'})
+        }
     }
 
     doSendMove(gcode: string, feedrate: number) {

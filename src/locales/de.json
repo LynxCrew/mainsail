@@ -795,6 +795,7 @@
             "Circle": "Kreis",
             "Control": "Steuerung",
             "Cross": "Kreuz",
+            "LynxBotStyleLayout": "Aktiviere Knopfbelegung im LynxBot Stil",
             "HideDuringPrint": "Achsensteuerung während des Drucks ausblenden",
             "EnableXYHoming": "Aktiviere kombiniertes X & Y homing",
             "EstimatedExtrusionInfo": "Zeige Info zur geschätzten Extrusion",

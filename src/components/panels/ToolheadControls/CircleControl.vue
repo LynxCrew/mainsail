@@ -125,7 +125,31 @@
                                 </g>
                             </a>
                             <!-- HOME ALL BUTTON IN THE CENTER -->
-                            <a v-if="enableXYHoming" :class="xyzHomeClass" @click="doHome">
+                            <a
+                                v-if="existsQGL && actionButton === 'qgl' && lynxLayout"
+                                id="tilt_adjust"
+                                :class="colorSpecialButton"
+                                @click="clickSpecialButton">
+                                <circle id="qgl_button" cx="31" cy="31" r="5" />
+                                <text x="31px" y="32.066px">QGL</text>
+                                <g id="tilt_icon" transform="translate(-39.95,0.00)">
+                                    <path :d="zTiltIcon1" />
+                                    <path :d="zTiltIcon2" />
+                                </g>
+                            </a>
+                            <a
+                                v-else-if="existsZtilt && actionButton === 'ztilt' && lynxLayout"
+                                id="tilt_adjust"
+                                :class="colorSpecialButton"
+                                @click="clickSpecialButton">
+                                <circle id="tilt_button" cx="31" cy="31" r="5" />
+                                <text x="31px" y="32.066px">Z-TILT</text>
+                                <g id="tilt_icon" transform="translate(-39.95,0.00)">
+                                    <path :d="zTiltIcon1" />
+                                    <path :d="zTiltIcon2" />
+                                </g>
+                            </a>
+                            <a v-else-if="enableXYHoming" :class="xyzHomeClass" @click="doHome">
                                 <g id="home_all_center" class="home_button">
                                     <circle id="home_button_all_center" cx="31" cy="31" r="5" />
                                 </g>
@@ -593,7 +617,7 @@
                         </g>
                     </g>
                     <a
-                        v-if="existsQGL && actionButton === 'qgl'"
+                        v-if="existsQGL && actionButton === 'qgl' && !lynxLayout"
                         id="tilt_adjust"
                         :class="colorSpecialButton"
                         @click="clickSpecialButton">
@@ -605,7 +629,7 @@
                         </g>
                     </a>
                     <a
-                        v-else-if="existsZtilt && actionButton === 'ztilt'"
+                        v-else-if="existsZtilt && actionButton === 'ztilt' && !lynxLayout"
                         id="tilt_adjust"
                         :class="colorSpecialButton"
                         @click="clickSpecialButton">

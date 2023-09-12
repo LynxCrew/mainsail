@@ -23,6 +23,7 @@ export interface GuiState {
         hideDuringPrint: boolean
         actionButton: null | 'm84' | 'qgl' | 'ztilt'
         enableXYHoming: boolean
+        lynxLayout: boolean
         feedrateXY: number
         stepsXY: number[]
         feedrateZ: number

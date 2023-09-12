@@ -801,6 +801,7 @@
             "Circle": "Circle",
             "Control": "Control",
             "Cross": "Cross",
+            "LynxBotStyleLayout": "Enable LynxBot Style Controls",
             "HideDuringPrint": "Hide axis controls during print",
             "EnableXYHoming": "Enable combined X & Y axes homing",
             "EstimatedExtrusionInfo": "Show estimated extrusion info",

@@ -8,7 +8,7 @@
         <!-- PANEL-HEADER 3-DOT-MENU -->
         <template
             v-if="
-                (controlStyle !== 'bars' && (existsZtilt || existsQGL)) ||
+                (controlStyle !== 'bars' && ((existsZtilt || existsQGL) && !lynxLayout)) ||
                 existsBedScrews ||
                 existsBedTilt ||
                 existsDeltaCalibrate ||
@@ -22,7 +22,7 @@
                     </v-btn>
                 </template>
                 <v-list dense>
-                    <v-list-item v-if="controlStyle !== 'bars' && actionButton !== 'm84'">
+                    <v-list-item v-if="controlStyle !== 'bars' && actionButton !== 'm84' && !lynxLayout">
                         <v-btn small style="width: 100%" @click="doSend('M84')">
                             <v-icon left small>{{ mdiEngineOff }}</v-icon>
                             {{ $t('Settings.ControlTab.MotorsOff', { isDefault: '' }) }}
@@ -161,6 +161,10 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
         return this.$store.state.gui.control.actionButton ?? this.defaultActionButton
     }
 
+    get lynxLayout(): boolean {
+        return this.$store.state.gui.control.lynxLayout ?? false
+    }
+
     get speedFactor(): number {
         return this.$store.state.printer?.gcode_move?.speed_factor ?? 1
     }
@@ -168,7 +172,7 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
     get isPrinting() {
         return ['printing'].includes(this.printer_state)
     }
-    
+
     get axisControlVisible() {
         return !(this.isPrinting && (this.$store.state.gui.control.hideDuringPrint ?? false))
     }

@@ -32,6 +32,7 @@ export const getDefaultState = (): GuiState => {
             actionButton: null,
             hideDuringPrint: false,
             enableXYHoming: false,
+            lynxLayout: false,
             feedrateXY: 100,
             stepsXY: [100, 10, 1],
             feedrateZ: 25,

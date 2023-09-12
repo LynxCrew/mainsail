@@ -35,6 +35,12 @@
                         </settings-row>
                         <v-divider class="my-2"></v-divider>
                     </template>
+                    <template v-if="['circle'].includes(controlStyle) && ((existsQGL && actionButton === 'qgl') || ( existsZtilt && actionButton === 'ztilt'))">
+                        <settings-row :title="$t('Settings.ControlTab.LynxBotStyleLayout').toString()">
+                            <v-switch v-model="lynxLayout" hide-details class="mt-0"></v-switch>
+                        </settings-row>
+                        <v-divider class="my-2"></v-divider>
+                    </template>
                     <settings-row
                         :title="$t('Settings.ControlTab.HideDuringPrint').toString()"
                         :dynamic-slot-width="true">
@@ -345,7 +351,7 @@ export default class SettingsControlTab extends Mixins(BaseMixin, ControlMixin) 
     get hideDuringPrint(): Boolean {
         return this.$store.state.gui.control.hideDuringPrint ?? false
     }
-    
+
     set hideDuringPrint(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'control.hideDuringPrint', value: newVal })
     }
@@ -396,6 +402,14 @@ export default class SettingsControlTab extends Mixins(BaseMixin, ControlMixin) 
 
     set enableXYHoming(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'control.enableXYHoming', value: newVal })
+    }
+
+    get lynxLayout(): boolean {
+        return this.$store.state.gui.control.lynxLayout ?? false
+    }
+
+    set lynxLayout(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'control.lynxLayout', value: newVal })
     }
 
     get reverseX() {
