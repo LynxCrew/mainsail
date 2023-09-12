@@ -34,6 +34,13 @@
                         :key="objectName"
                         :object-name="objectName"
                         :is-responsive-mobile="el.is.mobile ?? false" />
+                    <template v-if="!hideMonitors">
+                        <temperature-panel-list-item
+                            v-for="objectName in monitors"
+                            :key="objectName"
+                            :object-name="objectName"
+                            :is-responsive-mobile="el.is.mobile ?? false" />
+                    </template>
                 </tbody>
             </v-simple-table>
         </template>
@@ -70,6 +77,14 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         return this.$store.state.printer?.heaters?.available_sensors ?? []
     }
 
+    get available_monitors() {
+        return this.$store.state.printer?.heaters?.available_monitors ?? []
+    }
+
+    get monitors() {
+        return this.available_monitors.sort(this.sortObjectName)
+    }
+
     get temperature_fans() {
         return this.available_sensors
             .filter((name: string) => name.startsWith('temperature_fan') && !name.startsWith('temperature_fan _'))
@@ -84,6 +99,10 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         return this.$store.state.gui.view.tempchart.hideMcuHostSensors ?? false
     }
 
+    get hideMonitors(): boolean {
+        return this.$store.state.gui.view.tempchart.hideMonitors ?? false
+    }
+
     get temperature_sensors() {
         return this.available_sensors
             .filter((fullName: string) => {
@@ -92,6 +111,9 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
 
                 // hide MCU & Host sensors, if the function is enabled
                 if (this.hideMcuHostSensors && this.checkMcuHostSensor(fullName)) return false
+
+                // hide monitors, if the function is enabled
+                if (this.hideMonitors && this.available_monitors.includes(fullName)) return fals
 
                 const splits = fullName.split(' ')
                 let name = splits[0]

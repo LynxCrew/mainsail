@@ -65,6 +65,32 @@
                     <v-switch v-model="boolBigThumbnail" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
+                <settings-row :title="$t('Settings.UiSettingsTab.BigThumbnailBackground')">
+                    <v-btn
+                        v-if="bigThumbnailBackground.toLowerCase() !== defaultBigThumbnailBackground.toLowerCase()"
+                        small
+                        text
+                        class="minwidth-0"
+                        @click="bigThumbnailBackground = defaultBigThumbnailBackground">
+                        <v-icon small>{{ mdiRestart }}</v-icon>
+                    </v-btn>
+                    <v-menu bottom left offset-y :close-on-content-click="false">
+                        <template #activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                :color="bigThumbnailBackground"
+                                class="minwidth-0 px-5"
+                                small
+                                v-on="on" />
+                        </template>
+                        <v-color-picker
+                            :value="bigThumbnailBackground"
+                            hide-mode-switch
+                            mode="rgba"
+                            @update:color="updateBigThumbnailBackground" />
+                    </v-menu>
+                </settings-row>
+                <v-divider class="my-2" />
                 <settings-row
                     :title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINT')"
                     :sub-title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINTDescription')"
@@ -220,6 +246,12 @@
                     :dynamic-slot-width="true">
                     <v-switch v-model="hideUpdateAnomalies" hide-details class="mt-0" />
                 </settings-row>
+                <settings-row
+                    :title="$t('Settings.UiSettingsTab.HideMiscellaneousLight')"
+                    :sub-title="$t('Settings.UiSettingsTab.HideMiscellaneousLightDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="hideMiscellaneousLight" hide-details class="mt-0" />
+                </settings-row>
             </v-card-text>
         </v-card>
     </div>
@@ -230,7 +262,7 @@ import Component from 'vue-class-component'
 import { Mixins } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import SettingsRow from '@/components/settings/SettingsRow.vue'
-import { defaultLogoColor, defaultPrimaryColor } from '@/store/variables'
+import { defaultLogoColor, defaultPrimaryColor, defaultBigThumbnailBackground } from '@/store/variables'
 import { Debounce } from 'vue-debounce-decorator'
 import { mdiRestart, mdiTimerOutline } from '@mdi/js'
 import { ServerPowerStateDevice } from '@/store/server/power/types'
@@ -244,6 +276,7 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
 
     defaultLogoColor = defaultLogoColor
     defaultPrimaryColor = defaultPrimaryColor
+    defaultBigThumbnailBackground = defaultBigThumbnailBackground
 
     get logoColor() {
         return this.$store.state.gui.uiSettings.logo
@@ -268,6 +301,15 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
     set boolBigThumbnail(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.boolBigThumbnail', value: newVal })
     }
+
+    get bigThumbnailBackground() {
+        return this.$store.state.gui.uiSettings.bigThumbnailBackground
+    }
+
+    set bigThumbnailBackground(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.bigThumbnailBackground', value: newVal })
+    }
+
 
     get displayCancelPrint() {
         return this.$store.state.gui.uiSettings.displayCancelPrint
@@ -467,6 +509,14 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideUpdateAnomalies', value: newVal })
     }
 
+    get hideMiscellaneousLight() {
+        return this.$store.state.gui.uiSettings.hideMiscellaneousLight ?? false
+    }
+
+    set hideMiscellaneousLight(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideMiscellaneousLight', value: newVal })
+    }
+
 
     clearColorObject(color: any): string {
         if (typeof color === 'object' && 'hex' in color) color = color.hex
@@ -482,6 +532,11 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
     @Debounce(500)
     updatePrimaryColor(newVal: any) {
         this.primaryColor = this.clearColorObject(newVal)
+    }
+
+    @Debounce(500)
+    updateBigThumbnailBackground(newVal: any) {
+        this.bigThumbnailBackground = this.clearColorObject(newVal)
     }
 }
 </script>

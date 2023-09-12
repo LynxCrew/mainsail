@@ -1,5 +1,5 @@
 <template>
-    <v-container :class="containerClass">
+    <v-container v-if="!hideMiscellaneousLight" :class="containerClass">
         <v-row>
             <v-col class="pb-3">
                 <v-subheader class="_light-subheader">
@@ -282,10 +282,10 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
 
     get isOn() {
         return (
-            (this.current.red ?? 0) +
+            (this.current?.red ?? 0) +
                 (this.current?.green ?? 0) +
-                (this.current.blue ?? 0) +
-                (this.current.white ?? 0) >
+                (this.current?.blue ?? 0) +
+                (this.current?.white ?? 0) >
             0
         )
     }
@@ -368,6 +368,11 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
 
         return output
     }
+
+    get hideMiscellaneousLight() {
+        return this.$store.state.gui.uiSettings.hideMiscellaneousLight ?? false
+    }
+
 
     colorChanged(color: ColorData) {
         if (

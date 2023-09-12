@@ -1078,6 +1078,8 @@
             "HideUpdateWarningsDescription": "Mit dieser Option werden alle Aktualisierungswarnungen im Aktualisierungsmanager ausgeblendet.",
             "HideUpdateAnomalies": "Anomaliewarnungen im Repo ausblenden",
             "HideUpdateAnomaliesDescription": "Mit dieser Option werden alle Anomaliewarnungen im Aktualisierungsmanager ausgeblendet.",
+            "HideMiscellaneousLight": "Verstecke den RGB-LED Farbwähler",
+            "HideMiscellaneousLightDescription": "Diese Option versteckt den RGB_LED Farbwähler im Sontiges Paneel.",
             "LockSliders": "Sperre Schieberegler auf Touchscreen Geräten",
             "LockSlidersDelay": "Verzögerung der Sperre für Schieberegler",
             "LockSlidersDelayDescription": "Schieberegler werden nach einer bestimmten Verzögerung gesperrt. Wenn 0 oder leer, dann sperren Schieberegler nur nach wechseln/neuladen der Seite.",

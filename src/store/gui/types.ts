@@ -105,6 +105,7 @@ export interface GuiState {
         confirmOnEmergencyStop: boolean
         confirmOnPowerDeviceChange: boolean
         boolBigThumbnail: boolean
+        bigThumbnailBackground: string
         boolWideNavDrawer: boolean
         boolHideUploadAndPrintButton: boolean
         navigationStyle: 'iconsAndText' | 'iconsOnly'
@@ -118,6 +119,7 @@ export interface GuiState {
         tempchartHeight: number
         hideUpdateWarnings: boolean
         hideUpdateAnomalies: boolean
+        hideMiscellaneousLight: boolean
     }
     view: {
         blockFileUpload: boolean
@@ -166,6 +168,7 @@ export interface GuiState {
             boolTempchart: boolean
             hiddenDataset: string[]
             hideMcuHostSensors: boolean
+            hideMonitors: boolean
             autoscale: boolean
             datasetSettings: any
         }
