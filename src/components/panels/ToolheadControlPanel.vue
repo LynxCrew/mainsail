@@ -8,7 +8,8 @@
         <!-- PANEL-HEADER 3-DOT-MENU -->
         <template
             v-if="
-                (controlStyle !== 'bars' && ((existsZtilt || existsQGL) && !lynxLayout)) ||
+                (controlStyle !== 'bars' &&
+                ((existsZtilt || existsQGL) && (!lynxLayout || (actionButton !== 'ztilt' && actionButton !== 'qgl')))) ||
                 existsBedScrews ||
                 existsBedTilt ||
                 existsDeltaCalibrate ||
