@@ -798,8 +798,8 @@ export default class CircleControl extends Mixins(BaseMixin, ControlMixin) {
     get colorSpecialButton() {
         let classes = []
         if (this.isPrinting) classes.push('disabled')
-        if (this.existsQGL) classes.push(this.colorQuadGantryLevel)
-        else if (this.existsZtilt) classes.push(this.colorZTilt)
+        if (this.existsQGL) classes.push(this.colorQuadGantryLevelCircle)
+        else if (this.existsZtilt) classes.push(this.colorZTiltCircle)
 
         return classes
     }
