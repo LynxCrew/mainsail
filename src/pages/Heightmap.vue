@@ -199,7 +199,7 @@
                     class="mt-6 mt-md-0">
                     <v-card-text v-if="profiles.length" class="px-0 py-3">
                         <template v-for="(profile, index) in profiles">
-                            <v-divider v-if="index" :key="'deliver_' + index" class="my-3"></v-divider>
+                            <v-divider v-if="index" :key="'deliver_' + index" class="my-3" />
                             <v-row :key="index" class="rowProfile">
                                 <v-col class="pl-6 py-0 colName">
                                     <span

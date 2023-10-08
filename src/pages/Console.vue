@@ -188,6 +188,7 @@ export default class PageConsole extends Mixins(BaseMixin) {
     get autoscroll(): boolean {
         return this.$store.state.gui.console.autoscroll ?? true
     }
+
     set autoscroll(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'console.autoscroll', value: newVal })
     }
@@ -318,6 +319,7 @@ export default class PageConsole extends Mixins(BaseMixin) {
     min-height: 200px;
     height: calc(var(--app-height) - 180px);
 }
+
 .gcode-command-field {
     font-family: 'Roboto Mono', monospace;
 }

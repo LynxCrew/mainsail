@@ -310,7 +310,6 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.bigThumbnailBackground', value: newVal })
     }
 
-
     get displayCancelPrint() {
         return this.$store.state.gui.uiSettings.displayCancelPrint
     }
