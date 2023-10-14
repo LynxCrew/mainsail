@@ -31,6 +31,7 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin)
     private remote_pc_id: string | null = null
     private aspectRatio: null | number = null
     private status: string = 'connecting'
+    private restartTimer: number | null = null
 
     @Prop({ required: true }) readonly camSettings!: GuiWebcamStateWebcam
     @Prop({ default: null }) declare readonly printerUrl: string | null
@@ -39,7 +40,6 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin)
     get url() {
         const baseUrl = this.camSettings.stream_url
         let url = new URL(baseUrl, this.printerUrl === null ? this.hostUrl.toString() : this.printerUrl)
-        url.port = this.hostPort.toString()
 
         if (baseUrl.startsWith('http') || baseUrl.startsWith('://')) url = new URL(baseUrl)
 
@@ -105,11 +105,15 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin)
                 )
                 this.pc.addEventListener('connectionstatechange', () => {
                     this.status = (this.pc?.connectionState ?? '').toString()
+
+                    // clear restartTimer if it is set
+                    if (this.restartTimer) window.clearTimeout(this.restartTimer)
+
                     if (['failed', 'disconnected'].includes(this.status)) {
-                        setTimeout(async () => {
-                            await this.pc?.close()
-                            this.startStream()
-                        }, 500)
+                        // set restartTimer to restart stream after 5 seconds
+                        this.restartTimer = window.setTimeout(() => {
+                            this.restartStream()
+                        }, 5000)
                     }
                 })
                 this.pc.addEventListener('icecandidate', (e) => {
@@ -153,8 +157,16 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin)
                 if (isFirefox) this.status = 'connected'
                 return response.json()
             })
-            .catch(function (e) {
+            .catch((e) => {
                 window.console.error(e)
+
+                // clear restartTimer if it is set
+                if (this.restartTimer) window.clearTimeout(this.restartTimer)
+
+                // set restartTimer to restart stream after 5 seconds
+                this.restartTimer = window.setTimeout(() => {
+                    this.restartStream()
+                }, 5000)
             })
     }
 
@@ -168,12 +180,19 @@ export default class WebrtcCameraStreamer extends Mixins(BaseMixin, WebcamMixin)
 
     beforeDestroy() {
         this.pc?.close()
+        if (this.restartTimer) window.clearTimeout(this.restartTimer)
+    }
+
+    restartStream() {
+        this.pc?.close()
+        setTimeout(async () => {
+            this.startStream()
+        }, 500)
     }
 
     @Watch('url')
     async changedUrl() {
-        await this.pc?.close()
-        this.startStream()
+        this.restartStream()
     }
 }
 </script>

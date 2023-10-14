@@ -2,20 +2,11 @@
     <panel
         v-if="klipperReadyForGui"
         :icon="mdiGamepad"
-        :title="$t('Panels.ToolheadControlPanel.Headline').toString()"
+        :title="$t('Panels.ToolheadControlPanel.Headline')"
         :collapsible="true"
         card-class="toolhead-control-panel">
         <!-- PANEL-HEADER 3-DOT-MENU -->
-        <template
-            v-if="
-                (controlStyle !== 'bars' &&
-                ((existsZtilt || existsQGL) && (!lynxLayout || (actionButton !== 'ztilt' && actionButton !== 'qgl')))) ||
-                existsBedScrews ||
-                existsBedTilt ||
-                existsDeltaCalibrate ||
-                existsScrewsTilt
-            "
-            #buttons>
+        <template v-if="showButtons" #buttons>
             <v-menu left offset-y :close-on-content-click="false" class="pa-0">
                 <template #activator="{ on, attrs }">
                     <v-btn icon tile v-bind="attrs" :disabled="['printing'].includes(printer_state)" v-on="on">
@@ -93,21 +84,21 @@
             </v-menu>
         </template>
         <!-- MOVE TO CONTROL -->
-        <move-to-control class="py-0 pt-3"></move-to-control>
+        <move-to-control class="py-0 pt-3" />
         <!-- AXIS CONTROL -->
         <v-container v-if="axisControlVisible">
-            <component :is="`${controlStyle}-control`"></component>
+            <component :is="`${controlStyle}-control`" />
         </v-container>
         <!-- Z-OFFSET CONTROL -->
-        <v-divider :class="{ 'mt-3': !axisControlVisible }"></v-divider>
+        <v-divider :class="{ 'mt-3': !axisControlVisible }" />
         <v-container>
-            <zoffset-control></zoffset-control>
+            <zoffset-control />
         </v-container>
         <!-- SPEED FACTOR -->
-        <v-divider></v-divider>
+        <v-divider />
         <v-container>
             <tool-slider
-                :label="$t('Panels.ToolheadControlPanel.SpeedFactor').toString()"
+                :label="$t('Panels.ToolheadControlPanel.SpeedFactor')"
                 :icon="mdiSpeedometer"
                 :target="speedFactor"
                 :min="1"
@@ -117,7 +108,7 @@
                 :dynamic-range="true"
                 :has-input-field="true"
                 command="M220"
-                attribute-name="S"></tool-slider>
+                attribute-name="S" />
         </v-container>
     </panel>
 </template>
@@ -176,6 +167,17 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
 
     get axisControlVisible() {
         return !(this.isPrinting && (this.$store.state.gui.control.hideDuringPrint ?? false))
+    }
+
+    get showButtons() {
+        if (this.controlStyle !== 'bars' &&
+            ((this.existsZtilt
+                    || this.existsQGL)
+                && (!this.lynxLayout
+                    || (this.actionButton !== 'ztilt'
+                        && this.actionButton !== 'qgl')))) return true
+
+        return this.existsBedScrews || this.existsBedTilt || this.existsDeltaCalibrate || this.existsScrewsTilt
     }
 }
 </script>

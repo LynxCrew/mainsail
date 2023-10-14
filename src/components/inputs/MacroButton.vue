@@ -189,7 +189,8 @@ import BaseMixin from '@/components/mixins/base'
 import { GuiMacrosStateMacrogroupMacro } from '@/store/gui/macros/types'
 import { mdiCloseThick, mdiMenuDown, mdiRefresh } from '@mdi/js'
 import Panel from '@/components/ui/Panel.vue'
-import { PrinterStateMacroParam } from '@/store/printer/types'
+import { TranslateResult } from 'vue-i18n'
+import { PrinterStateMacro, PrinterStateMacroParam } from '@/store/printer/types'
 
 interface NamedUiParam extends PrinterStateMacroParam {
     value?: string | number | null
@@ -261,13 +262,13 @@ export default class MacroButton extends Mixins(BaseMixin) {
     }
 
     @Prop({ required: true })
-    declare readonly macro: GuiMacrosStateMacrogroupMacro
+    declare readonly macro: GuiMacrosStateMacrogroupMacro | PrinterStateMacro
 
     @Prop({ default: 'primary' })
     declare readonly color: string
 
     @Prop({ default: null })
-    declare readonly alias: string
+    declare readonly alias: string | TranslateResult
 
     @Prop({ default: false })
     declare readonly disabled: boolean
