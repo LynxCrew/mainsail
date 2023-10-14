@@ -355,6 +355,10 @@ export default class SettingsMacrosTabExpert extends Mixins(BaseMixin) {
                 value: 'error',
             },
             {
+                text: this.$t('Settings.MacrosTab.Highlight'),
+                value: 'highlight',
+            },
+            {
                 text: this.$t('Settings.MacrosTab.Custom'),
                 value: 'custom',
             },

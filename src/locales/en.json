@@ -934,6 +934,7 @@
             "Simple": "Simple",
             "Status": "Status",
             "Success": "success",
+            "Highlight": "highlight",
             "UnknownGroup": "Unknown Group",
             "Warning": "warning"
         },

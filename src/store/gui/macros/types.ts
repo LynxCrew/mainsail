@@ -9,7 +9,7 @@ export interface GuiMacrosState {
 export interface GuiMacrosStateMacrogroup {
     id: string | null
     name: string
-    color: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'custom'
+    color: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'highlight' | 'custom'
     colorCustom?: string
     showInStandby: boolean
     showInPrinting: boolean
@@ -20,7 +20,7 @@ export interface GuiMacrosStateMacrogroup {
 export interface GuiMacrosStateMacrogroupMacro {
     pos: number
     name: string
-    color: 'group' | 'primary' | 'secondary' | 'success' | 'warning' | 'error'
+    color: 'group' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'highlight'
     showInStandby: boolean
     showInPrinting: boolean
     showInPause: boolean
