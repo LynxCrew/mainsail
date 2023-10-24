@@ -20,6 +20,9 @@
                             {{ $t('Settings.ControlTab.MotorsOff', { isDefault: '' }) }}
                         </v-btn>
                     </v-list-item>
+                    <v-list-item v-if="controlStyle !== 'bars' && actionButton !== 'm84' && lynxLayout">
+                        <v-btn small style="width: 100%" @click="doHome">Z-Tilt Adjust</v-btn>
+                    </v-list-item>
                     <v-list-item v-if="controlStyle !== 'bars' && existsZtilt && actionButton !== 'ztilt'">
                         <v-btn small style="width: 100%" @click="doZtilt">Z-Tilt Adjust</v-btn>
                     </v-list-item>
@@ -170,12 +173,7 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
     }
 
     get showButtons() {
-        if (this.controlStyle !== 'bars' &&
-            ((this.existsZtilt
-                    || this.existsQGL)
-                && (!this.lynxLayout
-                    || (this.actionButton !== 'ztilt'
-                        && this.actionButton !== 'qgl')))) return true
+        if (this.controlStyle !== 'bars' && (this.existsZtilt || this.existsQGL)) return true
 
         return this.existsBedScrews || this.existsBedTilt || this.existsDeltaCalibrate || this.existsScrewsTilt
     }
