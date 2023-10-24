@@ -7,7 +7,7 @@
         card-class="toolhead-control-panel">
         <!-- PANEL-HEADER 3-DOT-MENU -->
         <template v-if="showButtons" #buttons>
-            <v-menu left offset-y :close-on-content-click="false" class="pa-0">
+            <v-menu left offset-y :close-on-content-click="true" class="pa-0">
                 <template #activator="{ on, attrs }">
                     <v-btn icon tile v-bind="attrs" :disabled="['printing'].includes(printer_state)" v-on="on">
                         <v-icon>{{ mdiDotsVertical }}</v-icon>
@@ -21,7 +21,7 @@
                         </v-btn>
                     </v-list-item>
                     <v-list-item v-if="controlStyle !== 'bars' && actionButton !== 'm84' && lynxLayout">
-                        <v-btn small style="width: 100%" @click="doHome">Z-Tilt Adjust</v-btn>
+                        <v-btn small style="width: 100%" @click="doHome">Home</v-btn>
                     </v-list-item>
                     <v-list-item v-if="controlStyle !== 'bars' && existsZtilt && actionButton !== 'ztilt'">
                         <v-btn small style="width: 100%" @click="doZtilt">Z-Tilt Adjust</v-btn>
