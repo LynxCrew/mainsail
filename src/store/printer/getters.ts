@@ -388,11 +388,24 @@ export const getters: GetterTree<PrinterState, RootState> = {
         for (const [key, value] of Object.entries(state)) {
             const nameSplit = key.split(' ')
 
-            if (sensorObjectNames.includes(nameSplit[0])) {
+            if (nameSplit[0] == "filament_motion_sensor") {
                 sensors.push({
                     name: nameSplit[1],
+                    info: "Detection Length: " + value.detection_length + "mm",
                     enabled: value.enabled,
                     filament_detected: value.filament_detected,
+                    type: 'motion'
+                })
+            } else if (nameSplit[0] == "filament_switch_sensor") {
+                const info = ((value.runout_elapsed ?? -1) != -1
+                    ? "Runout: " + value.runout_elapsed + "/" + value.runout_distance + "mm"
+                    : "Runout Distance: " + value.runout_distance + "mm");
+                sensors.push({
+                    name: nameSplit[1],
+                    info: info,
+                    enabled: value.enabled,
+                    filament_detected: value.filament_detected,
+                    type: 'switch'
                 })
             }
         }

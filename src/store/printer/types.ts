@@ -152,8 +152,10 @@ export interface PrinterStateMiscellaneous {
 
 export interface PrinterStateFilamentSensors {
     name: string
+    info: string
     enabled: boolean
     filament_detected: boolean
+    type: 'motion' | 'switch'
 }
 
 export interface PrinterStateBedMesh {

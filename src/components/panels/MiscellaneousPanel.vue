@@ -38,7 +38,10 @@
             <filament-sensor
                 :name="sensor.name"
                 :enabled="sensor.enabled"
-                :filament_detected="sensor.filament_detected"></filament-sensor>
+                :info="sensor.info"
+                :filament_detected="sensor.filament_detected"
+                :type="sensor.type"
+            ></filament-sensor>
         </div>
     </panel>
 </template>

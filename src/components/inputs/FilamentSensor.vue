@@ -12,6 +12,7 @@
                     <v-icon small class="mr-2">{{ mdiPrinter3dNozzleAlert }}</v-icon>
                     <span>{{ convertName(name) }}</span>
                     <v-spacer></v-spacer>
+                    <small :class="'mr-3 --text'">{{ infoText }}</small>
                     <small :class="'mr-3 ' + statusColor + '--text'">{{ statusText }}</small>
                     <v-icon @click="changeSensor">
                         {{ enabled ? mdiToggleSwitch : mdiToggleSwitchOffOutline }}
@@ -27,6 +28,7 @@ import { convertName } from '@/plugins/helpers'
 import { Component, Mixins, Prop } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { mdiPrinter3dNozzleAlert, mdiToggleSwitch, mdiToggleSwitchOffOutline } from '@mdi/js'
+import {PrinterStateFilamentSensors} from "@/store/printer/types";
 
 @Component
 export default class FilamentSensor extends Mixins(BaseMixin) {
@@ -41,8 +43,10 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
     convertName = convertName
 
     @Prop({ type: String, required: true }) declare readonly name: string
+    @Prop({type: String, required: true }) declare readonly info: string
     @Prop({ type: Boolean, required: true }) declare readonly enabled: boolean
     @Prop({ type: Boolean, required: true }) declare readonly filament_detected: boolean
+    @Prop({ type: String, required: true }) declare readonly type: string
 
     get statusColor() {
         if (!this.enabled) return 'gray'
@@ -54,6 +58,11 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
         if (!this.enabled) return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Disabled')
         else if (this.filament_detected) return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Detected')
         else return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Empty')
+    }
+
+    get infoText() {
+        if (this.enabled) return this.info
+        else return ""
     }
 
     changeSensor() {
