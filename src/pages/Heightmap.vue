@@ -1069,6 +1069,10 @@ export default class PageHeightmap extends Mixins(BaseMixin, ControlMixin) {
         }
     }
 
+    get lynxLayout(): boolean {
+        return this.$store.state.gui.control.lynxLayout ?? false
+    }
+
     tooltipFormatter(data: any): string {
         const outputArray: string[] = []
         outputArray.push('<b>' + data.seriesName + '</b>')
@@ -1183,7 +1187,9 @@ export default class PageHeightmap extends Mixins(BaseMixin, ControlMixin) {
 
     calibrateMesh(): void {
         this.calibrateDialog.boolShow = false
-        const gcode = 'BED_MESH_CALIBRATE PROFILE="' + this.calibrateDialog.name + '"'
+        const gcode = this.lynxLayout
+            ? 'LEVEL_AUTO PROFILE="' + this.calibrateDialog.name + '"'
+            : 'BED_MESH_CALIBRATE PROFILE="' + this.calibrateDialog.name + '"'
         this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
         this.$socket.emit('printer.gcode.script', { script: gcode }, { loading: 'bedMeshCalibrate' })
     }

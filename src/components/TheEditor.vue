@@ -253,7 +253,7 @@ export default class TheEditor extends Mixins(BaseMixin) {
         if (this.filename === 'moonraker.conf') return 'moonraker'
 
         // all .cfg files will be klipper config files
-        if (this.fileExtension === 'cfg') return 'klipper'
+        if (this.fileExtension === 'cfg' || this.fileExtension === 'include') return 'klipper'
 
         return null
     }

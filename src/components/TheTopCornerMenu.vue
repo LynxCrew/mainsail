@@ -98,13 +98,13 @@
                 </template>
                 <v-divider class="mt-0"></v-divider>
                 <v-subheader class="pt-2" style="height: auto">{{ $t('App.TopCornerMenu.HostControl') }}</v-subheader>
-                <v-list-item class="minheight30 pr-2" link @click="checkDialog(hostReboot, 'host', 'reboot')">
+                <v-list-item class="minheight30 pr-2" link @click="checkDialog(btnHostReboot, 'host', 'reboot')">
                     <v-list-item-title>{{ $t('App.TopCornerMenu.Reboot') }}</v-list-item-title>
                     <v-list-item-action class="my-0 d-flex flex-row" style="min-width: auto">
                         <v-icon class="mr-2" small>{{ mdiPower }}</v-icon>
                     </v-list-item-action>
                 </v-list-item>
-                <v-list-item class="minheight30 pr-2" link @click="checkDialog(hostShutdown, 'host', 'shutdown')">
+                <v-list-item class="minheight30 pr-2" link @click="checkDialog(btnHostShutdown, 'host', 'shutdown')">
                     <v-list-item-title>{{ $t('App.TopCornerMenu.Shutdown') }}</v-list-item-title>
                     <v-list-item-action class="my-0 d-flex flex-row" style="min-width: auto">
                         <v-icon class="mr-2" small>{{ mdiPower }}</v-icon>
@@ -162,6 +162,40 @@
                 </v-card-actions>
             </panel>
         </v-dialog>
+        <v-dialog v-model="showConfirmRebootDialog" width="400" :fullscreen="isMobile">
+            <v-card>
+                <v-card-title class="headline">
+                    {{ $t('RebootDialog.Reboot') }}
+                </v-card-title>
+                <v-card-text>{{ $t('RebootDialog.AreYouSure') }}</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red darken-1" text @click="showConfirmRebootDialog = false">
+                        {{ $t('RebootDialog.No') }}
+                    </v-btn>
+                    <v-btn color="green darken-1" text @click="hostReboot">
+                        {{ $t('RebootDialog.Yes') }}
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="showConfirmShutdownDialog" width="400" :fullscreen="isMobile">
+            <v-card>
+                <v-card-title class="headline">
+                    {{ $t('ShutdownDialog.Shutdown') }}
+                </v-card-title>
+                <v-card-text>{{ $t('ShutdownDialog.AreYouSure') }}</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red darken-1" text @click="showConfirmShutdownDialog = false">
+                        {{ $t('ShutdownDialog.No') }}
+                    </v-btn>
+                    <v-btn color="green darken-1" text @click="hostShutdown">
+                        {{ $t('ShutdownDialog.Yes') }}
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -181,6 +215,7 @@ import {
     mdiStop,
     mdiToggleSwitch,
     mdiToggleSwitchOff,
+    mdiAlertOctagonOutline,
 } from '@mdi/js'
 
 interface dialogPowerDeviceChange {
@@ -203,6 +238,7 @@ interface dialogConfirmation {
 })
 export default class TheTopCornerMenu extends Mixins(BaseMixin) {
     mdiAlert = mdiAlert
+    mdiAlertOctagonOutline = mdiAlertOctagonOutline
     mdiCloseThick = mdiCloseThick
     mdiPowerStandby = mdiPowerStandby
     mdiRestart = mdiRestart
@@ -213,6 +249,10 @@ export default class TheTopCornerMenu extends Mixins(BaseMixin) {
     mdiToggleSwitchOff = mdiToggleSwitchOff
 
     showMenu = false
+
+    showConfirmRebootDialog = false
+    showConfirmShutdownDialog = false
+
     dialogPowerDeviceChange: dialogPowerDeviceChange = {
         show: false,
         device: '',
@@ -344,13 +384,34 @@ export default class TheTopCornerMenu extends Mixins(BaseMixin) {
         )
     }
 
+    btnHostReboot() {
+        const confirmReboot = this.$store.state.gui.uiSettings.confirmOnReboot
+        if (confirmReboot) {
+            this.showConfirmRebootDialog = true
+            return
+        }
+
+        this.hostReboot()
+    }
+
     hostReboot() {
         this.showMenu = false
         this.$socket.emit('machine.reboot', {})
     }
 
+    btnHostShutdown() {
+        const confirmShutdown = this.$store.state.gui.uiSettings.confirmOnShutdown
+        if (confirmShutdown) {
+            this.showConfirmShutdownDialog = true
+            return
+        }
+
+        this.hostShutdown()
+    }
+
     hostShutdown() {
         this.showMenu = false
+        this.showConfirmShutdownDialog = false
         this.$socket.emit('machine.shutdown', {})
     }
 }

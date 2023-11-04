@@ -175,6 +175,18 @@
         "No": "No",
         "Yes": "Yes"
     },
+    "RebootDialog": {
+        "AreYouSure": "Are you sure?",
+        "Reboot": "Reboot",
+        "No": "No",
+        "Yes": "Yes"
+    },
+    "ShutdownDialog": {
+        "AreYouSure": "Are you sure?",
+        "Shutdown": "Shutdown",
+        "No": "No",
+        "Yes": "Yes"
+    },
     "Files": {
         "AddBatchToQueue": "Add batch to Queue",
         "AddToQueue": "Add to Queue",
@@ -862,6 +874,8 @@
             "Style": "Style",
             "ValueGreaterThan": "Value has to be greater than {value}",
             "ZOffsetIncrements": "Z-Offset increments (in mm)",
+            "ZOffsetSaveOption": "Z-Offset save option",
+            "ZOffsetSaveOptionDescription": "Change the option to save the Z-Offset",
             "ZTiltAdjust": "Z-Tilt Adjust{isDefault}"
         },
         "DashboardTab": {
@@ -1106,6 +1120,10 @@
             "BoolHideUploadAndPrintButtonDescription": "Show or hide the \"Upload and Print\" button in the top bar.",
             "ConfirmOnEmergencyStop": "Require confirm on Emergency Stop",
             "ConfirmOnEmergencyStopDescription": "Show a confirmation dialog on Emergency Stop",
+            "ConfirmOnReboot": "Require confirm on Reboot",
+            "ConfirmOnRebootDescription": "Show a confirmation dialog on Reboot",
+            "ConfirmOnShutdown": "Require confirm on Shutdown",
+            "ConfirmOnShutdownDescription": "Show a confirmation dialog on Shutdown",
             "ConfirmOnPowerDeviceChange": "Require confirm on Device Power changes",
             "ConfirmOnPowerDeviceChangeDescription": "Show a confirmation dialog on Device Power changes",
             "DefaultNavigationState": "Navigation default state",

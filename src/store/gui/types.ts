@@ -28,6 +28,7 @@ export interface GuiState {
         stepsXY: number[]
         feedrateZ: number
         offsetsZ: number[]
+        offsetZSaveOption: null | 'Z_OFFSET_APPLY_ENDSTOP' | 'Z_OFFSET_APPLY_PROBE'
         stepsZ: number[]
         stepsAll: number[]
         stepsCircleXY: number[]
@@ -104,6 +105,8 @@ export interface GuiState {
         lockSlidersOnTouchDevices: boolean
         lockSlidersDelay: number
         confirmOnEmergencyStop: boolean
+        confirmOnReboot: boolean
+        confirmOnShutdown: boolean
         confirmOnPowerDeviceChange: boolean
         boolBigThumbnail: boolean
         bigThumbnailBackground: string
