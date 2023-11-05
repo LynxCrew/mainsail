@@ -10,6 +10,45 @@
             @close="editLightPresetObject = null" />
         <v-card-text v-else>
             <h3 class="text-h5 mb-3">{{ $t('Settings.MiscellaneousTab.Miscellaneous') }}</h3>
+            <settings-row
+                :title="$t('Settings.MiscellaneousTab.HideMiscellaneousLight')"
+                :sub-title="$t('Settings.MiscellaneousTab.HideMiscellaneousLightDescription')"
+                :dynamic-slot-width="true">
+                <v-switch v-model="hideMiscellaneousLight" hide-details class="mt-0" />
+            </settings-row>
+            <v-divider class="my-2" />
+            <settings-row
+                :title="$t('Settings.MiscellaneousTab.ShowDetectionLength')"
+                :sub-title="$t('Settings.MiscellaneousTab.ShowDetectionLengthDescription')"
+                :dynamic-slot-width="true">
+                <v-switch v-model="showDetectionLength" hide-details class="mt-0" />
+            </settings-row>
+            <template v-if="showDetectionLength">
+                <v-divider class="my-2" />
+                <settings-row
+                    :title="$t('Settings.MiscellaneousTab.HideDetectionLengthOnDisabled')"
+                    :sub-title="$t('Settings.MiscellaneousTab.HideDetectionLengthOnDisabledDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="hideDetectionLengthOnDisabled" hide-details class="mt-0" />
+                </settings-row>
+            </template>
+            <v-divider class="my-2" />
+            <settings-row
+                :title="$t('Settings.MiscellaneousTab.ShowRunoutDistance')"
+                :sub-title="$t('Settings.MiscellaneousTab.ShowRunoutDistanceDescription')"
+                :dynamic-slot-width="true">
+                <v-switch v-model="showRunoutDistance" hide-details class="mt-0" />
+            </settings-row>
+            <template v-if="showRunoutDistance">
+                <v-divider class="my-2" />
+                <settings-row
+                    :title="$t('Settings.MiscellaneousTab.HideRunoutDistanceOnDisabled')"
+                    :sub-title="$t('Settings.MiscellaneousTab.HideRunoutDistanceOnDisabledDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="hideRunoutDistanceOnDisabled" hide-details class="mt-0" />
+                </settings-row>
+            </template>
+            <v-divider class="my-2" />
             <template v-if="filteredLights.length">
                 <div v-for="(light, index) in filteredLights" :key="index">
                     <v-divider v-if="index" class="my-2"></v-divider>
@@ -74,6 +113,46 @@ export default class SettingsMiscellaneousTab extends Mixins(BaseMixin) {
 
     get filteredLights() {
         return this.lights.filter((light: PrinterStateLight) => light.colorOrder.length > 1)
+    }
+
+    get hideMiscellaneousLight() {
+        return this.$store.state.gui.uiSettings.hideMiscellaneousLight ?? false
+    }
+
+    set hideMiscellaneousLight(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideMiscellaneousLight', value: newVal })
+    }
+
+    get showDetectionLength() {
+        return this.$store.state.gui.uiSettings.showDetectionLength ?? true
+    }
+
+    set showDetectionLength(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.showDetectionLength', value: newVal })
+    }
+
+    get hideDetectionLengthOnDisabled() {
+        return this.$store.state.gui.uiSettings.hideDetectionLengthOnDisabled ?? true
+    }
+
+    set hideDetectionLengthOnDisabled(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideDetectionLengthOnDisabled', value: newVal })
+    }
+
+    get showRunoutDistance() {
+        return this.$store.state.gui.uiSettings.showRunoutDistance ?? true
+    }
+
+    set showRunoutDistance(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.showRunoutDistance', value: newVal })
+    }
+
+    get hideRunoutDistanceOnDisabled() {
+        return this.$store.state.gui.uiSettings.hideRunoutDistanceOnDisabled ?? true
+    }
+
+    set hideRunoutDistanceOnDisabled(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideRunoutDistanceOnDisabled', value: newVal })
     }
 }
 </script>

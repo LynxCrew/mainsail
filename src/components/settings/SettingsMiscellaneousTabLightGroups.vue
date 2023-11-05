@@ -3,7 +3,7 @@
         <template v-if="boolForm">
             <v-card-text>
                 <h3 class="text-h5 mb-3">{{ $t('Settings.MiscellaneousTab.CreateGroup') }}</h3>
-                <settings-row :title="$t('Settings.MiscellaneousTab.Name').toString()">
+                <settings-row :title="$t('Settings.MiscellaneousTab.Name')">
                     <v-text-field
                         v-model="form.name"
                         hide-details="auto"
@@ -13,8 +13,8 @@
                 </settings-row>
                 <v-divider class="my-2"></v-divider>
                 <settings-row
-                    :title="$t('Settings.MiscellaneousTab.Start').toString()"
-                    :sub-title="$t('Settings.MiscellaneousTab.StartDescription').toString()">
+                    :title="$t('Settings.MiscellaneousTab.Start')"
+                    :sub-title="$t('Settings.MiscellaneousTab.StartDescription')">
                     <v-text-field
                         v-model="form.start"
                         hide-details="auto"
@@ -26,8 +26,8 @@
                 </settings-row>
                 <v-divider class="my-2"></v-divider>
                 <settings-row
-                    :title="$t('Settings.MiscellaneousTab.End').toString()"
-                    :sub-title="$t('Settings.MiscellaneousTab.EndDescription').toString()">
+                    :title="$t('Settings.MiscellaneousTab.End')"
+                    :sub-title="$t('Settings.MiscellaneousTab.EndDescription')">
                     <v-text-field
                         v-model="form.end"
                         hide-details="auto"
@@ -59,7 +59,7 @@
                                     $t('Settings.MiscellaneousTab.GroupSubTitle', {
                                         start: group.start,
                                         end: group.end,
-                                    }).toString()
+                                    })
                                 "
                                 :dynamic-slot-width="true">
                                 <v-btn small outlined class="ml-3" @click="editGroup(group)">

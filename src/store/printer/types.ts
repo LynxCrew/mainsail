@@ -155,7 +155,7 @@ export interface PrinterStateFilamentSensors {
     info: string
     enabled: boolean
     filament_detected: boolean
-    type: 'motion' | 'switch'
+    type: "switch" | "motion" | ""
 }
 
 export interface PrinterStateBedMesh {

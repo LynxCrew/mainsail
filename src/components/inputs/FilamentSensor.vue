@@ -61,14 +61,37 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
     }
 
     get infoText() {
-        if (this.enabled) return this.info
-        else return ""
+        if (this.type == 'switch' && this.showRunoutDistance && (this.enabled || !this.hideRunoutDistanceOnDisabled)) {
+            return this.info
+        }
+
+        if (this.type == 'motion' && this.showDetectionLength && (this.enabled || !this.hideDetectionLengthOnDisabled)) {
+            return this.info
+        }
+
+        return ""
     }
 
     changeSensor() {
         const gcode = 'SET_FILAMENT_SENSOR SENSOR=' + this.name + ' ENABLE=' + (this.enabled ? 0 : 1)
         this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
         this.$socket.emit('printer.gcode.script', { script: gcode })
+    }
+
+    get showDetectionLength() {
+        return this.$store.state.gui.uiSettings.showDetectionLength ?? true
+    }
+
+    get hideDetectionLengthOnDisabled() {
+        return this.$store.state.gui.uiSettings.hideDetectionLengthOnDisabled ?? true
+    }
+
+    get showRunoutDistance() {
+        return this.$store.state.gui.uiSettings.showRunoutDistance ?? true
+    }
+
+    get hideRunoutDistanceOnDisabled() {
+        return this.$store.state.gui.uiSettings.hideRunoutDistanceOnDisabled ?? true
     }
 }
 </script>

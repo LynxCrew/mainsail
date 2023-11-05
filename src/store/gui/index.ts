@@ -174,6 +174,10 @@ export const getDefaultState = (): GuiState => {
             hideUpdateWarnings: false,
             hideUpdateAnomalies: false,
             hideMiscellaneousLight: false,
+            showDetectionLength: true,
+            hideDetectionLengthOnDisabled: true,
+            showRunoutDistance: true,
+            hideRunoutDistanceOnDisabled: true,
         },
         view: {
             blockFileUpload: false,

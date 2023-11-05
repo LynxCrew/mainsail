@@ -3,7 +3,7 @@
         <template v-if="boolForm">
             <v-card-text>
                 <h3 class="text-h5 mb-3">{{ $t('Settings.MiscellaneousTab.CreatePreset') }}</h3>
-                <settings-row :title="$t('Settings.MiscellaneousTab.Name').toString()">
+                <settings-row :title="$t('Settings.MiscellaneousTab.Name')">
                     <v-text-field
                         v-model="form.name"
                         hide-details="auto"
@@ -12,7 +12,7 @@
                         outlined></v-text-field>
                 </settings-row>
                 <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.MiscellaneousTab.Color').toString()">
+                <settings-row :title="$t('Settings.MiscellaneousTab.Color')">
                     <v-row>
                         <v-col class="text-center">
                             <color-picker

@@ -254,17 +254,12 @@
                     :dynamic-slot-width="true">
                     <v-switch v-model="hideUpdateWarnings" hide-details class="mt-0" />
                 </settings-row>
+                <v-divider class="my-2" />
                 <settings-row
                     :title="$t('Settings.UiSettingsTab.HideUpdateAnomalies')"
                     :sub-title="$t('Settings.UiSettingsTab.HideUpdateAnomaliesDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="hideUpdateAnomalies" hide-details class="mt-0" />
-                </settings-row>
-                <settings-row
-                    :title="$t('Settings.UiSettingsTab.HideMiscellaneousLight')"
-                    :sub-title="$t('Settings.UiSettingsTab.HideMiscellaneousLightDescription')"
-                    :dynamic-slot-width="true">
-                    <v-switch v-model="hideMiscellaneousLight" hide-details class="mt-0" />
                 </settings-row>
             </v-card-text>
         </v-card>
@@ -536,14 +531,6 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
 
     set hideUpdateAnomalies(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideUpdateAnomalies', value: newVal })
-    }
-
-    get hideMiscellaneousLight() {
-        return this.$store.state.gui.uiSettings.hideMiscellaneousLight ?? false
-    }
-
-    set hideMiscellaneousLight(newVal) {
-        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideMiscellaneousLight', value: newVal })
     }
 
 

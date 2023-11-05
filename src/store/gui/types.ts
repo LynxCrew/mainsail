@@ -124,6 +124,10 @@ export interface GuiState {
         hideUpdateWarnings: boolean
         hideUpdateAnomalies: boolean
         hideMiscellaneousLight: boolean
+        showDetectionLength: boolean
+        hideDetectionLengthOnDisabled: boolean
+        showRunoutDistance: boolean
+        hideRunoutDistanceOnDisabled: boolean
     }
     view: {
         blockFileUpload: boolean

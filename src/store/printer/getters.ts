@@ -388,24 +388,28 @@ export const getters: GetterTree<PrinterState, RootState> = {
         for (const [key, value] of Object.entries(state)) {
             const nameSplit = key.split(' ')
 
-            if (nameSplit[0] == "filament_motion_sensor") {
-                sensors.push({
-                    name: nameSplit[1],
-                    info: "Detection Length: " + value.detection_length + "mm",
-                    enabled: value.enabled,
-                    filament_detected: value.filament_detected,
-                    type: 'motion'
-                })
-            } else if (nameSplit[0] == "filament_switch_sensor") {
-                const info = ((value.runout_elapsed ?? -1) != -1
-                    ? "Runout: " + value.runout_elapsed + "/" + value.runout_distance + "mm"
-                    : "Runout Distance: " + value.runout_distance + "mm");
-                sensors.push({
+            if (sensorObjectNames.includes(nameSplit[0])) {
+                let type = ''
+                let info = ""
+
+                if (nameSplit[0] == "filament_motion_sensor") {
+                    type = 'motion'
+                    info = "Detection Length: " + value.detection_length + "mm"
+                }
+
+                if (nameSplit[0] == "filament_switch_sensor") {
+                    type = 'switch'
+                    info = (value.filament_detected || ((value.runout_distance ?? 0) == 0)
+                        ? "Runout Distance: " + value.runout_distance + "mm"
+                        : "Runout: " + value.runout_elapsed + "/" + value.runout_distance + "mm");
+                }
+
+                sensors.push(<PrinterStateFilamentSensors>{
                     name: nameSplit[1],
                     info: info,
                     enabled: value.enabled,
                     filament_detected: value.filament_detected,
-                    type: 'switch'
+                    type: type
                 })
             }
         }
