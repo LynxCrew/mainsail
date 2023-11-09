@@ -1008,7 +1008,7 @@
             "End": "End",
             "EndDescription": "Last LED of this group.",
             "Groups": "Groups",
-            "GroupSubTitle": "Start: {start}, End: {end}",
+            "GroupSubTitle": "Indices: [{indices}], CheckIndex: {checkindex}",
             "LightGroups": "{name} - Groups",
             "LightPresets": "{name} - Presets",
             "Miscellaneous": "Miscellaneous",
@@ -1020,7 +1020,11 @@
             "Start": "Start",
             "StartDescription": "First LED of this group.",
             "UnableToLoadLight": "Unable to load light",
-            "UnableToLoadPreset": "Unable to load preset"
+            "UnableToLoadPreset": "Unable to load preset",
+            "Index": "Index",
+            "IndexDescription": "Define the indices of the LEDs of this group",
+            "CheckIndex": "CheckIndex",
+            "CheckIndexDescription": "The Index which should be used to update the color-picker"
         },
         "NavigationTab": {
             "Navigation": "Navigation"

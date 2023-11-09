@@ -13,37 +13,10 @@
                 </settings-row>
                 <v-divider class="my-2"></v-divider>
                 <settings-row
-                    :title="$t('Settings.MiscellaneousTab.Start')"
-                    :sub-title="$t('Settings.MiscellaneousTab.StartDescription')">
+                    :title="$t('Settings.MiscellaneousTab.Index')"
+                    :sub-title="$t('Settings.MiscellaneousTab.IndexDescription')">
                     <v-text-field
-                        v-model="form.start"
-                        hide-details="auto"
-                        type="number"
-                        step="1"
-                        :rules="[rules.minStart, rules.max]"
-                        dense
-                        outlined></v-text-field>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row
-                    :title="$t('Settings.MiscellaneousTab.End')"
-                    :sub-title="$t('Settings.MiscellaneousTab.EndDescription')">
-                    <v-text-field
-                        v-model="form.end"
-                        hide-details="auto"
-                        type="number"
-                        step="1"
-                        :rules="[rules.minEnd, rules.max]"
-                        dense
-                        outlined></v-text-field>
-                </settings-row>
-
-
-                <settings-row
-                    :title="$t('Settings.MiscellaneousTab.Start')"
-                    :sub-title="$t('Settings.MiscellaneousTab.StartDescription')">
-                    <v-text-field
-                        v-model="form.indices"
+                        v-model="indices"
                         hide-details="auto"
                         type="string"
                         :rules="[rules.indices]"
@@ -52,14 +25,14 @@
                 </settings-row>
                 <v-divider class="my-2"></v-divider>
                 <settings-row
-                    :title="$t('Settings.MiscellaneousTab.End')"
-                    :sub-title="$t('Settings.MiscellaneousTab.EndDescription')">
+                    :title="$t('Settings.MiscellaneousTab.CheckIndex')"
+                    :sub-title="$t('Settings.MiscellaneousTab.CheckIndexDescription')">
                     <v-text-field
-                        v-model="form.checkindex"
+                        v-model="checkindex"
                         hide-details="auto"
                         type="number"
                         step="1"
-                        :rules="[rules.minStart, rules.max]"
+                        :rules="[rules.checkIndex]"
                         dense
                         outlined></v-text-field>
                 </settings-row>
@@ -83,8 +56,8 @@
                                 :title="group.name"
                                 :sub-title="
                                     $t('Settings.MiscellaneousTab.GroupSubTitle', {
-                                        start: group.start,
-                                        end: group.end,
+                                        indices: group.indices,
+                                        checkindex: group.checkindex,
                                     })
                                 "
                                 :dynamic-slot-width="true">
@@ -156,21 +129,16 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     convertName = convertName
 
     private boolForm = false
+    private local_indices = [0]
 
     private form: {
         id: string | null
         name: string
-        start: number
-        end: number
-
         indices: string
         checkindex: number
     } = {
         id: null,
         name: '',
-        start: 1,
-        end: 1,
-
         indices: '1',
         checkindex: 1,
     }
@@ -178,10 +146,8 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     private rules = {
         required: (value: string) => value !== '' || 'required',
         groupUnique: (value: string) => !this.existsGroupName(value) || 'Name already exists',
-        minStart: (value: number) => value > 0 || 'smaller than 1',
-        minEnd: (value: number) => value >= this.form.start || 'smaller than start value',
-        max: (value: number) => value <= (this.light?.chainCount ?? 1) || 'higher than chain_count',
-        indices: (value: string) => this.indexAllowed(value) || 'invalid syntax',
+        indices: (value: string) => this.indexAllowed(value),
+        checkIndex: (value: number) => this.checkIndexAllowed(value) || 'not in indices'
     }
 
     @Prop({ type: Object, default: null })
@@ -201,9 +167,9 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         Object.entries(this.entry.lightgroups).forEach(([key, lightgroup]) => {
             groups.push({
                 name: lightgroup.name,
-                start: lightgroup.start,
-                end: lightgroup.end,
                 id: key,
+                indices: lightgroup.indices,
+                checkindex: lightgroup.checkindex,
             })
         })
         window.console.log('getEntryLightgroups', groups)
@@ -211,20 +177,91 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         return caseInsensitiveSort(groups, 'name')
     }
 
+    set indices(newval: string) {
+        this.local_indices = this.parse_indices(newval)
+        if (this.local_indices.length > 0) {
+            this.form.indices = newval
+        }
+    }
+
+    get indices() {
+        return this.form.indices
+    }
+
+    set checkindex(newval: number) {
+        this.form.checkindex = newval
+    }
+
+    get checkindex() {
+        return this.form.checkindex
+    }
+
+    parse_indices(index: string) {
+        const result = []
+        const indices = index.split(",")
+        for (let i = 0; i < indices.length; i++) {
+            const s = indices[i]
+            const range = s.split("-")
+            if (range.length > 2) {
+                return []
+            }
+            if (range.length == 1) {
+                const index = parseInt(range[0])
+                if (this.invalidIndex(index)
+                    || range[0].includes("|")) {
+                    return []
+                }
+                result.push(index)
+            }
+            if (range.length == 2) {
+                let step = "1"
+                const minval = range[0]
+                let maxval = range[1]
+                const range_steps = maxval.split("|")
+                if (range_steps.length > 2) {
+                    return []
+                }
+                if (range_steps.length == 2) {
+                    step = range_steps[1]
+                    maxval = range_steps[0]
+                }
+                let min = parseInt(minval)
+                let max = parseInt(maxval)
+                let parsedstep = parseInt(step)
+                if (this.invalidIndex(min)
+                    || this.invalidIndex(max)
+                    || isNaN(parsedstep)
+                    || parsedstep < 1) {
+                    return []
+                }
+                for (min; min <= max; min += parsedstep) {
+                    result.push(min)
+                }
+            }
+        }
+        return result
+    }
+
+   invalidIndex(index: number) {
+        return (isNaN(index) || index < 1 || index > (this.light?.chainCount ?? 1))
+    }
+
     createGroup() {
         this.form.id = null
         this.form.name = ''
-        this.form.start = 1
-        this.form.end = this.light?.chainCount ?? 1
+        this.form.indices = ""
+        this.form.checkindex = 1
         this.boolForm = true
+        this.parse_indices(this.form.indices)
     }
 
     editGroup(group: GuiMiscellaneousStateEntryLightgroup) {
         this.form.id = group.id ?? null
         this.form.name = group.name
-        this.form.start = group.start
-        this.form.end = group.end
+        this.form.indices = group.indices
+        this.form.checkindex = group.checkindex
         this.boolForm = true
+        this.parse_indices(this.form.indices)
     }
 
     closeForm() {
@@ -264,15 +301,51 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         )
     }
 
-    indexAllowed(index: string) {
-        return (
-            index.replaceAll(new RegExp(/1-9/), "")
-                .replaceAll("-", "")
-                .replaceAll(",", "")
-                .replaceAll("|", "")
-                .replaceAll("-", "")
-                .length == 0
-        )
+    indexAllowed(value: string) {
+        const indices = value.split(",")
+        for (let i = 0; i < indices.length; i++) {
+            const s = indices[i]
+            const range = s.split("-")
+            if (range.length > 2) {
+                return ("More than one '-' found in '"+ s + "', only one allowed")
+            }
+            if (range.length == 1) {
+                const index = parseInt(range[0])
+                if (this.invalidIndex(index)) {
+                    return "Missing characters in '" + value + "'"
+                }
+                if (range[0].includes("|")) {
+                    return "'|' specified without preceding range in '" + s + "'"
+                }
+            }
+            if (range.length == 2) {
+                let step = "1"
+                const minval = range[0]
+                let maxval = range[1]
+                const range_steps = maxval.split("|")
+                if (range_steps.length > 2) {
+                    return "More than one '|' found in '" + s+ "', only one allowed"
+                }
+                if (range_steps.length == 2) {
+                    step = range_steps[1]
+                    maxval = range_steps[0]
+                }
+                let min = parseInt(minval)
+                let max = parseInt(maxval)
+                let parsedstep = parseInt(step)
+                if (this.invalidIndex(min)
+                    || this.invalidIndex(max)
+                    || isNaN(parsedstep)
+                    || parsedstep < 1) {
+                    return "'" + s + "' contains illegal characters"
+                }
+            }
+        }
+        return true
+    }
+
+    checkIndexAllowed(index: number) {
+        return this.local_indices.includes(parseInt(index.toString()))
     }
 }
 </script>

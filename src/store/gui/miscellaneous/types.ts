@@ -19,10 +19,8 @@ export interface GuiMiscellaneousStateEntry {
 export interface GuiMiscellaneousStateEntryLightgroup {
     id?: string
     name: string
-    start: number
-    end: number
-
     indices: string
+    checkindex: number
 }
 
 export interface GuiMiscellaneousStateEntryPreset {

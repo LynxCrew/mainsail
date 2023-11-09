@@ -44,9 +44,9 @@ export const getters: GetterTree<GuiMiscellaneousState, any> = {
         Object.entries(entry.lightgroups).forEach(([key, lightgroup]) => {
             groups.push({
                 name: lightgroup.name,
-                start: lightgroup.start,
-                end: lightgroup.end,
                 id: key,
+                indices: lightgroup.indices,
+                checkindex: lightgroup.checkindex,
             })
         })
 

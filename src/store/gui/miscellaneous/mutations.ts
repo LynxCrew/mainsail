@@ -27,8 +27,8 @@ export const mutations: MutationTree<GuiMiscellaneousState> = {
     updateLightgroup(state, payload: payloadUpdateLightgroup) {
         const lightgroup: GuiMiscellaneousStateEntryLightgroup = {
             name: payload.values.name,
-            start: parseInt(payload.values.start.toString()),
-            end: parseInt(payload.values.end.toString()),
+            indices: payload.values.indices.toString(),
+            checkindex: parseInt(payload.values.checkindex.toString()),
         }
 
         Vue.set(state.entries[payload.entryId].lightgroups, payload.lightgroupId, lightgroup)

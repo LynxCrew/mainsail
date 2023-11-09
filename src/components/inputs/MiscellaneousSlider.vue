@@ -126,6 +126,18 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     @Prop({ type: Number, required: true })
     declare target: number
 
+    @Prop({ type: Number, required: true })
+    declare red: number
+
+    @Prop({ type: Number, required: true })
+    declare green: number
+
+    @Prop({ type: Number, required: true })
+    declare blue: number
+
+    @Prop({ type: Number, required: true })
+    declare white: number
+
     @Prop({ type: Number, default: 1 })
     declare max: number
 
@@ -193,7 +205,13 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
             this.sliderValue = this.off_below
         }
 
+        console.log(this.value)
         this.sendCmd(this.sliderValue)
+        console.log(this.lights[0].singleChannelTarget)
+    }
+
+    get lights() {
+        return this.$store.getters['printer/getLights'] ?? []
     }
 
     sendCmd(newVal: number): void {

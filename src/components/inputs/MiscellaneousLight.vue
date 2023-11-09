@@ -1,5 +1,5 @@
 <template>
-    <v-container v-if="!hideMiscellaneousLight" :class="containerClass">
+    <v-container :class="containerClass">
         <v-row>
             <v-col class="pb-3">
                 <v-subheader class="_light-subheader">
@@ -136,7 +136,7 @@
 
 <script lang="ts">
 import { convertName } from '@/plugins/helpers'
-import { Component, Mixins, Prop } from 'vue-property-decorator'
+import {Component, Mixins, Prop, Watch} from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { mdiCloseThick, mdiLightbulbOutline, mdiLightbulbOnOutline } from '@mdi/js'
 import { PrinterStateLight } from '@/store/printer/types'
@@ -169,6 +169,9 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
 
     @Prop({ type: Boolean, default: false }) readonly root!: boolean
     @Prop(Object) readonly group!: GuiMiscellaneousStateEntryLightgroup | undefined
+
+    @Prop({ type: String, required: true })
+    declare colorString: string
 
     private boolDialog = false
     private inputValue = 0
@@ -261,6 +264,7 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
     }
 
     get current() {
+        console.log("2")
         const color: ColorData = {
             red: 0,
             green: 0,
@@ -271,7 +275,7 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         if (this.existWhite) color.white = 0
         if (this.object.colorData.length === 0) return color
 
-        const firstColorData = this.object.colorData[(this.group?.start ?? 1) - 1]
+        const firstColorData = this.object.colorData[(this.group?.checkindex ?? 1) - 1]
         color.red = firstColorData[0] * 255
         color.green = firstColorData[1] * 255
         color.blue = firstColorData[2] * 255
@@ -369,10 +373,6 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         return output
     }
 
-    get hideMiscellaneousLight() {
-        return this.$store.state.gui.uiSettings.hideMiscellaneousLight ?? false
-    }
-
 
     colorChanged(color: ColorData) {
         if (
@@ -393,17 +393,7 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         gcode += ` SYNC=0`
 
         if (this.group) {
-            const tmp = gcode
-
-            gcode += ` INDICES=${this.group.indices}`
-            //for (let i = this.group.start; i <= this.group.end; i++) {
-            //    if (i === this.group.start) {
-            //        gcode += ` INDEX=${i}`
-            //        continue
-            //    }
-
-            //    gcode += `\n${tmp} INDEX=${i}`
-            //}
+            gcode += ` Index=${this.group.indices}`
         }
 
         gcode += ` TRANSMIT=1`

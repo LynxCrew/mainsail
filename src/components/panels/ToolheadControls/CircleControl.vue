@@ -12,7 +12,7 @@
                     <g id="ArtBoard1" transform="matrix(1.24239,0,0,1,0,0)">
                         <rect x="0" y="0" width="62" height="62" style="fill: none" />
                         <g id="home_buttons" transform="matrix(0.804902,0,0,1,0.0430241,0)">
-                            <!-- HOME X BUTTON -->
+                            <!-- HOME Y BUTTON -->
                             <a :class="yHomeClass" @click="doHomeY">
                                 <g
                                     id="home_y"
@@ -35,7 +35,7 @@
                                     </g>
                                 </g>
                             </a>
-                            <!-- HOME Y BUTTON -->
+                            <!-- HOME X BUTTON -->
                             <a :class="xHomeClass" @click="doHomeX">
                                 <g
                                     id="home_x"

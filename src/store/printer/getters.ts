@@ -184,6 +184,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     },
 
     getFans: (state, getters) => {
+        console.log("get fans")
         const fans: PrinterStateFan[] = []
         const supportedFans = ['temperature_fan', 'controller_fan', 'heater_fan', 'fan_generic', 'fan']
         const objects = getters.getPrinterObjects(supportedFans)
@@ -214,6 +215,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     },
 
     getLights: (state, getters) => {
+        console.log("get lights")
         const lights: PrinterStateLight[] = []
         const supportedObjects = ['dotstar', 'led', 'neopixel', 'pca9533', 'pca9632']
         const objects = getters.getPrinterObjects(supportedObjects)
@@ -294,6 +296,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     },
 
     getMiscellaneous: (state) => {
+        console.log("get misc")
         const output: PrinterStateMiscellaneous[] = []
         const supportedObjects = ['controller_fan', 'heater_fan', 'fan_generic', 'fan', 'output_pin']
 
@@ -382,6 +385,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     },
 
     getFilamentSensors: (state) => {
+        console.log("get sensors")
         const sensorObjectNames = ['filament_switch_sensor', 'filament_motion_sensor']
         const sensors: PrinterStateFilamentSensors[] = []
 
