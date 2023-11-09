@@ -37,6 +37,32 @@
                         dense
                         outlined></v-text-field>
                 </settings-row>
+
+
+                <settings-row
+                    :title="$t('Settings.MiscellaneousTab.Start')"
+                    :sub-title="$t('Settings.MiscellaneousTab.StartDescription')">
+                    <v-text-field
+                        v-model="form.indices"
+                        hide-details="auto"
+                        type="string"
+                        :rules="[rules.indices]"
+                        dense
+                        outlined></v-text-field>
+                </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row
+                    :title="$t('Settings.MiscellaneousTab.End')"
+                    :sub-title="$t('Settings.MiscellaneousTab.EndDescription')">
+                    <v-text-field
+                        v-model="form.checkindex"
+                        hide-details="auto"
+                        type="number"
+                        step="1"
+                        :rules="[rules.minStart, rules.max]"
+                        dense
+                        outlined></v-text-field>
+                </settings-row>
             </v-card-text>
             <v-card-actions class="d-flex justify-end">
                 <v-btn text @click="closeForm">{{ $t('Settings.Cancel') }}</v-btn>
@@ -136,11 +162,17 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         name: string
         start: number
         end: number
+
+        indices: string
+        checkindex: number
     } = {
         id: null,
         name: '',
         start: 1,
         end: 1,
+
+        indices: '1',
+        checkindex: 1,
     }
 
     private rules = {
@@ -149,6 +181,7 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         minStart: (value: number) => value > 0 || 'smaller than 1',
         minEnd: (value: number) => value >= this.form.start || 'smaller than start value',
         max: (value: number) => value <= (this.light?.chainCount ?? 1) || 'higher than chain_count',
+        indices: (value: string) => value.replaceAll(new RegExp("0-9,|-"), "").length == 0 || 'invalid syntax',
     }
 
     @Prop({ type: Object, default: null })
@@ -229,6 +262,10 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 (group: GuiMacrosStateMacrogroup) => group.name === name && group.id != this.form.id
             ) >= 0
         )
+    }
+
+    indexAllowed(index: string) {
+
     }
 }
 </script>
