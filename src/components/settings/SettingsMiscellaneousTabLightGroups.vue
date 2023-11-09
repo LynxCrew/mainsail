@@ -181,7 +181,7 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         minStart: (value: number) => value > 0 || 'smaller than 1',
         minEnd: (value: number) => value >= this.form.start || 'smaller than start value',
         max: (value: number) => value <= (this.light?.chainCount ?? 1) || 'higher than chain_count',
-        indices: (value: string) => value.replaceAll(new RegExp("0-9,|-"), "").length == 0 || 'invalid syntax',
+        indices: (value: string) => this.indexAllowed(value) || 'invalid syntax',
     }
 
     @Prop({ type: Object, default: null })
@@ -265,7 +265,14 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     }
 
     indexAllowed(index: string) {
-
+        return (
+            index.replaceAll(new RegExp(/1-9/), "")
+                .replaceAll("-", "")
+                .replaceAll(",", "")
+                .replaceAll("|", "")
+                .replaceAll("-", "")
+                .length == 0
+        )
     }
 }
 </script>

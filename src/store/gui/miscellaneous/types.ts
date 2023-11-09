@@ -21,6 +21,8 @@ export interface GuiMiscellaneousStateEntryLightgroup {
     name: string
     start: number
     end: number
+
+    indices: string
 }
 
 export interface GuiMiscellaneousStateEntryPreset {

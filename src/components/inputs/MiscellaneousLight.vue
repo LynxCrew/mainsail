@@ -395,14 +395,15 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         if (this.group) {
             const tmp = gcode
 
-            for (let i = this.group.start; i <= this.group.end; i++) {
-                if (i === this.group.start) {
-                    gcode += ` INDEX=${i}`
-                    continue
-                }
+            gcode += ` INDICES=${this.group.indices}`
+            //for (let i = this.group.start; i <= this.group.end; i++) {
+            //    if (i === this.group.start) {
+            //        gcode += ` INDEX=${i}`
+            //        continue
+            //    }
 
-                gcode += `\n${tmp} INDEX=${i}`
-            }
+            //    gcode += `\n${tmp} INDEX=${i}`
+            //}
         }
 
         gcode += ` TRANSMIT=1`
