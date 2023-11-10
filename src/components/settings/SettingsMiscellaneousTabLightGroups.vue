@@ -129,7 +129,7 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     convertName = convertName
 
     private boolForm = false
-    private local_indices = [0]
+    private local_indices = [1]
 
     private form: {
         id: string | null
@@ -189,7 +189,11 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     }
 
     set checkindex(newval: number) {
-        this.form.checkindex = newval
+        if (this.checkIndexAllowed(newval)) {
+            this.form.checkindex = newval
+        } else {
+            this.form.checkindex = this.local_indices[0] ?? 1
+        }
     }
 
     get checkindex() {
