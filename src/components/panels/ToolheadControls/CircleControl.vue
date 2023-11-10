@@ -12,52 +12,102 @@
                     <g id="ArtBoard1" transform="matrix(1.24239,0,0,1,0,0)">
                         <rect x="0" y="0" width="62" height="62" style="fill: none" />
                         <g id="home_buttons" transform="matrix(0.804902,0,0,1,0.0430241,0)">
-                            <!-- HOME Y BUTTON -->
-                            <a :class="yHomeClass" @click="doHomeY">
-                                <g
-                                    id="home_y"
-                                    transform="matrix(0.707107,-0.707107,0.707107,0.707107,-1.41799,4.05689)">
+                            <template v-if="lynxLayout">
+                                <!-- HOME X BUTTON -->
+                                <a :class="xHomeClass" @click="doHomeX">
                                     <g
-                                        id="home_button_y"
-                                        class="home_button"
-                                        transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
-                                        <path :d="pathHomeButtonTop" />
+                                        id="home_x"
+                                        transform="matrix(0.707107,0.707107,-0.707107,0.707107,57.8807,-1.41799)">
+                                        <g
+                                            id="home_button_x"
+                                            class="home_button"
+                                            transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
+                                            <path :d="pathHomeButtonTop" />
+                                        </g>
+                                        <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                            <text x="3.789px" y="6.089px" style="font-weight: bold">X</text>
+                                        </g>
+                                        <g
+                                            id="icon"
+                                            class="home_icon"
+                                            transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                            stroke-width="0.0">
+                                            <path :d="homeIcon" style="fill-rule: nonzero" />
+                                        </g>
                                     </g>
-                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
-                                        <text x="3.789px" y="6.089px" style="font-weight: bold">Y</text>
-                                    </g>
+                                </a>
+                                <!-- HOME Y BUTTON -->
+                                <a :class="yHomeClass" @click="doHomeY">
                                     <g
-                                        id="Icon"
-                                        class="home_icon"
-                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
-                                        stroke-width="0.0">
-                                        <path :d="homeIcon" style="fill-rule: nonzero" />
+                                        id="home_y"
+                                        transform="matrix(0.707107,-0.707107,0.707107,0.707107,-1.41799,4.05689)">
+                                        <g
+                                            id="home_button_y"
+                                            class="home_button"
+                                            transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
+                                            <path :d="pathHomeButtonTop" />
+                                        </g>
+                                        <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                            <text x="3.789px" y="6.089px" style="font-weight: bold">Y</text>
+                                        </g>
+                                        <g
+                                            id="Icon"
+                                            class="home_icon"
+                                            transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                            stroke-width="0.0">
+                                            <path :d="homeIcon" style="fill-rule: nonzero" />
+                                        </g>
                                     </g>
-                                </g>
-                            </a>
-                            <!-- HOME X BUTTON -->
-                            <a :class="xHomeClass" @click="doHomeX">
-                                <g
-                                    id="home_x"
-                                    transform="matrix(0.707107,0.707107,-0.707107,0.707107,57.8807,-1.41799)">
+                                </a>
+                            </template>
+                            <template v-else>
+                                <!-- HOME X BUTTON -->
+                                <a :class="xHomeClass" @click="doHomeX">
                                     <g
-                                        id="home_button_x"
-                                        class="home_button"
-                                        transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
-                                        <path :d="pathHomeButtonTop" />
+                                        id="home_x"
+                                        transform="matrix(0.707107,-0.707107,0.707107,0.707107,-1.41799,4.05689)">
+                                        <g
+                                            id="home_button_x"
+                                            class="home_button"
+                                            transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
+                                            <path :d="pathHomeButtonTop" />
+                                        </g>
+                                        <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                            <text x="3.789px" y="6.089px" style="font-weight: bold">X</text>
+                                        </g>
+                                        <g
+                                            id="Icon"
+                                            class="home_icon"
+                                            transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                            stroke-width="0.0">
+                                            <path :d="homeIcon" style="fill-rule: nonzero" />
+                                        </g>
                                     </g>
-                                    <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
-                                        <text x="3.789px" y="6.089px" style="font-weight: bold">X</text>
-                                    </g>
+                                </a>
+                                <!-- HOME Y BUTTON -->
+                                <a :class="yHomeClass" @click="doHomeY">
                                     <g
-                                        id="icon"
-                                        class="home_icon"
-                                        transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
-                                        stroke-width="0.0">
-                                        <path :d="homeIcon" style="fill-rule: nonzero" />
+                                        id="home_y"
+                                        transform="matrix(0.707107,0.707107,-0.707107,0.707107,57.8807,-1.41799)">
+                                        <g
+                                            id="home_button_y"
+                                            class="home_button"
+                                            transform="matrix(0.68689,0.68689,-0.68689,0.68689,3.87132,0.962447)">
+                                            <path :d="pathHomeButtonTop" />
+                                        </g>
+                                        <g transform="matrix(0.654426,0,0,0.654426,0.298666,4.01315)" stroke-width="0.0">
+                                            <text x="3.789px" y="6.089px" style="font-weight: bold">Y</text>
+                                        </g>
+                                        <g
+                                            id="icon"
+                                            class="home_icon"
+                                            transform="matrix(0.147059,0,0,0.147059,2.10662,2.08254)"
+                                            stroke-width="0.0">
+                                            <path :d="homeIcon" style="fill-rule: nonzero" />
+                                        </g>
                                     </g>
-                                </g>
-                            </a>
+                                </a>
+                            </template>
                             <!-- HOME Z BUTTON -->
                             <a :class="zHomeClass" @click="doHomeZ">
                                 <g
@@ -810,6 +860,10 @@ export default class CircleControl extends Mixins(BaseMixin, ControlMixin) {
         if (this.isPrinting) classes.push('disabled')
 
         return classes
+    }
+
+    get lynxLayout(): boolean {
+        return this.$store.state.gui.control.lynxLayout ?? false
     }
 
     clickSpecialButton() {

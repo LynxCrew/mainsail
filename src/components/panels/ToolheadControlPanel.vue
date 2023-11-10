@@ -21,7 +21,7 @@
                         </v-btn>
                     </v-list-item>
                     <v-list-item v-if="controlStyle !== 'bars' && actionButton !== 'm84' && lynxLayout">
-                        <v-btn small style="width: 100%" @click="doHome">Home</v-btn>
+                        <v-btn small style="width: 100%" @click="doHome">Home All</v-btn>
                     </v-list-item>
                     <v-list-item v-if="controlStyle !== 'bars' && existsZtilt && actionButton !== 'ztilt'">
                         <v-btn small style="width: 100%" @click="doZtilt">Z-Tilt Adjust</v-btn>
