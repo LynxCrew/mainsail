@@ -11,7 +11,7 @@ import {
     PrinterStateMcu,
     PrinterStateMacro,
     PrinterGetterObject,
-    PrinterStateLight,
+    PrinterStateLight, PrinterStateDisplayTemplates,
 } from '@/store/printer/types'
 import {
     caseInsensitiveSort,
@@ -211,6 +211,23 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
             return 0
         })
+    },
+
+    getDisplayTemplates: (state, getters) => {
+        const array: PrinterStateDisplayTemplates[] = []
+        const config = state.configfile?.config ?? {}
+        const settings = state.configfile?.settings ?? null
+
+        Object.keys(config)
+            .filter((prop) => prop.startsWith('display_template'))
+            .forEach((prop) => {
+                const name = prop.replace('display_template ', '')
+                array.push({
+                    name
+                })
+            })
+
+        return caseInsensitiveSort(array, 'name')
     },
 
     getLights: (state, getters) => {

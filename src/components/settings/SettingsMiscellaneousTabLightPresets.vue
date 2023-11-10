@@ -12,81 +12,103 @@
                         outlined></v-text-field>
                 </settings-row>
                 <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.MiscellaneousTab.Color')">
-                    <v-row>
-                        <v-col class="text-center">
-                            <color-picker
-                                :color="colorRGB"
-                                :options="colorPickerOptions"
-                                @update:color="onColorRGBChanged" />
-                            <color-picker
-                                v-if="existWhite"
-                                :color="colorRGBW"
-                                :options="colorPickerWhiteOptions"
-                                class="mt-3"
-                                @update:color="onColorWhiteChanged" />
-                        </v-col>
-                        <v-col>
-                            <v-row v-if="existRed">
-                                <v-col>
-                                    <number-input
-                                        :label="$t('Panels.MiscellaneousPanel.Light.Red')"
-                                        param="red"
-                                        :target="redInt"
-                                        :min="0"
-                                        :max="255"
-                                        :dec="1"
-                                        :step="1"
-                                        :output-error-msg="true"
-                                        :has-spinner="true"
-                                        @submit="onColorInput" />
-                                </v-col>
-                            </v-row>
-                            <v-row v-if="existGreen">
-                                <v-col>
-                                    <number-input
-                                        :label="$t('Panels.MiscellaneousPanel.Light.Green')"
-                                        param="green"
-                                        :target="greenInt"
-                                        :min="0"
-                                        :max="255"
-                                        :dec="1"
-                                        :step="1"
-                                        :has-spinner="true"
-                                        @submit="onColorInput" />
-                                </v-col>
-                            </v-row>
-                            <v-row v-if="existBlue">
-                                <v-col>
-                                    <number-input
-                                        :label="$t('Panels.MiscellaneousPanel.Light.Blue')"
-                                        param="blue"
-                                        :target="blueInt"
-                                        :min="0"
-                                        :max="255"
-                                        :dec="1"
-                                        :step="1"
-                                        :has-spinner="true"
-                                        @submit="onColorInput" />
-                                </v-col>
-                            </v-row>
-                            <v-row v-if="existWhite">
-                                <v-col>
-                                    <number-input
-                                        :label="$t('Panels.MiscellaneousPanel.Light.White')"
-                                        param="white"
-                                        :target="whiteInt"
-                                        :min="0"
-                                        :max="255"
-                                        :dec="1"
-                                        :step="1"
-                                        :has-spinner="true"
-                                        @submit="onColorInput" />
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                    </v-row>
+                <settings-row :title="$t('Settings.MiscellaneousTab.Group')"
+                              :sub-title="$t('Settings.MiscellaneousTab.GroupDescription')">
+                    <v-text-field
+                        v-model="group"
+                        hide-details="auto"
+                        :rules="[rules.group]"
+                        dense
+                        outlined></v-text-field>
                 </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row :title="$t('Settings.MiscellaneousTab.Template')"
+                              :sub-title="$t('Settings.MiscellaneousTab.TemplateDescription')">
+                    <v-text-field
+                        v-model="template"
+                        hide-details="auto"
+                        :rules="[rules.template]"
+                        dense
+                        outlined></v-text-field>
+                </settings-row>
+                <template v-if="form.template == ''">
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.MiscellaneousTab.Color')">
+                        <v-row>
+                            <v-col class="text-center">
+                                <color-picker
+                                    :color="colorRGB"
+                                    :options="colorPickerOptions"
+                                    @update:color="onColorRGBChanged" />
+                                <color-picker
+                                    v-if="existWhite"
+                                    :color="colorRGBW"
+                                    :options="colorPickerWhiteOptions"
+                                    class="mt-3"
+                                    @update:color="onColorWhiteChanged" />
+                            </v-col>
+                            <v-col>
+                                <v-row v-if="existRed">
+                                    <v-col>
+                                        <number-input
+                                            :label="$t('Panels.MiscellaneousPanel.Light.Red')"
+                                            param="red"
+                                            :target="redInt"
+                                            :min="0"
+                                            :max="255"
+                                            :dec="1"
+                                            :step="1"
+                                            :output-error-msg="true"
+                                            :has-spinner="true"
+                                            @submit="onColorInput" />
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="existGreen">
+                                    <v-col>
+                                        <number-input
+                                            :label="$t('Panels.MiscellaneousPanel.Light.Green')"
+                                            param="green"
+                                            :target="greenInt"
+                                            :min="0"
+                                            :max="255"
+                                            :dec="1"
+                                            :step="1"
+                                            :has-spinner="true"
+                                            @submit="onColorInput" />
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="existBlue">
+                                    <v-col>
+                                        <number-input
+                                            :label="$t('Panels.MiscellaneousPanel.Light.Blue')"
+                                            param="blue"
+                                            :target="blueInt"
+                                            :min="0"
+                                            :max="255"
+                                            :dec="1"
+                                            :step="1"
+                                            :has-spinner="true"
+                                            @submit="onColorInput" />
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="existWhite">
+                                    <v-col>
+                                        <number-input
+                                            :label="$t('Panels.MiscellaneousPanel.Light.White')"
+                                            param="white"
+                                            :target="whiteInt"
+                                            :min="0"
+                                            :max="255"
+                                            :dec="1"
+                                            :step="1"
+                                            :has-spinner="true"
+                                            @submit="onColorInput" />
+                                    </v-col>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </settings-row>
+                </template>
             </v-card-text>
             <v-card-actions class="d-flex justify-end">
                 <v-btn text @click="closeForm">{{ $t('Settings.Cancel') }}</v-btn>
@@ -184,6 +206,8 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
     convertName = convertName
 
     private boolForm = false
+    private local_group = ''
+    private local_template = ''
 
     private form: {
         id: string | null
@@ -192,6 +216,8 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         green: number | null
         blue: number | null
         white: number | null
+        group: string
+        template: string
     } = {
         id: null,
         name: '',
@@ -199,6 +225,8 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         green: null,
         blue: null,
         white: null,
+        group: '',
+        template: '',
     }
 
     private rules = {
@@ -206,10 +234,46 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         presetUnique: (value: string) => !this.existsPresetName(value) || 'Name already exists',
         min: (value: number) => value >= 0 || 'Must be minimum 0',
         max: (value: number) => value <= 255 || 'Must be smaller then 256',
+        group: (value: string) => this.groupAllowed(value) || 'Not a valid Group',
+        template: (value: string) => this.templateAllowed(value) || 'Not a valid Template'
     }
 
     @Prop({ type: Object, default: null })
     declare light: PrinterStateLight | null
+
+    set group(newval: string) {
+        this.local_group = newval
+        if (this.groupAllowed(newval)) {
+            this.form.group = newval
+        } else if (!this.groupAllowed(this.form.group)) {
+            this.form.group = ''
+        }
+    }
+
+    get group() {
+        return this.local_group
+    }
+
+    set template(newval: string) {
+        this.local_template = newval
+        if (this.templateAllowed(newval)) {
+            this.form.template = newval
+            const color: ColorData = {
+                red: 255,
+                green: 255,
+                blue: 255,
+                white: 255,
+            }
+
+            this.colorChanged(color)
+        } else if (!this.templateAllowed(this.form.template)) {
+            this.form.template = ''
+        }
+    }
+
+    get template() {
+        return this.local_template
+    }
 
     get entry() {
         return this.$store.getters['gui/miscellaneous/getEntry']({
@@ -231,6 +295,19 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         window.console.log('getEntryPresets', presets)
 
         return caseInsensitiveSort(presets, 'name')
+    }
+
+    get groups() {
+        return (
+            this.$store.getters['gui/miscellaneous/getEntryLightgroups']({
+                type: this.light?.type,
+                name: this.light?.name,
+            }) ?? []
+        )
+    }
+
+    get templates() {
+        return this.$store.getters['printer/getDisplayTemplates'] ?? []
     }
 
     get existRed() {
@@ -364,7 +441,11 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         this.form.green = this.light?.colorOrder.indexOf('G') != -1 ? 0 : null
         this.form.blue = this.light?.colorOrder.indexOf('B') != -1 ? 0 : null
         this.form.white = this.light?.colorOrder.indexOf('W') != -1 ? 0 : null
+        this.form.group = ''
+        this.form.template = ''
         this.boolForm = true
+        this.local_group = this.form.group
+        this.local_template = this.form.template
     }
 
     editPreset(preset: GuiMiscellaneousStateEntryPreset) {
@@ -374,7 +455,11 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         this.form.green = this.light?.colorOrder.indexOf('G') != -1 ? preset.green : null
         this.form.blue = this.light?.colorOrder.indexOf('B') != -1 ? preset.blue : null
         this.form.white = this.light?.colorOrder.indexOf('W') != -1 ? preset.white : null
+        this.form.group = preset.group
+        this.form.template = preset.template
         this.boolForm = true
+        this.local_group = this.form.group
+        this.local_template = this.form.template
     }
 
     closeForm() {
@@ -412,6 +497,33 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
                 (group: GuiMiscellaneousStateEntryPreset) => group.name === name && group.id != this.form.id
             ) >= 0
         )
+    }
+
+    groupAllowed(group: string) {
+        if (group == '') {
+            return true
+        }
+        const groups = this.groups
+        for (let i = 0; i < groups.length; i++) {
+            const local_group = groups[i]
+            if (group == local_group.name) {
+                return true
+            }
+        }
+        return false
+    }
+
+    templateAllowed(template: string) {
+        if (template == '') {
+            return true
+        }
+        const templates = this.templates
+        for (let i = 0; i < templates.length; i++) {
+            if (template == templates[i].name) {
+                return true
+            }
+        }
+        return false
     }
 
     @Debounce({ time: 250 })

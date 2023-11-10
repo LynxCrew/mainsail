@@ -139,7 +139,7 @@ import { convertName } from '@/plugins/helpers'
 import {Component, Mixins, Prop, Watch} from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { mdiCloseThick, mdiLightbulbOutline, mdiLightbulbOnOutline } from '@mdi/js'
-import { PrinterStateLight } from '@/store/printer/types'
+import {PrinterGetterObject, PrinterStateLight} from '@/store/printer/types'
 import ColorPicker from '@/components/inputs/ColorPicker.vue'
 import { ColorPickerProps } from '@jaames/iro/dist/ColorPicker.d'
 import { Debounce } from 'vue-debounce-decorator'
@@ -169,9 +169,6 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
 
     @Prop({ type: Boolean, default: false }) readonly root!: boolean
     @Prop(Object) readonly group!: GuiMiscellaneousStateEntryLightgroup | undefined
-
-    @Prop({ type: String, required: true })
-    declare colorString: string
 
     private boolDialog = false
     private inputValue = 0
@@ -264,7 +261,6 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
     }
 
     get current() {
-        console.log("2")
         const color: ColorData = {
             red: 0,
             green: 0,
@@ -275,7 +271,7 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         if (this.existWhite) color.white = 0
         if (this.object.colorData.length === 0) return color
 
-        const firstColorData = this.object.colorData[(this.group?.checkindex ?? 1) - 1]
+        const firstColorData = this.object.colorData[(this.group?.checkIndex ?? 1) - 1]
         color.red = firstColorData[0] * 255
         color.green = firstColorData[1] * 255
         color.blue = firstColorData[2] * 255
@@ -361,6 +357,8 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
             this.$store.getters['gui/miscellaneous/getEntryPresets']({
                 type: this.object.type,
                 name: this.object.name,
+            }).filter((object: GuiMiscellaneousStateEntryPreset) => {
+                return (object.group == '' || object.group == this.group?.name)
             }) ?? []
         )
     }
@@ -373,6 +371,17 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         return output
     }
 
+
+    parsePreset(name: string) {
+        const presets = this.presets
+        for (let i = 0; i < presets.length; i++) {
+            const local_preset = presets[i]
+            if (name == local_preset.name) {
+                return local_preset
+            }
+        }
+        return null
+    }
 
     colorChanged(color: ColorData) {
         if (
@@ -388,20 +397,43 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         const blue = Math.round(((color.blue ?? 0) / 255) * 10000) / 10000
         const white = Math.round(((color.white ?? 0) / 255) * 10000) / 10000
 
+        let clear_gcode = `SET_LED_TEMPLATE LED="${this.object.name}" TEMPLATE=""`
         let gcode = `SET_LED LED="${this.object.name}" RED=${red} GREEN=${green} BLUE=${blue}`
         if (this.existWhite) gcode += ` WHITE=${white}`
         gcode += ` SYNC=0`
 
         if (this.group) {
+            clear_gcode += ` Index=${this.group.indices}`
             gcode += ` Index=${this.group.indices}`
         }
 
         gcode += ` TRANSMIT=1`
 
         this.$store.dispatch('server/addEvent', {
+            message: clear_gcode,
+            type: 'command',
+        })
+
+        this.$store.dispatch('server/addEvent', {
             message: gcode,
             type: 'command',
         })
+        this.$socket.emit('printer.gcode.script', { script: clear_gcode })
+        this.$socket.emit('printer.gcode.script', { script: gcode })
+    }
+
+    templateChanged(template: string) {
+        let gcode = `SET_LED_TEMPLATE LED="${this.object.name}" TEMPLATE="${template}"`
+
+        if (this.group) {
+            gcode += ` Index=${this.group.indices}`
+        }
+
+        this.$store.dispatch('server/addEvent', {
+            message: gcode,
+            type: 'command',
+        })
+
         this.$socket.emit('printer.gcode.script', { script: gcode })
     }
 
@@ -459,32 +491,43 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
     }
 
     on() {
-        const color: ColorData = {
-            red: 255,
-            green: 255,
-            blue: 255,
-            white: 255,
-        }
+        if (this.group && this.group.defaultPreset != '') {
+            this.usePreset(this.parsePreset(this.group.defaultPreset))
+        } else {
+            const color: ColorData = {
+                red: 255,
+                green: 255,
+                blue: 255,
+                white: 255,
+            }
 
-        this.colorChanged(color)
+            this.colorChanged(color)
+        }
     }
 
     presetStyle(preset: GuiMiscellaneousStateEntryPreset) {
+        console.log(preset?.red ?? 0)
+        console.log(preset?.green ?? 0)
+        console.log(preset?.blue ?? 0)
         if ((preset?.red ?? 0) + (preset?.green ?? 0) + (preset?.blue ?? 0) === 0 && (preset?.white ?? 0) > 0) {
             return {
-                backgroundColor: `rgb(${preset.white}%, ${preset.white}%, ${preset.white}%)`,
+                backgroundColor: `rgb(${preset.red}, ${preset.green}, ${preset.blue})`,
             }
         }
 
         return {
-            backgroundColor: `rgb(${preset.red}%, ${preset.green}%, ${preset.blue}%)`,
+            backgroundColor: `rgb(${preset.red}, ${preset.green}, ${preset.blue})`,
         }
     }
 
     usePreset(preset: GuiMiscellaneousStateEntryPreset) {
-        const color: ColorData = { ...preset }
+        if (preset.template != '') {
+            this.templateChanged(preset.template)
+        } else {
+            const color: ColorData = {...preset}
 
-        this.colorChanged(color)
+            this.colorChanged(color)
+        }
     }
 }
 </script>

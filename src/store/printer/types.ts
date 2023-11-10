@@ -137,6 +137,10 @@ export interface PrinterStateMiscellaneous {
     max_power?: number
 }
 
+export interface PrinterStateDisplayTemplates {
+    name: string
+}
+
 export interface PrinterStateFilamentSensors {
     name: string
     info: string

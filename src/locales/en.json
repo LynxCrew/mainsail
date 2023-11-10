@@ -1008,11 +1008,15 @@
             "End": "End",
             "EndDescription": "Last LED of this group.",
             "Groups": "Groups",
-            "GroupSubTitle": "Indices: [{indices}], CheckIndex: {checkindex}",
+            "GroupSubTitle": "Indices: [{indices}], CheckIndex: {checkIndex}",
             "LightGroups": "{name} - Groups",
             "LightPresets": "{name} - Presets",
             "Miscellaneous": "Miscellaneous",
             "Name": "Name",
+            "Group": "Group",
+            "GroupDescription": "The groups this preset should be available to, if none are specified it is available to all",
+            "Template": "Template",
+            "TemplateDescription": "If this is specified a template will be used instead of colors",
             "NoDevicesFound": "No devices found",
             "NoGroupFound": "No group found",
             "NoPresetFound": "No preset found",
@@ -1024,7 +1028,9 @@
             "Index": "Index",
             "IndexDescription": "Define the indices of the LEDs of this group",
             "CheckIndex": "CheckIndex",
-            "CheckIndexDescription": "The Index which should be used to update the color-picker"
+            "CheckIndexDescription": "The Index which should be used to update the color-picker",
+            "DefaultPreset": "Default Preset",
+            "DefaultPresetDescription": "The preset to be set when the lightbulb icon is pressed, default is all colors"
         },
         "NavigationTab": {
             "Navigation": "Navigation"

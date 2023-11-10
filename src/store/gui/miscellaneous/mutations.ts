@@ -28,7 +28,8 @@ export const mutations: MutationTree<GuiMiscellaneousState> = {
         const lightgroup: GuiMiscellaneousStateEntryLightgroup = {
             name: payload.values.name,
             indices: payload.values.indices.toString(),
-            checkindex: parseInt(payload.values.checkindex.toString()),
+            checkIndex: parseInt(payload.values.checkIndex.toString()),
+            defaultPreset: payload.values.defaultPreset.toString()
         }
 
         Vue.set(state.entries[payload.entryId].lightgroups, payload.lightgroupId, lightgroup)
@@ -48,6 +49,8 @@ export const mutations: MutationTree<GuiMiscellaneousState> = {
             green: payload.values.green,
             blue: payload.values.blue,
             white: payload.values.white,
+            group: payload.values.group,
+            template: payload.values.template,
         }
 
         Vue.set(state.entries[payload.entryId].presets, payload.presetId, preset)

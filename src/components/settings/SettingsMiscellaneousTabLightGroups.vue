@@ -28,11 +28,23 @@
                     :title="$t('Settings.MiscellaneousTab.CheckIndex')"
                     :sub-title="$t('Settings.MiscellaneousTab.CheckIndexDescription')">
                     <v-text-field
-                        v-model="checkindex"
+                        v-model="checkIndex"
                         hide-details="auto"
                         type="number"
                         step="1"
                         :rules="[rules.checkIndex]"
+                        dense
+                        outlined></v-text-field>
+                </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row
+                    :title="$t('Settings.MiscellaneousTab.DefaultPreset')"
+                    :sub-title="$t('Settings.MiscellaneousTab.DefaultPresetDescription')">
+                    <v-text-field
+                        v-model="defaultPreset"
+                        hide-details="auto"
+                        type="string"
+                        :rules="[rules.defaultPreset]"
                         dense
                         outlined></v-text-field>
                 </settings-row>
@@ -57,7 +69,7 @@
                                 :sub-title="
                                     $t('Settings.MiscellaneousTab.GroupSubTitle', {
                                         indices: group.indices,
-                                        checkindex: group.checkindex,
+                                        checkIndex: group.checkIndex,
                                     })
                                 "
                                 :dynamic-slot-width="true">
@@ -114,7 +126,11 @@ import { mdiDelete, mdiPalette, mdiPencil } from '@mdi/js'
 import { caseInsensitiveSort, convertName } from '@/plugins/helpers'
 import { PrinterStateLight } from '@/store/printer/types'
 import { GuiMacrosStateMacrogroup } from '@/store/gui/macros/types'
-import { GuiMiscellaneousStateEntry, GuiMiscellaneousStateEntryLightgroup } from '@/store/gui/miscellaneous/types'
+import {
+    GuiMiscellaneousStateEntry,
+    GuiMiscellaneousStateEntryLightgroup,
+    GuiMiscellaneousStateEntryPreset
+} from '@/store/gui/miscellaneous/types'
 
 @Component({
     components: {
@@ -130,24 +146,29 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
 
     private boolForm = false
     private local_indices = [1]
+    private local_checkIndex = 1
+    private local_defaultPreset = ''
 
     private form: {
         id: string | null
         name: string
         indices: string
-        checkindex: number
+        checkIndex: number
+        defaultPreset: string
     } = {
         id: null,
         name: '',
         indices: '1',
-        checkindex: 1,
+        checkIndex: 1,
+        defaultPreset: ''
     }
 
     private rules = {
         required: (value: string) => value !== '' || 'required',
         groupUnique: (value: string) => !this.existsGroupName(value) || 'Name already exists',
         indices: (value: string) => this.indexAllowed(value),
-        checkIndex: (value: number) => this.checkIndexAllowed(value) || 'not in indices'
+        checkIndex: (value: number) => this.checkIndexAllowed(value) || 'not in indices',
+        defaultPreset: (value: string) => this.defaultPresetAllowed(value) || 'Not a valid Preset'
     }
 
     @Prop({ type: Object, default: null })
@@ -169,7 +190,8 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 name: lightgroup.name,
                 id: key,
                 indices: lightgroup.indices,
-                checkindex: lightgroup.checkindex,
+                checkIndex: lightgroup.checkIndex,
+                defaultPreset: lightgroup.defaultPreset,
             })
         })
         window.console.log('getEntryLightgroups', groups)
@@ -177,10 +199,21 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         return caseInsensitiveSort(groups, 'name')
     }
 
+    get presets() {
+        return (
+            this.$store.getters['gui/miscellaneous/getEntryPresets']({
+                type: this.light?.type,
+                name: this.light?.name,
+            }) ?? []
+        )
+    }
+
     set indices(newval: string) {
         this.local_indices = this.parse_indices(newval)
         if (this.local_indices.length > 0) {
             this.form.indices = newval
+        } else if (this.parse_indices(this.form.indices).length < 0) {
+            this.form.indices = "1"
         }
     }
 
@@ -188,16 +221,30 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
         return this.form.indices
     }
 
-    set checkindex(newval: number) {
+    set checkIndex(newval: number) {
+        this.local_checkIndex = newval
         if (this.checkIndexAllowed(newval)) {
-            this.form.checkindex = newval
-        } else {
-            this.form.checkindex = this.local_indices[0] ?? 1
+            this.form.checkIndex = newval
+        } else if (!this.checkIndexAllowed(this.form.checkIndex)) {
+            this.form.checkIndex = this.local_indices[0] ?? 1
         }
     }
 
-    get checkindex() {
-        return this.form.checkindex
+    get checkIndex() {
+        return this.local_checkIndex
+    }
+
+    set defaultPreset(newval: string) {
+        this.local_defaultPreset = newval
+        if (this.defaultPresetAllowed(newval)) {
+            this.form.defaultPreset = newval
+        } else if (!this.defaultPresetAllowed(this.form.defaultPreset)) {
+            this.form.defaultPreset = ''
+        }
+    }
+
+    get defaultPreset() {
+        return this.local_defaultPreset
     }
 
     parse_indices(index: string) {
@@ -253,19 +300,25 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     createGroup() {
         this.form.id = null
         this.form.name = ''
-        this.form.indices = ""
-        this.form.checkindex = 1
+        this.form.indices = '1'
+        this.form.checkIndex = 1
+        this.form.defaultPreset = ''
         this.boolForm = true
-        this.parse_indices(this.form.indices)
+        this.local_indices = this.parse_indices(this.form.indices)
+        this.local_checkIndex = this.form.checkIndex
+        this.local_defaultPreset = this.form.defaultPreset
     }
 
     editGroup(group: GuiMiscellaneousStateEntryLightgroup) {
         this.form.id = group.id ?? null
         this.form.name = group.name
         this.form.indices = group.indices
-        this.form.checkindex = group.checkindex
+        this.form.checkIndex = group.checkIndex
+        this.form.defaultPreset = group.defaultPreset
         this.boolForm = true
-        this.parse_indices(this.form.indices)
+        this.local_indices = this.parse_indices(this.form.indices)
+        this.local_checkIndex = this.form.checkIndex
+        this.local_defaultPreset = this.form.defaultPreset
     }
 
     closeForm() {
@@ -350,6 +403,20 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
 
     checkIndexAllowed(index: number) {
         return this.local_indices.includes(parseInt(index.toString()))
+    }
+
+    defaultPresetAllowed(preset: string) {
+        if (preset == '') {
+            return true
+        }
+        const presets = this.presets
+        for (let i = 0; i < presets.length; i++) {
+            const local_preset = presets[i]
+            if (preset == local_preset.name) {
+                return true
+            }
+        }
+        return false
     }
 }
 </script>

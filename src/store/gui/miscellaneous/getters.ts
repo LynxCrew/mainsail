@@ -46,7 +46,8 @@ export const getters: GetterTree<GuiMiscellaneousState, any> = {
                 name: lightgroup.name,
                 id: key,
                 indices: lightgroup.indices,
-                checkindex: lightgroup.checkindex,
+                checkIndex: lightgroup.checkIndex,
+                defaultPreset: lightgroup.defaultPreset,
             })
         })
 
@@ -67,6 +68,8 @@ export const getters: GetterTree<GuiMiscellaneousState, any> = {
                 blue: preset.blue,
                 white: preset.white,
                 id: key,
+                group: preset.group,
+                template: preset.template,
             })
         })
 

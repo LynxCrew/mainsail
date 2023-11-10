@@ -34,7 +34,7 @@
                 :rpm="null"
                 :controllable="true"
                 :pwm="true"/>
-            <miscellaneous-light v-else-if="!hideMiscellaneousLight" :object="light" :root="true" :color-string="colorString(light.colorData)" />
+            <miscellaneous-light v-else-if="!hideMiscellaneousLight" :object="light" :root="true" />
         </div>
         <div v-for="(sensor, index) of filamentSensors" :key="'sensor_' + index">
             <v-divider v-if="index || miscellaneous.length || lights.length"></v-divider>
@@ -84,14 +84,6 @@ export default class MiscellaneousPanel extends Mixins(BaseMixin) {
 
     get hideMiscellaneousLight() {
         return this.$store.state.gui.uiSettings.hideMiscellaneousLight ?? false
-    }
-
-    colorString(colorData: number[][]) {
-        let data = ''
-        colorData.forEach((i) => {
-            data.concat(i.toString())
-        })
-        return data
     }
 
     hideDivider(light: PrinterStateLight, index: string|number) {

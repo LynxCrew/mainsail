@@ -20,7 +20,8 @@ export interface GuiMiscellaneousStateEntryLightgroup {
     id?: string
     name: string
     indices: string
-    checkindex: number
+    checkIndex: number
+    defaultPreset: string
 }
 
 export interface GuiMiscellaneousStateEntryPreset {
@@ -30,4 +31,6 @@ export interface GuiMiscellaneousStateEntryPreset {
     blue: number | null
     green: number | null
     white: number | null
+    group: string
+    template: string
 }
