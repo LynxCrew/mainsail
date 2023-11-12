@@ -31,6 +31,6 @@ export interface GuiMiscellaneousStateEntryPreset {
     blue: number | null
     green: number | null
     white: number | null
-    group: string
+    groups: string
     template: string
 }

@@ -68,7 +68,7 @@ export const getters: GetterTree<GuiMiscellaneousState, any> = {
                 blue: preset.blue,
                 white: preset.white,
                 id: key,
-                group: preset.group,
+                groups: preset.groups,
                 template: preset.template,
             })
         })

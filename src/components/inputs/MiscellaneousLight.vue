@@ -358,7 +358,9 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
                 type: this.object.type,
                 name: this.object.name,
             }).filter((object: GuiMiscellaneousStateEntryPreset) => {
-                return (object.group == '' || object.group == this.group?.name)
+                return (object.groups == ''
+                    || (this.group
+                        && object.groups?.split(',').map(s => s.trim()).includes(this.group.name)))
             }) ?? []
         )
     }
@@ -402,7 +404,7 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         if (this.existWhite) gcode += ` WHITE=${white}`
         gcode += ` SYNC=0`
 
-        if (this.group) {
+        if (this.group && this.group.indices != '') {
             clear_gcode += ` Index=${this.group.indices}`
             gcode += ` Index=${this.group.indices}`
         }
@@ -506,9 +508,6 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
     }
 
     presetStyle(preset: GuiMiscellaneousStateEntryPreset) {
-        console.log(preset?.red ?? 0)
-        console.log(preset?.green ?? 0)
-        console.log(preset?.blue ?? 0)
         if ((preset?.red ?? 0) + (preset?.green ?? 0) + (preset?.blue ?? 0) === 0 && (preset?.white ?? 0) > 0) {
             return {
                 backgroundColor: `rgb(${preset.red}, ${preset.green}, ${preset.blue})`,

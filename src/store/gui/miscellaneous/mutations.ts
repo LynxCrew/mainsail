@@ -49,7 +49,7 @@ export const mutations: MutationTree<GuiMiscellaneousState> = {
             green: payload.values.green,
             blue: payload.values.blue,
             white: payload.values.white,
-            group: payload.values.group,
+            groups: payload.values.groups,
             template: payload.values.template,
         }
 

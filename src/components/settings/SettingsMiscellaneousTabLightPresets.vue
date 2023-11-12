@@ -216,7 +216,7 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         green: number | null
         blue: number | null
         white: number | null
-        group: string
+        groups: string
         template: string
     } = {
         id: null,
@@ -225,7 +225,7 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         green: null,
         blue: null,
         white: null,
-        group: '',
+        groups: '',
         template: '',
     }
 
@@ -244,9 +244,9 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
     set group(newval: string) {
         this.local_group = newval
         if (this.groupAllowed(newval)) {
-            this.form.group = newval
-        } else if (!this.groupAllowed(this.form.group)) {
-            this.form.group = ''
+            this.form.groups = newval
+        } else if (!this.groupAllowed(this.form.groups)) {
+            this.form.groups = ''
         }
     }
 
@@ -441,10 +441,10 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         this.form.green = this.light?.colorOrder.indexOf('G') != -1 ? 0 : null
         this.form.blue = this.light?.colorOrder.indexOf('B') != -1 ? 0 : null
         this.form.white = this.light?.colorOrder.indexOf('W') != -1 ? 0 : null
-        this.form.group = ''
+        this.form.groups = ''
         this.form.template = ''
         this.boolForm = true
-        this.local_group = this.form.group
+        this.local_group = this.form.groups
         this.local_template = this.form.template
     }
 
@@ -455,10 +455,10 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         this.form.green = this.light?.colorOrder.indexOf('G') != -1 ? preset.green : null
         this.form.blue = this.light?.colorOrder.indexOf('B') != -1 ? preset.blue : null
         this.form.white = this.light?.colorOrder.indexOf('W') != -1 ? preset.white : null
-        this.form.group = preset.group
+        this.form.groups = preset.groups
         this.form.template = preset.template
         this.boolForm = true
-        this.local_group = this.form.group
+        this.local_group = this.form.groups
         this.local_template = this.form.template
     }
 
@@ -503,14 +503,19 @@ export default class SettingsMiscellaneousTabLightPresets extends Mixins(BaseMix
         if (group == '') {
             return true
         }
-        const groups = this.groups
-        for (let i = 0; i < groups.length; i++) {
-            const local_group = groups[i]
-            if (group == local_group.name) {
-                return true
+        const groups = group.split(',').map(s => s.trim())
+        for (let j = 0; j < groups.length; j++) {
+            let found = false
+            for (let i = 0; i < this.groups.length; i++) {
+                if (groups[j] == this.groups[i].name) {
+                    found = true
+                }
+            }
+            if (!found) {
+                return false
             }
         }
-        return false
+        return true
     }
 
     templateAllowed(template: string) {
