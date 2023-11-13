@@ -282,7 +282,8 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 if (this.invalidIndex(min)
                     || this.invalidIndex(max)
                     || isNaN(parsedstep)
-                    || parsedstep < 1) {
+                    || parsedstep < 1
+                    || parsedstep > (max - min)) {
                     return []
                 }
                 for (min; min <= max; min += parsedstep) {
@@ -381,7 +382,7 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 let maxval = range[1]
                 const range_steps = maxval.split("|")
                 if (range_steps.length > 2) {
-                    return "More than one '|' found in '" + s+ "', only one allowed"
+                    return "More than one '|' found in '" + s + "', only one allowed"
                 }
                 if (range_steps.length == 2) {
                     step = range_steps[1]
@@ -392,9 +393,17 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 let parsedstep = parseInt(step)
                 if (this.invalidIndex(min)
                     || this.invalidIndex(max)
-                    || isNaN(parsedstep)
-                    || parsedstep < 1) {
+                    || isNaN(parsedstep)) {
                     return "'" + s + "' contains illegal characters"
+                }
+                if (min > max) {
+                    return "Min value greater than max value in '" + s + "'"
+                }
+                if (parsedstep < 1) {
+                    return "Steps must be at least 1 (are '" + parsedstep + "')"
+                }
+                if (parsedstep > max - min) {
+                    return "Steps can not be bigger than range (are '" + parsedstep + "')"
                 }
             }
         }
