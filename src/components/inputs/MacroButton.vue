@@ -7,7 +7,7 @@
             :loading="loadings.includes('macro_' + macro.name)"
             :disabled="disabled || paramsRequired"
             @click="doSendMacro(macro.name)">
-            {{ alias ? alias : macro.name.replace(/_/g, ' ') }}
+            {{ macroAlias(macro) }}
         </v-btn>
         <template v-if="paramArray.length">
             <v-menu v-if="!isMobile" v-model="paramsDialog" offset-y :close-on-content-click="false">
@@ -294,6 +294,10 @@ export default class MacroButton extends Mixins(BaseMixin) {
 
     get paramsOverlayWidth() {
         return 750 * this.paramCols
+    }
+
+    macroAlias(macro: GuiMacrosStateMacrogroupMacro|PrinterStateMacro) {
+        return (macro.alias ?? '') != '' ? macro.alias : (this.alias ? this.alias : macro.name.replace(/_/g, ' '))
     }
 
     @Watch('klipperMacro', { deep: true, immediate: true })

@@ -184,6 +184,7 @@ export type PrinterStateMacroParams = {
 
 export interface PrinterStateMacro {
     name: string
+    alias: string
     description: string | null
     prop: {
         // eslint-disable-next-line

@@ -20,6 +20,7 @@ export interface GuiMacrosStateMacrogroup {
 export interface GuiMacrosStateMacrogroupMacro {
     pos: number
     name: string
+    alias: string
     color: 'group' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'highlight'
     showInStandby: boolean
     showInPrinting: boolean

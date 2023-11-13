@@ -27,6 +27,7 @@ export const mutations: MutationTree<GuiMacrosState> = {
         const newMacro: GuiMacrosStateMacrogroupMacro = {
             pos: 1,
             name: payload.macro,
+            alias: '',
             color: 'group',
             showInStandby: true,
             showInPrinting: true,

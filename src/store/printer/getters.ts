@@ -163,6 +163,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
                 array.push({
                     name,
+                    alias: '',
                     description: settings[propLower].description ?? null,
                     prop: propSettings,
                     params: hints ? getMacroParamsFromState(hints) : getMacroParamsFromConfig(propSettings),

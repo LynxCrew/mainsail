@@ -157,6 +157,21 @@
                                     <template v-if="existsMacro(macro.name)">
                                         <v-tooltip top>
                                             <template #activator="{ on, attrs }">
+                                                <v-text-field
+                                                    v-model="macro.alias"
+                                                    hide-details="auto"
+                                                    dense
+                                                    outlined
+                                                    @change="updateMacroFromGroup(
+                                                        macro,
+                                                        'alias',
+                                                        macro.alias
+                                                        )"></v-text-field>
+                                            </template>
+                                            <span>{{ $t('Settings.MacrosTab.ChangeMacroColor') }}</span>
+                                        </v-tooltip>
+                                        <v-tooltip top>
+                                            <template #activator="{ on, attrs }">
                                                 <v-btn
                                                     small
                                                     outlined

@@ -88,7 +88,7 @@
                             (device.locked_while_printing && ['printing', 'paused'].includes(printer_state))
                         "
                         @click="changeSwitch(device, device.status)">
-                        <v-list-item-title>{{ device.device.replaceAll('_', ' ') }}</v-list-item-title>
+                        <v-list-item-title>{{ device.device.replace(/_/g, ' ') }}</v-list-item-title>
                         <v-list-item-action class="my-0 d-flex flex-row" style="min-width: auto">
                             <v-icon class="mr-2" :color="device.status === 'on' ? '' : 'grey darken-2'">
                                 {{ device.status === 'on' ? mdiToggleSwitch : mdiToggleSwitchOff }}
