@@ -168,7 +168,7 @@
                                                         macro.alias
                                                         )"></v-text-field>
                                             </template>
-                                            <span>{{ $t('Settings.MacrosTab.ChangeMacroColor') }}</span>
+                                            <span>{{ $t('Settings.MacrosTab.ChangeMacroAlias') }}</span>
                                         </v-tooltip>
                                         <v-tooltip top>
                                             <template #activator="{ on, attrs }">

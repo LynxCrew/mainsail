@@ -957,6 +957,7 @@
             "AddGroup": "add Group",
             "AvailableMacros": "Available Macros",
             "ChangeMacroColor": "Change the color of the button.",
+            "ChangeMacroAlias": "Change the displayed name of the macro on the dashboard.",
             "Color": "Color",
             "CountMacros": "no Macros added | {count} Macro | {count} Macros",
             "Custom": "custom",
