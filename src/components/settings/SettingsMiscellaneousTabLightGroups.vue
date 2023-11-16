@@ -68,7 +68,7 @@
                                 :title="group.name"
                                 :sub-title="
                                     $t('Settings.MiscellaneousTab.GroupSubTitle', {
-                                        indices: group.indices,
+                                        indices: group.indices != '' ? group.indices : 'all',
                                         checkIndex: group.checkIndex,
                                     })
                                 "
@@ -194,7 +194,7 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 defaultPreset: lightgroup.defaultPreset,
             })
         })
-        window.console.log('getEntryLightgroups', groups)
+        //window.console.log('getEntryLightgroups', groups)
 
         return caseInsensitiveSort(groups, 'name')
     }
@@ -249,6 +249,10 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
 
     parse_indices(index: string) {
         const result = []
+        if (index == '') {
+            return Array.from({ length: (this.light?.chainCount ?? 1) }, (value, index) => index + 1)
+        }
+
         const indices = index.split(",")
         for (let i = 0; i < indices.length; i++) {
             const s = indices[i]
@@ -360,6 +364,9 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
     }
 
     indexAllowed(value: string) {
+        if (value == '') {
+            return true
+        }
         const indices = value.split(",")
         for (let i = 0; i < indices.length; i++) {
             const s = indices[i]
@@ -369,8 +376,14 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
             }
             if (range.length == 1) {
                 const index = parseInt(range[0])
-                if (this.invalidIndex(index)) {
-                    return "Missing characters in '" + value + "'"
+                if (isNaN(index)) {
+                    return "'" + range[0] + "' is not a number"
+                }
+                if (index < 1) {
+                    return "Index can't be smaller than 1, is '" + s + "'"
+                }
+                if (index > (this.light?.chainCount ?? 1)) {
+                    return "Index can't be greater than max led count ('" + (this.light?.chainCount ?? 1) + "'), is '" + s + "'"
                 }
                 if (range[0].includes("|")) {
                     return "'|' specified without preceding range in '" + s + "'"
@@ -391,11 +404,31 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
                 let min = parseInt(minval)
                 let max = parseInt(maxval)
                 let parsedstep = parseInt(step)
-                if (this.invalidIndex(min)
-                    || this.invalidIndex(max)
-                    || isNaN(parsedstep)) {
-                    return "'" + s + "' contains illegal characters"
+
+                if (isNaN(min)) {
+                    return "'" + minval + "' is not a number"
                 }
+                if (min < 1) {
+                    return "Index can't be smaller than 1, is '" + minval + "'"
+                }
+                if (min > (this.light?.chainCount ?? 1)) {
+                    return "Index can't be greater than max led count (" + (this.light?.chainCount ?? 1) + "), is '" + minval + "'"
+                }
+
+                if (isNaN(max)) {
+                    return "'" + maxval + "' is not a number"
+                }
+                if (max < 1) {
+                    return "Index can't be smaller than 1, is '" + maxval + "'"
+                }
+                if (max > (this.light?.chainCount ?? 1)) {
+                    return "Index can't be greater than max led count (" + (this.light?.chainCount ?? 1) + "), is '" + maxval + "'"
+                }
+
+                if (isNaN(parsedstep)) {
+                    return "'" + parsedstep + "' is not a number"
+                }
+
                 if (min > max) {
                     return "Min value greater than max value in '" + s + "'"
                 }

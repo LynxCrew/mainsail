@@ -417,9 +417,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
                 if (nameSplit[0] == "filament_switch_sensor") {
                     type = 'switch'
-                    info = (value.filament_detected || ((value.runout_distance ?? 0) == 0)
+                    info = (value.filament_detected || value.runout_distance == 0)
                         ? "Runout Distance: " + value.runout_distance + "mm"
-                        : "Runout: " + value.runout_elapsed + "/" + value.runout_distance + "mm");
+                        : "Runout: " + value.runout_elapsed + "/" + value.runout_distance + "mm";
                 }
 
                 sensors.push(<PrinterStateFilamentSensors>{
