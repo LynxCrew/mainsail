@@ -2,6 +2,6 @@
     "defaultLocale": "en",
     "hostname": null,
     "port": null,
-    "instancesDB": "browser",
+    "instancesDB": "moonraker",
     "instances": []
 }
