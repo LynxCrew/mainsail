@@ -18,6 +18,13 @@
             </settings-row>
             <v-divider class="my-2" />
             <settings-row
+                :title="$t('Settings.MiscellaneousTab.ShowStateOnDisabled')"
+                :sub-title="$t('Settings.MiscellaneousTab.ShowStateOnDisabledDescription')"
+                :dynamic-slot-width="true">
+                <v-switch v-model="showStateOnDisabled" hide-details class="mt-0" />
+            </settings-row>
+            <v-divider class="my-2" />
+            <settings-row
                 :title="$t('Settings.MiscellaneousTab.ShowDetectionLength')"
                 :sub-title="$t('Settings.MiscellaneousTab.ShowDetectionLengthDescription')"
                 :dynamic-slot-width="true">
@@ -121,6 +128,14 @@ export default class SettingsMiscellaneousTab extends Mixins(BaseMixin) {
 
     set hideMiscellaneousLight(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.hideMiscellaneousLight', value: newVal })
+    }
+
+    get showStateOnDisabled() {
+        return this.$store.state.gui.uiSettings.showStateOnDisabled ?? true
+    }
+
+    set showStateOnDisabled(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.showStateOnDisabled', value: newVal })
     }
 
     get showDetectionLength() {

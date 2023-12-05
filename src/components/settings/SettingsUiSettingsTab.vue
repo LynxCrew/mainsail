@@ -137,6 +137,13 @@
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
+                    :title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChange')"
+                    :sub-title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChangeDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="confirmOnPowerDeviceChange" hide-details class="mt-0" />
+                </settings-row>
+                <v-divider class="my-2" />
+                <settings-row
                     :title="$t('Settings.UiSettingsTab.ConfirmOnReboot')"
                     :sub-title="$t('Settings.UiSettingsTab.ConfirmOnRebootDescription')"
                     :dynamic-slot-width="true">
@@ -148,13 +155,6 @@
                     :sub-title="$t('Settings.UiSettingsTab.ConfirmOnShutdownDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="confirmOnShutdown" hide-details class="mt-0" />
-                </settings-row>
-                <v-divider class="my-2" />
-                <settings-row
-                    :title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChange')"
-                    :sub-title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChangeDescription')"
-                    :dynamic-slot-width="true">
-                    <v-switch v-model="confirmOnPowerDeviceChange" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row

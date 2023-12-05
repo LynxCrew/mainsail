@@ -14,6 +14,7 @@
                     <v-spacer></v-spacer>
                     <small :class="'mr-3 --text'">{{ infoText }}</small>
                     <small :class="'mr-3 ' + statusColor + '--text'">{{ statusText }}</small>
+                    <small v-if="!enabled" :class="'mr-3 ' + statusColor + '--text'">{{ disabledText }}</small>
                     <v-icon @click="changeSensor">
                         {{ enabled ? mdiToggleSwitch : mdiToggleSwitchOffOutline }}
                     </v-icon>
@@ -51,13 +52,7 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
     get statusColor() {
         if (!this.enabled) return 'gray'
         else if (this.filament_detected) return 'success'
-        else return 'danger'
-    }
-
-    get statusText() {
-        if (!this.enabled) return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Disabled')
-        else if (this.filament_detected) return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Detected')
-        else return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Empty')
+        else return 'attention'
     }
 
     get infoText() {
@@ -69,13 +64,31 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
             return this.info
         }
 
-        return ""
+        return null
+    }
+
+    get statusText() {
+        if (!this.showStateOnDisabled) return null
+        if (this.filament_detected) return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Detected')
+        else return this.$t('Panels.MiscellaneousPanel.RunoutSensor.Empty')
+    }
+
+    get disabledText() {
+        if (!this.enabled) {
+            let disabled = this.$t('Panels.MiscellaneousPanel.RunoutSensor.Disabled');
+            return this.showStateOnDisabled ? "(" + disabled + ")" : disabled
+        }
+        else return null
     }
 
     changeSensor() {
         const gcode = 'SET_FILAMENT_SENSOR SENSOR=' + this.name + ' ENABLE=' + (this.enabled ? 0 : 1)
         this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
         this.$socket.emit('printer.gcode.script', { script: gcode })
+    }
+
+    get showStateOnDisabled() {
+        return this.$store.state.gui.uiSettings.showStateOnDisabled ?? true
     }
 
     get showDetectionLength() {

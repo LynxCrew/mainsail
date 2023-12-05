@@ -374,6 +374,10 @@ export default class SettingsMacrosTabExpert extends Mixins(BaseMixin) {
                 value: 'highlight',
             },
             {
+                text: this.$t('Settings.MacrosTab.Attention'),
+                value: 'attention',
+            },
+            {
                 text: this.$t('Settings.MacrosTab.Custom'),
                 value: 'custom',
             },

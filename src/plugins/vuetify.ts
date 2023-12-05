@@ -21,6 +21,7 @@ export default new Vuetify({
                 success: '#4CAF50',
                 warning: '#FF8300',
                 highlight: '#FF8300',
+                attention: '#FF8300',
             },
         },
         options: { customProperties: true },

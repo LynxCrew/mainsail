@@ -174,6 +174,7 @@ export const getDefaultState = (): GuiState => {
             hideUpdateWarnings: false,
             hideUpdateAnomalies: false,
             hideMiscellaneousLight: false,
+            showStateOnDisabled: true,
             showDetectionLength: true,
             hideDetectionLengthOnDisabled: true,
             showRunoutDistance: true,

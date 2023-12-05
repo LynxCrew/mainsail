@@ -154,7 +154,7 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     declare pwm: boolean
 
     @Prop({ type: [Number, Boolean], default: false })
-    declare rpm: number | boolean
+    declare rpm: number | boolean | null
 
     @Prop({ type: Number, default: 1 })
     declare multi: number

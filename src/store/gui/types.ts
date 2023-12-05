@@ -124,6 +124,7 @@ export interface GuiState {
         hideUpdateWarnings: boolean
         hideUpdateAnomalies: boolean
         hideMiscellaneousLight: boolean
+        showStateOnDisabled: boolean
         showDetectionLength: boolean
         hideDetectionLengthOnDisabled: boolean
         showRunoutDistance: boolean

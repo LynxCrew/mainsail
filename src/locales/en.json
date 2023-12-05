@@ -632,7 +632,7 @@
             "RunoutSensor": {
                 "Detected": "detected",
                 "Disabled": "disabled",
-                "Empty": "Empty"
+                "Empty": "empty"
             }
         },
         "PowerControlPanel": {
@@ -987,12 +987,15 @@
             "Status": "Status",
             "Success": "success",
             "Highlight": "highlight",
+            "Attention": "attention",
             "UnknownGroup": "Unknown Group",
             "Warning": "warning"
         },
         "MiscellaneousTab": {
             "HideMiscellaneousLight": "Hide RGB-LED color-picker",
             "HideMiscellaneousLightDescription": "This option will hide the RGB-LED color-picker in the Miscellaneous tab on the Dashboard.",
+            "ShowStateOnDisabled": "Show state when disabled",
+            "ShowStateOnDisabledDescription": "Show filament sensor state even when the sensor is disabled.",
             "ShowDetectionLength": "Show Detection Length",
             "ShowDetectionLengthDescription": "This option will show the detection_length of a filament_motion_sensor.",
             "HideDetectionLengthOnDisabled": "Hide Detection Length on Disabled",
