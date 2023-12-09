@@ -30,7 +30,7 @@
                         </v-col>
                         <v-col :class="{ 'col-12': el.is.small }">
                             <number-input
-                                :label="$t('Panels.ExtruderControlPanel.PressureAdvanceSettings.Advance')"
+                                :label="$t('Panels.ExtruderControlPanel.PressureAdvanceSettings.Advance') + ' ' + pa_enabled"
                                 param="ADVANCE"
                                 :target="pressureAdvance"
                                 :default-value="defaultPressureAdvance"
@@ -46,7 +46,7 @@
                         </v-col>
                         <v-col :class="{ 'col-12': el.is.small }">
                             <number-input
-                                :label="$t('Panels.ExtruderControlPanel.PressureAdvanceSettings.SmoothTime')"
+                                :label="$t('Panels.ExtruderControlPanel.PressureAdvanceSettings.SmoothTime') + ' ' + pa_enabled"
                                 param="SMOOTH_TIME"
                                 :target="smoothTime"
                                 :default-value="defaultSmoothTime"
@@ -114,6 +114,10 @@ export default class PressureAdvanceSettings extends Mixins(BaseMixin) {
 
     get smoothTime(): number {
         return Math.floor((this.$store.state.printer?.[this.selectedExtruder]?.smooth_time ?? 0.04) * 1000) / 1000
+    }
+
+    get pa_enabled(): string {
+        return this.$store.state.printer?.[this.selectedExtruder]?.pressure_advance_enabled ? "" : "(disabled)"
     }
 
     get defaultPressureAdvance(): number {
