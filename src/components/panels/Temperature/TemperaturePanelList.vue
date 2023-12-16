@@ -139,16 +139,6 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         return ['temperature_mcu', 'temperature_host'].includes(sensor_type)
     }
 
-    get settings() {
-        return this.$store.state.printer?.configfile?.settings ?? {}
-    }
-
-    checkMcuHostSensor(fullName: string) {
-        const settingsObject = this.settings[fullName.toLowerCase()] ?? {}
-        const sensor_type = settingsObject.sensor_type ?? ''
-        return ['temperature_mcu', 'temperature_host'].includes(sensor_type)
-    }
-
     sortObjectName(a: string, b: string) {
         const splitsA = a.split(' ')
         let nameA = splitsA[0]

@@ -39,7 +39,7 @@ export default class ZoffsetMixin extends Vue {
         return this.$store.state.printer?.gcode_move?.homing_origin[2].toFixed(3)
     }
     get isEndstopProbe() {
-        return this.endstop_pin.search('probe:z_virtual_endstop') !== -1
+        return this.endstop_pin?.search('probe:z_virtual_endstop') !== -1
     }
 
     get existZOffsetApplyProbe() {
