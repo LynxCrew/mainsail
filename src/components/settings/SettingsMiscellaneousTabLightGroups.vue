@@ -463,4 +463,4 @@ export default class SettingsMiscellaneousTabLightGroups extends Mixins(BaseMixi
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

@@ -65,8 +65,11 @@
                 <v-row>
                     <v-col class="col-12 py-2 d-flex align-center">
                         <span>
-                            <b>{{ $t('Machine.ConfigFilesPanel.CurrentPath') }}:</b>
-                            {{ absolutePath }}
+                            <b class="mr-1">{{ $t('Machine.ConfigFilesPanel.CurrentPath') }}:</b>
+                            <path-navigation
+                                :path="currentPath"
+                                :base-directory-label="`/${root}`"
+                                :on-segment-click="clickPathNavGoToDirectory" />
                         </span>
                         <v-spacer></v-spacer>
                         <template v-if="disk_usage !== null && !showMissingConfigRootWarning">
@@ -586,7 +589,7 @@
             </panel>
         </v-dialog>
 
-        <v-snackbar v-model="uploadSnackbar.status" :timeout="-1" :value="true" fixed right bottom dark>
+        <v-snackbar v-model="uploadSnackbar.status" :timeout="-1" :value="true" fixed right bottom>
             <span v-if="uploadSnackbar.max > 1" class="mr-1">
                 ({{ uploadSnackbar.number }}/{{ uploadSnackbar.max }})
             </span>
@@ -607,10 +610,12 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
+import ThemeMixin from '@/components/mixins/theme'
 import { formatFilesize, sortFiles } from '@/plugins/helpers'
 import { FileStateFile, FileStateGcodefile } from '@/store/files/types'
 import axios from 'axios'
 import Panel from '@/components/ui/Panel.vue'
+import PathNavigation from '@/components/ui/PathNavigation.vue'
 import { hiddenRootDirectories } from '@/store/variables'
 import {
     mdiFilePlus,
@@ -689,9 +694,9 @@ interface draggingFile {
 }
 
 @Component({
-    components: { Panel },
+    components: { Panel, PathNavigation },
 })
-export default class ConfigFilesPanel extends Mixins(BaseMixin) {
+export default class ConfigFilesPanel extends Mixins(BaseMixin, ThemeMixin) {
     mdiInformation = mdiInformation
     mdiClose = mdiClose
     mdiCog = mdiCog
@@ -881,7 +886,7 @@ export default class ConfigFilesPanel extends Mixins(BaseMixin) {
             },
             {
                 text: this.$t('Machine.ConfigFilesPanel.UploadFile'),
-                color: 'grey darken-3',
+                color: this.machineButtonCol,
                 icon: mdiFileUpload,
                 loadingName: null,
                 onlyWriteable: true,
@@ -890,7 +895,7 @@ export default class ConfigFilesPanel extends Mixins(BaseMixin) {
             },
             {
                 text: this.$t('Machine.ConfigFilesPanel.CreateFile'),
-                color: 'grey darken-3',
+                color: this.machineButtonCol,
                 icon: mdiFilePlus,
                 loadingName: null,
                 onlyWriteable: true,
@@ -899,7 +904,7 @@ export default class ConfigFilesPanel extends Mixins(BaseMixin) {
             },
             {
                 text: this.$t('Machine.ConfigFilesPanel.CreateDirectory'),
-                color: 'grey darken-3',
+                color: this.machineButtonCol,
                 icon: mdiFolderPlus,
                 loadingName: null,
                 onlyWriteable: true,
@@ -908,7 +913,7 @@ export default class ConfigFilesPanel extends Mixins(BaseMixin) {
             },
             {
                 text: this.$t('Machine.ConfigFilesPanel.RefreshDirectory'),
-                color: 'grey darken-3',
+                color: this.machineButtonCol,
                 icon: mdiRefresh,
                 loadingName: null,
                 onlyWriteable: false,
@@ -1113,6 +1118,10 @@ export default class ConfigFilesPanel extends Mixins(BaseMixin) {
 
     clickRowGoBack() {
         this.currentPath = this.currentPath.slice(0, this.currentPath.lastIndexOf('/'))
+    }
+
+    clickPathNavGoToDirectory(segment: { location: string }) {
+        this.currentPath = segment.location
     }
 
     showContextMenu(e: any, item: FileStateFile) {

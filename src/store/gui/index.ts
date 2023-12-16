@@ -3,7 +3,7 @@ import { Module } from 'vuex'
 import { actions } from '@/store/gui/actions'
 import { mutations } from '@/store/gui/mutations'
 import { getters } from '@/store/gui/getters'
-import { defaultLogoColor, defaultPrimaryColor, defaultBigThumbnailBackground } from '@/store/variables'
+import { defaultTheme, defaultLogoColor, defaultPrimaryColor, defaultBigThumbnailBackground } from '@/store/variables'
 
 // load modules
 import { console } from '@/store/gui/console'
@@ -15,6 +15,7 @@ import { notifications } from '@/store/gui/notifications'
 import { presets } from '@/store/gui/presets'
 import { remoteprinters } from '@/store/gui/remoteprinters'
 import { webcams } from '@/store/gui/webcams'
+import { heightmap } from '@/store/gui/heightmap'
 
 export const getDefaultState = (): GuiState => {
     return {
@@ -149,6 +150,7 @@ export const getDefaultState = (): GuiState => {
             entries: [],
         },
         uiSettings: {
+            theme: defaultTheme,
             logo: defaultLogoColor,
             primary: defaultPrimaryColor,
             displayCancelPrint: false,
@@ -191,6 +193,13 @@ export const getDefaultState = (): GuiState => {
                 currentPath: '',
                 rootPath: 'config',
                 selectedFiles: [],
+            },
+            extruder: {
+                showTools: true,
+                showExtrusionFactor: true,
+                showPressureAdvance: true,
+                showFirmwareRetraction: true,
+                showExtruderControl: true,
             },
             gcodefiles: {
                 countPerPage: 10,
@@ -263,6 +272,13 @@ export const getDefaultState = (): GuiState => {
                 currentPath: 'timelapse',
                 selectedFiles: [],
             },
+            toolhead: {
+                showPosition: true,
+                showCoordinates: true,
+                showControl: true,
+                showZOffset: true,
+                showSpeedFactor: true,
+            },
             webcam: {
                 currentCam: {
                     dashboard: 'all',
@@ -292,5 +308,6 @@ export const gui: Module<GuiState, any> = {
         presets,
         remoteprinters,
         webcams,
+        heightmap,
     },
 }

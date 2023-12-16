@@ -1,9 +1,3 @@
-<style scoped>
-._filamentRunout-subheader {
-    height: auto;
-}
-</style>
-
 <template>
     <v-container class="px-0 py-2">
         <v-row>
@@ -108,3 +102,9 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
     }
 }
 </script>
+
+<style scoped>
+._filamentRunout-subheader {
+    height: auto;
+}
+</style>

@@ -198,7 +198,7 @@ export default class ZoffsetControl extends Mixins(BaseMixin, ZoffsetMixin) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .v-btn-toggle {
     width: 100%;
 }
@@ -235,6 +235,10 @@ export default class ZoffsetControl extends Mixins(BaseMixin, ZoffsetMixin) {
     .v-btn:not(:first-child) {
         border-left-width: 0;
     }
+}
+
+html.theme--light ._btn-group .v-btn {
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
 ._btn-qs {

@@ -99,6 +99,7 @@ export interface GuiState {
     presets?: GuiPresetsState
     remoteprinters?: GuiRemoteprintersState
     uiSettings: {
+        theme: 'dark' | 'light'
         logo: string
         primary: string
         displayCancelPrint: boolean
@@ -141,6 +142,13 @@ export interface GuiState {
             currentPath: string
             rootPath: string
             selectedFiles: FileStateFile[]
+        }
+        extruder: {
+            showTools: boolean
+            showExtrusionFactor: boolean
+            showPressureAdvance: boolean
+            showFirmwareRetraction: boolean
+            showExtruderControl: boolean
         }
         gcodefiles: {
             countPerPage: number
@@ -188,6 +196,13 @@ export interface GuiState {
             showHiddenFiles: boolean
             currentPath: string
             selectedFiles: FileStateFile[]
+        }
+        toolhead: {
+            showPosition: boolean
+            showCoordinates: boolean
+            showControl: boolean
+            showZOffset: boolean
+            showSpeedFactor: boolean
         }
         webcam: {
             currentCam: {
