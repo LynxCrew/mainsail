@@ -12,6 +12,7 @@ import { macros } from '@/store/gui/macros'
 import { miscellaneous } from '@/store/gui/miscellaneous'
 import { navigation } from '@/store/gui/navigation'
 import { notifications } from '@/store/gui/notifications'
+import { reminders } from '@/store/gui/reminders'
 import { presets } from '@/store/gui/presets'
 import { remoteprinters } from '@/store/gui/remoteprinters'
 import { webcams } from '@/store/gui/webcams'
@@ -309,5 +310,6 @@ export const gui: Module<GuiState, any> = {
         remoteprinters,
         webcams,
         heightmap,
+        reminders,
     },
 }

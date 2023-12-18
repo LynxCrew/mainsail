@@ -5,6 +5,7 @@ import i18n from '@/plugins/i18n.js'
 import { RootStateDependency } from '@/store/types'
 import { sha256 } from 'js-sha256'
 import { PrinterStateKlipperConfigWarning } from '@/store/printer/types'
+import { GuiRemindersStateReminder } from '../reminders/types'
 import { detect } from 'detect-browser'
 import semver from 'semver'
 import { minBrowserVersions } from '@/store/variables'
@@ -36,6 +37,9 @@ export const getters: GetterTree<GuiNotificationState, any> = {
 
         // browser warnings
         notifications = notifications.concat(getters['getNotificationsBrowserWarnings'])
+
+        // user-created reminders
+        notifications = notifications.concat(getters['getNotificationsOverdueReminders'])
 
         const mapType = {
             normal: 2,
@@ -356,6 +360,41 @@ export const getters: GetterTree<GuiNotificationState, any> = {
                 date,
                 dismissed: false,
             } as GuiNotificationStateEntry)
+        }
+
+        return notifications
+    },
+
+    getNotificationsOverdueReminders: (state, getters, rootState, rootGetters) => {
+        const notifications: GuiNotificationStateEntry[] = []
+        let reminders: GuiRemindersStateReminder[] = rootGetters['gui/reminders/getOverdueReminders']
+
+        const date = rootState.server.system_boot_at ?? new Date()
+
+        if (reminders.length) {
+            // get all dismissed reminders and convert it to a string[]
+            const remindersDismisses = rootGetters['gui/notifications/getDismissByCategory']('reminder').map(
+                (dismiss: GuiNotificationStateDismissEntry) => {
+                    return dismiss.id
+                }
+            )
+
+            // filter all dismissed reminders
+            reminders = reminders.filter((reminder) => !remindersDismisses.includes(reminder.id))
+
+            reminders.forEach((reminder) => {
+                // TODO: translate
+                const title = 'User Created Reminder'
+                const description = reminder.name
+                notifications.push({
+                    id: `reminder/${reminder.id}`,
+                    priority: 'normal',
+                    title: title,
+                    description: description,
+                    date,
+                    dismissed: false,
+                })
+            })
         }
 
         return notifications
