@@ -254,7 +254,7 @@
                                 class="pa-0 mr-0"
                                 @click.stop="select(!isSelected)"></v-simple-checkbox>
                         </td>
-                        <td class="px-0 text-center" style="width: 32px">
+                        <td class="px-0 text-center fileicon-container" style="width: 32px">
                             <template v-if="item.isDirectory">
                                 <v-icon>{{ mdiFolder }}</v-icon>
                             </template>
@@ -290,6 +290,10 @@
                             <template v-else>
                                 <v-icon>{{ mdiFile }}</v-icon>
                             </template>
+
+                            <span v-if="item.isPinned" class="pin">
+                                <v-icon>{{ mdiPin }}</v-icon>
+                            </span>
                         </td>
                         <td class=" ">{{ item.filename }}</td>
                         <td class="text-right text-no-wrap">
@@ -330,6 +334,16 @@
             @closeDialog="closeStartPrint" />
         <v-menu v-model="contextMenu.shown" :position-x="contextMenu.x" :position-y="contextMenu.y" absolute offset-y>
             <v-list>
+                <v-list-item
+                    v-if="!contextMenu.item.isPinned && !contextMenu.item.isDirectory"
+                    @click="pinFile(contextMenu.item)">
+                    <v-icon class="mr-1">{{ mdiPin }}</v-icon>
+                    {{ $t('Files.Pin') }}
+                </v-list-item>
+                <v-list-item v-else-if="!contextMenu.item.isDirectory" @click="unPinFile(contextMenu.item)">
+                    <v-icon class="mr-1">{{ mdiPinOff }}</v-icon>
+                    {{ $t('Files.Unpin') }}
+                </v-list-item>
                 <v-list-item
                     v-if="!contextMenu.item.isDirectory"
                     :disabled="printerIsPrinting || !klipperReadyForGui || !isGcodeFile(contextMenu.item)"
@@ -734,6 +748,8 @@ import {
     mdiVideo3d,
     mdiFileDocumentEditOutline,
     mdiContentCopy,
+    mdiPin,
+    mdiPinOff,
     mdiFileMove,
     mdiFolderMove,
 } from '@mdi/js'
@@ -1427,6 +1443,13 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
         }
     }
 
+    pinFile(item: FileStateFile) {
+        this.$store.dispatch('gui/addPinnedFile', item.filename)
+    }
+    unPinFile(item: FileStateFile) {
+        this.$store.dispatch('gui/removePinnedFile', item.filename)
+    }
+
     editFile(item: FileStateGcodefile) {
         this.$store.dispatch('editor/openFile', {
             root: 'gcodes',
@@ -1739,6 +1762,16 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
 
 .handle {
     cursor: move;
+}
+
+.fileicon-container {
+    position: relative;
+}
+.pin {
+    position: absolute;
+    top: 0;
+    right: 0;
+    filter: drop-shadow(0 0 4px black);
 }
 
 /*noinspection CssUnusedSymbol*/
