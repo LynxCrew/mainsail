@@ -6,7 +6,7 @@
             </v-icon>
         </td>
         <td class="name">
-            <span @click="showEditDialog = true">{{ formatName }}</span>
+            <span class="cursor-pointer" @click="showEditDialog = true">{{ formatName }}</span>
         </td>
         <td v-if="!isResponsiveMobile" class="state">
             <v-tooltip v-if="state !== null" top>
@@ -68,6 +68,7 @@ import { convertName } from '@/plugins/helpers'
 import {
     mdiFan,
     mdiFire,
+    mdiMemory,
     mdiPrinter3dNozzle,
     mdiPrinter3dNozzleAlert,
     mdiRadiator,
@@ -90,9 +91,12 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get printerObjectSettings() {
-        if (!(this.objectName in (this.$store.state.printer?.configfile?.settings ?? {}))) return {}
+        // convert objectName to lowercase, because klipper only user lowercase in configfile.settings
+        const lowerCaseObjectName = this.objectName.toLowerCase()
 
-        return this.$store.state.printer?.configfile?.settings[this.objectName]
+        if (!(lowerCaseObjectName in (this.$store.state.printer?.configfile?.settings ?? {}))) return {}
+
+        return this.$store.state.printer?.configfile?.settings[lowerCaseObjectName]
     }
 
     get name() {
@@ -128,6 +132,9 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         // show heater_generic icon
         if (this.objectName.startsWith('heater_generic')) return mdiFire
 
+        // show heater_generic icon
+        if (this.objectName.startsWith('tmc')) return mdiMemory
+
         // show fan icon, if it is a fan
         if (this.isFan) return mdiFan
 
@@ -135,7 +142,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get color() {
-        return this.$store.getters['printer/tempHistory/getDatasetColor'](this.objectName)
+        return this.$store.getters['printer/tempHistory/getDatasetColor'](this.objectName) ?? '#FFFFFF'
     }
 
     get iconColor() {
@@ -231,7 +238,10 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get rpm() {
-        if (!('rpm' in this.printerObject)) return null
+        const rpm = this.printerObject.rpm ?? null
+
+        // return null when rpm doesn't exist
+        if (rpm === null) return null
 
         return parseInt(this.printerObject.rpm)
     }
@@ -263,7 +273,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 ::v-deep .v-icon._no-focus-style:focus::after {
     opacity: 0 !important;
 }

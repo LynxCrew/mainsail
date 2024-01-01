@@ -15,6 +15,20 @@
             </v-list-item>
             <v-list-item class="minHeight36">
                 <v-checkbox
+                    v-model="hideMcuHostSensors"
+                    class="mt-0"
+                    hide-details
+                    :label="$t('Panels.TemperaturePanel.HideMcuHostSensors')" />
+            </v-list-item>
+            <v-list-item class="minHeight36">
+                <v-checkbox
+                    v-model="hideMonitors"
+                    class="mt-0"
+                    hide-details
+                    :label="$t('Panels.TemperaturePanel.HideMonitors')" />
+            </v-list-item>
+            <v-list-item class="minHeight36">
+                <v-checkbox
                     v-model="autoscaleTempchart"
                     class="mt-0"
                     hide-details
@@ -48,6 +62,22 @@ export default class TemperaturePanelSettings extends Mixins(BaseMixin) {
 
     set autoscaleTempchart(newVal: boolean) {
         this.$store.dispatch('gui/saveSetting', { name: 'view.tempchart.autoscale', value: newVal })
+    }
+
+    get hideMcuHostSensors(): boolean {
+        return this.$store.state.gui.view.tempchart.hideMcuHostSensors ?? false
+    }
+
+    set hideMcuHostSensors(newVal: boolean) {
+        this.$store.dispatch('gui/saveSetting', { name: 'view.tempchart.hideMcuHostSensors', value: newVal })
+    }
+
+    get hideMonitors(): boolean {
+        return this.$store.state.gui.view.tempchart.hideMonitors ?? false
+    }
+
+    set hideMonitors(newVal: boolean) {
+        this.$store.dispatch('gui/saveSetting', { name: 'view.tempchart.hideMonitors', value: newVal })
     }
 }
 </script>

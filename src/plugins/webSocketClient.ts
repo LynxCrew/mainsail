@@ -1,6 +1,7 @@
 import { Store } from 'vuex'
 import _Vue from 'vue'
 import { RootState } from '@/store/types'
+import { initableServerComponents } from '@/store/variables'
 
 export class WebSocketClient {
     url = ''
@@ -61,10 +62,27 @@ export class WebSocketClient {
 
             // report error messages
             if (data.error?.message) {
-                if (data.error?.message !== 'Klippy Disconnected')
+                // only report errors, if not disconnected and no init component
+                if (data.error?.message !== 'Klippy Disconnected' && !wait?.action?.startsWith('server/')) {
                     window.console.error(`Response Error: ${data.error.message} (${wait?.action ?? 'no action'})`)
+                }
 
-                if (wait?.id) this.removeWaitById(wait.id)
+                if (wait?.id) {
+                    const modulename = wait.action?.split('/')[1] ?? null
+
+                    if (
+                        modulename &&
+                        wait.action?.startsWith('server/') &&
+                        initableServerComponents.includes(modulename)
+                    ) {
+                        const component = wait.action.replace('server/', '').split('/')[0]
+                        window.console.error(`init server component ${component} failed`)
+                        this.store?.dispatch('server/addFailedInitComponent', component)
+                        this.store?.dispatch('socket/removeInitComponent', `server/${component}/`)
+                    }
+
+                    this.removeWaitById(wait.id)
+                }
 
                 return
             }

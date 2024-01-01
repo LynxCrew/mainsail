@@ -5,21 +5,31 @@
                 <strong>{{ repo.name }}</strong>
                 <br />
                 <template v-if="type === 'git_repo' && commitsBehind.length">
-                    <a class="primary--text cursor--pointer" @click="boolShowCommitList = true">
-                        <v-icon small color="primary" class="mr-1">{{ mdiInformation }}</v-icon>
+                    <a class="info--text cursor--pointer" @click="boolShowCommitList = true">
+                        <v-icon small color="info" class="mr-1">{{ mdiUpdate }}</v-icon>
                         {{ versionOutput }}
                     </a>
                 </template>
                 <template v-else-if="type === 'web' && webUpdatable">
-                    <a class="primary--text text-decoration-none" :href="webLinkRelease" target="_blank">
-                        <v-icon small color="primary" class="mr-1">{{ mdiInformation }}</v-icon>
+                    <a class="info--text text-decoration-none" :href="webLinkRelease" target="_blank">
+                        <v-icon small color="info" class="mr-1">{{ mdiUpdate }}</v-icon>
                         {{ versionOutput }}
                     </a>
                 </template>
                 <span v-else>{{ versionOutput }}</span>
             </v-col>
             <v-col class="col-auto pr-6 text-right" align-self="center">
-                <template v-if="needsRecovery">
+                <v-chip
+                    v-if="anomalies.length > 0"
+                    small
+                    label
+                    :outlined="!toggleAnomalies"
+                    color="grey"
+                    class="minwidth-0 px-1 mr-2"
+                    @click="toggleAnomalies = !toggleAnomalies">
+                    <v-icon small>{{ toggleAnomalies ? mdiInformationOutline : mdiInformation }}</v-icon>
+                </v-chip>
+                <template v-if="!isValid">
                     <v-menu :offset-y="true">
                         <template #activator="{ on, attrs }">
                             <v-chip
@@ -37,16 +47,16 @@
                             </v-chip>
                         </template>
                         <v-list dense class="py-0">
-                            <v-list-item @click="doRecovery(false)">
-                                <v-list-item-icon class="mr-0">
+                            <v-list-item v-if="!isCorrupt" @click="doRecovery(false)">
+                                <v-list-item-icon class="mr-0 pt-1">
                                     <v-icon small>{{ mdiReload }}</v-icon>
                                 </v-list-item-icon>
                                 <v-list-item-content>
                                     <v-list-item-title>{{ $t('Machine.UpdatePanel.SoftRecovery') }}</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-                            <v-list-item @click="doRecovery(true)">
-                                <v-list-item-icon class="mr-0">
+                            <v-list-item :disabled="!existsRecoveryUrl" @click="doRecovery(true)">
+                                <v-list-item-icon class="mr-0 pt-1">
                                     <v-icon small>{{ mdiReload }}</v-icon>
                                 </v-list-item-icon>
                                 <v-list-item-content>
@@ -70,36 +80,30 @@
                 </v-chip>
             </v-col>
         </v-row>
-        <v-row v-if="notificationText" class="mt-0">
-            <v-col class="px-6 pt-0">
-                <v-alert text dense :color="notificationColor" :icon="notificationIcon" border="left">
-                    {{ notificationText }}
-                </v-alert>
-            </v-col>
-        </v-row>
-        <v-row v-if="gitMessages.length" class="mt-0">
-            <v-col class="px-6 pt-0">
-                <v-alert
-                    v-for="(message, index) in gitMessages"
-                    :key="'message_' + index"
-                    text
-                    dense
-                    border="left"
-                    type="info">
-                    {{ message }}
-                </v-alert>
-            </v-col>
-        </v-row>
         <v-row v-if="warnings.length" class="mt-0">
             <v-col class="px-6 pt-0">
                 <v-alert
                     v-for="(message, index) in warnings"
                     :key="'warnings_' + index"
-                    text
                     dense
-                    border="left"
+                    text
                     color="orange"
-                    :icon="mdiAlertCircle">
+                    border="left"
+                    :icon="mdiCloseCircle">
+                    <p class="text--disabled mb-0">{{ message }}</p>
+                </v-alert>
+            </v-col>
+        </v-row>
+        <v-row v-show="toggleAnomalies" class="mt-0">
+            <v-col class="px-6 pt-0">
+                <v-alert
+                    v-for="(message, index) in anomalies"
+                    :key="'anomalies_' + index"
+                    dense
+                    text
+                    color="grey"
+                    border="left"
+                    :icon="mdiInformation">
                     {{ message }}
                 </v-alert>
             </v-col>
@@ -123,13 +127,15 @@ import { Component, Mixins, Prop } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { ServerUpdateManagerStateGitRepo } from '@/store/server/updateManager/types'
 import {
-    mdiAlertCircle,
+    mdiCloseCircle,
     mdiCheck,
     mdiHelpCircleOutline,
     mdiInformation,
+    mdiInformationOutline,
     mdiMenuDown,
     mdiProgressUpload,
     mdiReload,
+    mdiUpdate,
 } from '@mdi/js'
 import semver from 'semver'
 import GitCommitsList from '@/components/panels/Machine/UpdatePanel/GitCommitsList.vue'
@@ -141,10 +147,14 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
     mdiInformation = mdiInformation
     mdiMenuDown = mdiMenuDown
     mdiReload = mdiReload
-    mdiAlertCircle = mdiAlertCircle
+    mdiCloseCircle = mdiCloseCircle
+    mdiUpdate = mdiUpdate
+    mdiInformationOutline = mdiInformationOutline
 
     boolShowCommitList = false
     boolShowUpdateHint = false
+
+    toggleAnomalies = false
 
     @Prop({ required: true }) readonly repo!: ServerUpdateManagerStateGitRepo
 
@@ -230,6 +240,10 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
         return this.repo.is_dirty ?? false
     }
 
+    get isCorrupt() {
+        return this.repo.corrupt ?? false
+    }
+
     get debugEnabled() {
         return this.repo.debug_enabled ?? false
     }
@@ -240,19 +254,21 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
         return !this.debugEnabled && (this.repo.detached ?? false)
     }
 
-    get needsRecovery() {
-        return !this.isValid || this.isDirty
+    get existsRecoveryUrl() {
+        const url = this.repo.recovery_url ?? '?'
+
+        return url !== '?'
     }
 
     get btnDisabled() {
         if (['printing', 'paused'].includes(this.printer_state)) return true
-        if (!this.isValid || this.isDirty || this.commitsBehind.length) return false
+        if (!this.isValid || this.isCorrupt || this.isDirty || this.commitsBehind.length) return false
 
         return !(this.localVersion && this.remoteVersion && semver.gt(this.remoteVersion, this.localVersion))
     }
 
     get btnIcon() {
-        if (this.isDetached || !this.isValid || this.isDirty) return mdiAlertCircle
+        if (this.isDetached || !this.isValid || this.isCorrupt || this.isDirty) return mdiCloseCircle
 
         if (
             this.commitsBehind.length ||
@@ -266,8 +282,7 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
     }
 
     get btnColor() {
-        if (this.isDetached || !this.isValid) return 'orange'
-        if (this.isDirty) return 'red'
+        if (this.isCorrupt || this.isDetached || this.isDirty || !this.isValid) return 'orange'
 
         if (
             this.commitsBehind.length ||
@@ -279,9 +294,10 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
     }
 
     get btnText() {
+        if (this.isCorrupt) return this.$t('Machine.UpdatePanel.Corrupt')
         if (this.isDetached) return this.$t('Machine.UpdatePanel.Detached')
-        if (!this.isValid) return this.$t('Machine.UpdatePanel.Invalid')
         if (this.isDirty) return this.$t('Machine.UpdatePanel.Dirty')
+        if (!this.isValid) return this.$t('Machine.UpdatePanel.Invalid')
         if (
             this.commitsBehind.length ||
             (this.localVersion && this.remoteVersion && semver.gt(this.remoteVersion, this.localVersion))
@@ -293,23 +309,8 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
         return this.$t('Machine.UpdatePanel.UpToDate')
     }
 
-    get notificationText() {
-        if (this.isDetached) return this.$t('Machine.UpdatePanel.Notification.Detached')
-        if (this.isDirty) return this.$t('Machine.UpdatePanel.Notification.Dirty')
-
-        return null
-    }
-
-    get notificationColor() {
-        return this.btnColor
-    }
-
-    get notificationIcon() {
-        return this.btnIcon
-    }
-
-    get gitMessages() {
-        return this.repo.git_messages ?? []
+    get anomalies() {
+        return this.repo.anomalies ?? []
     }
 
     get warnings() {
@@ -323,8 +324,12 @@ export default class UpdatePanelEntry extends Mixins(BaseMixin) {
         return semver.gt(this.remoteVersion, this.localVersion)
     }
 
+    get repo_name() {
+        return this.repo.repo_name ?? this.repo.name ?? ''
+    }
+
     get webLinkRelease() {
-        return `https://github.com/${this.repo.owner}/${this.repo.name}/releases/tag/${this.repo.remote_version}`
+        return `https://github.com/${this.repo.owner}/${this.repo_name}/releases/tag/${this.repo.remote_version}`
     }
 
     get hideUpdateWarning() {

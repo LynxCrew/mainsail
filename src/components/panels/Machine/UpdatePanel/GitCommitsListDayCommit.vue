@@ -67,7 +67,7 @@ export default class GitCommitsListDayCommit extends Mixins(BaseMixin) {
         commitDay.setHours(0, 0, 0, 0)
         const todayDay = new Date()
         todayDay.setHours(0, 0, 0, 0)
-        const diff = Math.floor(todayDay.getTime() - commitDay.getTime()) / (1000 * 60 * 60 * 24)
+        const diff = Math.floor((todayDay.getTime() - commitDay.getTime()) / (1000 * 60 * 60 * 24))
 
         if (diff === 0) {
             const diffHours = Math.floor((new Date().getTime() - this.commit.date * 1000) / (1000 * 60 * 60))
@@ -85,8 +85,12 @@ export default class GitCommitsListDayCommit extends Mixins(BaseMixin) {
             })
     }
 
+    get repo_name() {
+        return this.repo.repo_name ?? this.repo.name ?? ''
+    }
+
     get commitHref() {
-        return `https://github.com/${this.repo.owner}/${this.repo.name}/commit/${this.commit.sha}`
+        return `https://github.com/${this.repo.owner}/${this.repo_name}/commit/${this.commit.sha}`
     }
 
     get commitShortSha() {
@@ -95,7 +99,7 @@ export default class GitCommitsListDayCommit extends Mixins(BaseMixin) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 li.commit {
     border-color: rgb(48, 54, 61);
     border-style: solid;

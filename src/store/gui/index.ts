@@ -3,7 +3,7 @@ import { Module } from 'vuex'
 import { actions } from '@/store/gui/actions'
 import { mutations } from '@/store/gui/mutations'
 import { getters } from '@/store/gui/getters'
-import { defaultLogoColor, defaultPrimaryColor } from '@/store/variables'
+import { defaultTheme, defaultLogoColor, defaultPrimaryColor, defaultBigThumbnailBackground } from '@/store/variables'
 
 // load modules
 import { console } from '@/store/gui/console'
@@ -15,6 +15,7 @@ import { notifications } from '@/store/gui/notifications'
 import { presets } from '@/store/gui/presets'
 import { remoteprinters } from '@/store/gui/remoteprinters'
 import { webcams } from '@/store/gui/webcams'
+import { heightmap } from '@/store/gui/heightmap'
 
 export const getDefaultState = (): GuiState => {
     return {
@@ -30,11 +31,13 @@ export const getDefaultState = (): GuiState => {
         control: {
             style: 'bars',
             actionButton: null,
+            hideDuringPrint: false,
             enableXYHoming: false,
             feedrateXY: 100,
             stepsXY: [100, 10, 1],
             feedrateZ: 25,
             offsetsZ: [0.005, 0.01, 0.025, 0.05],
+            offsetZSaveOption: null,
             stepsZ: [25, 1, 0.1],
             stepsAll: [0.1, 1, 10, 25, 50, 100],
             stepsCircleXY: [1, 10, 50, 100],
@@ -146,6 +149,7 @@ export const getDefaultState = (): GuiState => {
             entries: [],
         },
         uiSettings: {
+            theme: defaultTheme,
             logo: defaultLogoColor,
             primary: defaultPrimaryColor,
             displayCancelPrint: false,
@@ -154,9 +158,11 @@ export const getDefaultState = (): GuiState => {
             confirmOnEmergencyStop: false,
             confirmOnPowerDeviceChange: false,
             boolBigThumbnail: true,
+            bigThumbnailBackground: defaultBigThumbnailBackground,
             boolWideNavDrawer: false,
             boolHideUploadAndPrintButton: false,
             navigationStyle: 'iconsAndText',
+            defaultNavigationStateSetting: 'alwaysOpen',
             powerDeviceName: null,
             hideSaveConfigForBedMash: false,
             disableFanAnimation: false,
@@ -177,6 +183,13 @@ export const getDefaultState = (): GuiState => {
                 currentPath: '',
                 rootPath: 'config',
                 selectedFiles: [],
+            },
+            extruder: {
+                showTools: true,
+                showExtrusionFactor: true,
+                showPressureAdvance: true,
+                showFirmwareRetraction: true,
+                showExtruderControl: true,
             },
             gcodefiles: {
                 countPerPage: 10,
@@ -236,6 +249,8 @@ export const getDefaultState = (): GuiState => {
             tempchart: {
                 boolTempchart: true,
                 hiddenDataset: [],
+                hideMcuHostSensors: false,
+                hideMonitors: false,
                 autoscale: false,
                 datasetSettings: {},
             },
@@ -246,6 +261,13 @@ export const getDefaultState = (): GuiState => {
                 showHiddenFiles: false,
                 currentPath: 'timelapse',
                 selectedFiles: [],
+            },
+            toolhead: {
+                showPosition: true,
+                showCoordinates: true,
+                showControl: true,
+                showZOffset: true,
+                showSpeedFactor: true,
             },
             webcam: {
                 currentCam: {
@@ -276,5 +298,6 @@ export const gui: Module<GuiState, any> = {
         presets,
         remoteprinters,
         webcams,
+        heightmap,
     },
 }

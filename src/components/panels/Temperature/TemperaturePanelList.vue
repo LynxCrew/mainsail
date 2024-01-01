@@ -22,10 +22,25 @@
                 </thead>
                 <tbody>
                     <temperature-panel-list-item
-                        v-for="objectName in tempObjects"
+                        v-for="objectName in heaterObjects"
                         :key="objectName"
                         :object-name="objectName"
                         :is-responsive-mobile="el.is.mobile ?? false" />
+                    <temperature-panel-list-item-nevermore
+                        v-if="existsNevermoreFilter"
+                        :is-responsive-mobile="el.is.mobile ?? false" />
+                    <temperature-panel-list-item
+                        v-for="objectName in temperature_sensors"
+                        :key="objectName"
+                        :object-name="objectName"
+                        :is-responsive-mobile="el.is.mobile ?? false" />
+                    <template v-if="!hideMonitors">
+                        <temperature-panel-list-item
+                            v-for="objectName in monitors"
+                            :key="objectName"
+                            :object-name="objectName"
+                            :is-responsive-mobile="el.is.mobile ?? false" />
+                    </template>
                 </tbody>
             </v-simple-table>
         </template>
@@ -36,8 +51,11 @@
 import Component from 'vue-class-component'
 import { Mixins } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
+import TemperaturePanelListItemNevermore from '@/components/panels/Temperature/TemperaturePanelListItemNevermore.vue'
 
-@Component
+@Component({
+    components: { TemperaturePanelListItemNevermore },
+})
 export default class TemperaturePanelList extends Mixins(BaseMixin) {
     get available_heaters() {
         return this.$store.state.printer?.heaters?.available_heaters ?? []
@@ -59,10 +77,30 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         return this.$store.state.printer?.heaters?.available_sensors ?? []
     }
 
+    get available_monitors() {
+        return this.$store.state.printer?.heaters?.available_monitors ?? []
+    }
+
+    get monitors() {
+        return this.available_monitors.sort(this.sortObjectName)
+    }
+
     get temperature_fans() {
         return this.available_sensors
             .filter((name: string) => name.startsWith('temperature_fan') && !name.startsWith('temperature_fan _'))
             .sort(this.sortObjectName)
+    }
+
+    get existsNevermoreFilter() {
+        return 'nevermore' in this.$store.state.printer
+    }
+
+    get hideMcuHostSensors(): boolean {
+        return this.$store.state.gui.view.tempchart.hideMcuHostSensors ?? false
+    }
+
+    get hideMonitors(): boolean {
+        return this.$store.state.gui.view.tempchart.hideMonitors ?? false
     }
 
     get temperature_sensors() {
@@ -70,6 +108,9 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
             .filter((fullName: string) => {
                 if (this.available_heaters.includes(fullName)) return false
                 if (this.temperature_fans.includes(fullName)) return false
+
+                // hide MCU & Host sensors, if the function is enabled
+                if (this.hideMcuHostSensors && this.checkMcuHostSensor(fullName)) return false
 
                 const splits = fullName.split(' ')
                 let name = splits[0]
@@ -80,8 +121,19 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
             .sort(this.sortObjectName)
     }
 
-    get tempObjects() {
-        return [...this.filteredHeaters, ...this.temperature_fans, ...this.temperature_sensors]
+    get heaterObjects() {
+        return [...this.filteredHeaters, ...this.temperature_fans]
+    }
+
+    get settings() {
+        return this.$store.state.printer?.configfile?.settings ?? {}
+    }
+
+    checkMcuHostSensor(fullName: string) {
+        const settingsObject = this.settings[fullName.toLowerCase()] ?? {}
+        const sensor_type = settingsObject.sensor_type ?? ''
+
+        return ['temperature_mcu', 'temperature_host'].includes(sensor_type)
     }
 
     sortObjectName(a: string, b: string) {
@@ -103,7 +155,7 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .temperature-panel-table th,
 .temperature-panel-table ::v-deep td {
     padding-top: 5px !important;

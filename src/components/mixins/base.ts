@@ -13,8 +13,8 @@ export default class BaseMixin extends Vue {
         return this.$store.getters['socket/getHostUrl']
     }
 
-    get hostPort(): boolean {
-        return this.$store.state.socket.port ?? 80
+    get hostPort(): number {
+        return parseInt(this.$store.state.socket.port ?? 80)
     }
 
     get instancesDB() {
@@ -45,6 +45,10 @@ export default class BaseMixin extends Vue {
 
     get printerIsPrinting() {
         return this.klipperReadyForGui && ['printing', 'paused'].includes(this.printer_state)
+    }
+
+    get printerIsPrintingOnly() {
+        return this.klipperReadyForGui && this.printer_state === 'printing'
     }
 
     get printerPowerDevice(): string {
@@ -179,11 +183,7 @@ export default class BaseMixin extends Vue {
     }
 
     get hours12Format() {
-        const setting = this.$store.state.gui.general.timeFormat
-        if (setting === '12hours') return true
-        if (setting === null && this.browserLocale === 'en-US') return true
-
-        return false
+        return this.$store.getters['gui/getHours12Format']
     }
 
     formatDate(value: number | Date): string {

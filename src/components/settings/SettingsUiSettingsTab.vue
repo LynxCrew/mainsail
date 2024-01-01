@@ -2,7 +2,13 @@
     <div>
         <v-card flat>
             <v-card-text>
-                <settings-row :title="$t('Settings.UiSettingsTab.Logo').toString()">
+                <settings-row
+                    :title="$t('Settings.UiSettingsTab.Theme')"
+                    :sub-title="$t('Settings.UiSettingsTab.ThemeDescription')">
+                    <v-select v-model="theme" :items="themes" class="mt-0" hide-details outlined dense />
+                </settings-row>
+                <v-divider class="my-2" />
+                <settings-row :title="$t('Settings.UiSettingsTab.Logo')">
                     <v-btn
                         v-if="logoColor.toLowerCase() !== defaultLogoColor.toLowerCase()"
                         small
@@ -19,11 +25,11 @@
                             :value="logoColor"
                             hide-mode-switch
                             mode="rgba"
-                            @update:color="updateLogoColor"></v-color-picker>
+                            @update:color="updateLogoColor" />
                     </v-menu>
                 </settings-row>
                 <v-divider class="my-2" />
-                <settings-row :title="$t('Settings.UiSettingsTab.Primary').toString()">
+                <settings-row :title="$t('Settings.UiSettingsTab.Primary')">
                     <v-btn
                         v-if="primaryColor.toLowerCase() !== defaultPrimaryColor.toLowerCase()"
                         small
@@ -45,8 +51,8 @@
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.GcodeThumbnails').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.GcodeThumbnailsDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.GcodeThumbnails')"
+                    :sub-title="$t('Settings.UiSettingsTab.GcodeThumbnailsDescription')"
                     :dynamic-slot-width="true">
                     <v-btn
                         outlined
@@ -54,27 +60,53 @@
                         color="primary"
                         href="https://docs.mainsail.xyz/overview/features/thumbnails"
                         target="_blank">
-                        {{ $t('Settings.UiSettingsTab.Guide').toString() }}
+                        {{ $t('Settings.UiSettingsTab.Guide') }}
                     </v-btn>
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.BoolBigThumbnail').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.BoolBigThumbnailDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.BoolBigThumbnail')"
+                    :sub-title="$t('Settings.UiSettingsTab.BoolBigThumbnailDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="boolBigThumbnail" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
-                <settings-row
-                    :title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINT').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINTDescription').toString()"
-                    :dynamic-slot-width="true">
-                    <v-switch v-model="displayCancelPrint" hide-details class="mt-0"></v-switch>
+                <settings-row :title="$t('Settings.UiSettingsTab.BigThumbnailBackground')">
+                    <v-btn
+                        v-if="bigThumbnailBackground.toLowerCase() !== defaultBigThumbnailBackground.toLowerCase()"
+                        small
+                        text
+                        class="minwidth-0"
+                        @click="bigThumbnailBackground = defaultBigThumbnailBackground">
+                        <v-icon small>{{ mdiRestart }}</v-icon>
+                    </v-btn>
+                    <v-menu bottom left offset-y :close-on-content-click="false">
+                        <template #activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                :color="bigThumbnailBackground"
+                                class="minwidth-0 px-5"
+                                small
+                                v-on="on" />
+                        </template>
+                        <v-color-picker
+                            :value="bigThumbnailBackground"
+                            hide-mode-switch
+                            mode="rgba"
+                            @update:color="updateBigThumbnailBackground" />
+                    </v-menu>
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.LockSliders').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.LockSlidersDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINT')"
+                    :sub-title="$t('Settings.UiSettingsTab.DisplayCANCEL_PRINTDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="displayCancelPrint" hide-details class="mt-0" />
+                </settings-row>
+                <v-divider class="my-2" />
+                <settings-row
+                    :title="$t('Settings.UiSettingsTab.LockSliders')"
+                    :sub-title="$t('Settings.UiSettingsTab.LockSlidersDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="lockSliders" hide-details class="mt-0" />
                 </settings-row>
@@ -82,8 +114,8 @@
                 <v-expand-transition>
                     <settings-row
                         v-show="lockSliders"
-                        :title="$t('Settings.UiSettingsTab.LockSlidersDelay').toString()"
-                        :sub-title="$t('Settings.UiSettingsTab.LockSlidersDelayDescription').toString()"
+                        :title="$t('Settings.UiSettingsTab.LockSlidersDelay')"
+                        :sub-title="$t('Settings.UiSettingsTab.LockSlidersDelayDescription')"
                         :dynamic-slot-width="true">
                         <v-text-field
                             v-model="lockSlidersDelay"
@@ -104,22 +136,22 @@
                 </v-expand-transition>
                 <v-divider v-show="lockSliders" class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.ConfirmOnEmergencyStop').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.ConfirmOnEmergencyStopDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.ConfirmOnEmergencyStop')"
+                    :sub-title="$t('Settings.UiSettingsTab.ConfirmOnEmergencyStopDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="confirmOnEmergencyStop" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChange').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChangeDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChange')"
+                    :sub-title="$t('Settings.UiSettingsTab.ConfirmOnPowerDeviceChangeDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="confirmOnPowerDeviceChange" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.NavigationStyle').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.NavigationStyleDescription').toString()">
+                    :title="$t('Settings.UiSettingsTab.NavigationStyle')"
+                    :sub-title="$t('Settings.UiSettingsTab.NavigationStyleDescription')">
                     <v-select
                         v-model="navigationStyleSetting"
                         :items="navigationStyles"
@@ -130,15 +162,27 @@
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.BoolHideUploadAndPrintButton').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.BoolHideUploadAndPrintButtonDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.DefaultNavigationState')"
+                    :sub-title="$t('Settings.UiSettingsTab.DefaultNavigationStateDescription')">
+                    <v-select
+                        v-model="defaultNavigationStateSetting"
+                        :items="defaultNavigationStateSettings"
+                        class="mt-0"
+                        hide-details
+                        outlined
+                        dense />
+                </settings-row>
+                <v-divider class="my-2" />
+                <settings-row
+                    :title="$t('Settings.UiSettingsTab.BoolHideUploadAndPrintButton')"
+                    :sub-title="$t('Settings.UiSettingsTab.BoolHideUploadAndPrintButtonDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="boolHideUploadAndPrintButton" hide-details class="mt-0" />
                 </settings-row>
-                <v-divider class="my-2"></v-divider>
+                <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.PowerDeviceName').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.PowerDeviceNameDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.PowerDeviceName')"
+                    :sub-title="$t('Settings.UiSettingsTab.PowerDeviceNameDescription')"
                     :dynamic-slot-width="true">
                     <v-select
                         v-model="powerDeviceName"
@@ -150,43 +194,43 @@
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.HideSaveConfigButtonForBedMesh').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.HideSaveConfigButtonForBedMeshDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.HideSaveConfigButtonForBedMesh')"
+                    :sub-title="$t('Settings.UiSettingsTab.HideSaveConfigButtonForBedMeshDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="hideSaveConfigForBedMash" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.DisableFanAnimation').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.DisableFanAnimationDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.DisableFanAnimation')"
+                    :sub-title="$t('Settings.UiSettingsTab.DisableFanAnimationDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="disableFanAnimation" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.ManualProbeDialog').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.ManualProbeDialogDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.ManualProbeDialog')"
+                    :sub-title="$t('Settings.UiSettingsTab.ManualProbeDialogDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="boolManualProbeDialog" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.BedScrewsDialog').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.BedScrewsDialogDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.BedScrewsDialog')"
+                    :sub-title="$t('Settings.UiSettingsTab.BedScrewsDialogDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="boolBedScrewsDialog" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.ScrewsTiltAdjustDialog').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.ScrewsTiltAdjustDialogDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.ScrewsTiltAdjustDialog')"
+                    :sub-title="$t('Settings.UiSettingsTab.ScrewsTiltAdjustDialogDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="boolScrewsTiltAdjustDialog" hide-details class="mt-0" />
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.TempchartHeight').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.TempchartHeightDescription').toString()">
+                    :title="$t('Settings.UiSettingsTab.TempchartHeight')"
+                    :sub-title="$t('Settings.UiSettingsTab.TempchartHeightDescription')">
                     <v-slider
                         v-model.lazy="tempchartHeight"
                         hide-details
@@ -197,8 +241,8 @@
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
-                    :title="$t('Settings.UiSettingsTab.HideUpdateWarnings').toString()"
-                    :sub-title="$t('Settings.UiSettingsTab.HideUpdateWarningsDescription').toString()"
+                    :title="$t('Settings.UiSettingsTab.HideUpdateWarnings')"
+                    :sub-title="$t('Settings.UiSettingsTab.HideUpdateWarningsDescription')"
                     :dynamic-slot-width="true">
                     <v-switch v-model="hideUpdateWarnings" hide-details class="mt-0" />
                 </settings-row>
@@ -212,7 +256,7 @@ import Component from 'vue-class-component'
 import { Mixins } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import SettingsRow from '@/components/settings/SettingsRow.vue'
-import { defaultLogoColor, defaultPrimaryColor } from '@/store/variables'
+import { defaultLogoColor, defaultPrimaryColor, defaultBigThumbnailBackground } from '@/store/variables'
 import { Debounce } from 'vue-debounce-decorator'
 import { mdiRestart, mdiTimerOutline } from '@mdi/js'
 import { ServerPowerStateDevice } from '@/store/server/power/types'
@@ -224,8 +268,30 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
     mdiRestart = mdiRestart
     mdiTimerOutline = mdiTimerOutline
 
-    private defaultLogoColor = defaultLogoColor
-    private defaultPrimaryColor = defaultPrimaryColor
+    defaultLogoColor = defaultLogoColor
+    defaultPrimaryColor = defaultPrimaryColor
+    defaultBigThumbnailBackground = defaultBigThumbnailBackground
+
+    get theme() {
+        return this.$store.state.gui.uiSettings.theme
+    }
+
+    set theme(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.theme', value: newVal })
+    }
+
+    get themes() {
+        return [
+            {
+                text: this.$t('Settings.UiSettingsTab.ThemeDark'),
+                value: 'dark',
+            },
+            {
+                text: this.$t('Settings.UiSettingsTab.ThemeLight'),
+                value: 'light',
+            },
+        ]
+    }
 
     get logoColor() {
         return this.$store.state.gui.uiSettings.logo
@@ -249,6 +315,14 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
 
     set boolBigThumbnail(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.boolBigThumbnail', value: newVal })
+    }
+
+    get bigThumbnailBackground() {
+        return this.$store.state.gui.uiSettings.bigThumbnailBackground
+    }
+
+    set bigThumbnailBackground(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.bigThumbnailBackground', value: newVal })
     }
 
     get displayCancelPrint() {
@@ -314,6 +388,31 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
             {
                 text: this.$t('Settings.UiSettingsTab.NavigationStyleIconsAndText'),
                 value: 'iconsAndText',
+            },
+        ]
+    }
+
+    get defaultNavigationStateSetting() {
+        return this.$store.state.gui.uiSettings.defaultNavigationStateSetting
+    }
+
+    set defaultNavigationStateSetting(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.defaultNavigationStateSetting', value: newVal })
+    }
+
+    get defaultNavigationStateSettings() {
+        return [
+            {
+                text: this.$t('Settings.UiSettingsTab.DefaultNavigationStateAlwaysOpen'),
+                value: 'alwaysOpen',
+            },
+            {
+                text: this.$t('Settings.UiSettingsTab.DefaultNavigationStateAlwaysClosed'),
+                value: 'alwaysClosed',
+            },
+            {
+                text: this.$t('Settings.UiSettingsTab.DefaultNavigationStateLastState'),
+                value: 'lastState',
             },
         ]
     }
@@ -430,6 +529,11 @@ export default class SettingsUiSettingsTab extends Mixins(BaseMixin) {
     @Debounce(500)
     updatePrimaryColor(newVal: any) {
         this.primaryColor = this.clearColorObject(newVal)
+    }
+
+    @Debounce(500)
+    updateBigThumbnailBackground(newVal: any) {
+        this.bigThumbnailBackground = this.clearColorObject(newVal)
     }
 }
 </script>
