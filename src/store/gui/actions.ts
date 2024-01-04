@@ -202,7 +202,7 @@ export const actions: ActionTree<GuiState, RootState> = {
     addPinnedFile({ commit, dispatch, state }, value) {
         commit('addPinnedFile', value)
         dispatch('updateSettings', {
-            keyName: 'gcodefiles.pinnedFiles',
+            keyName: 'view.gcodefiles.pinnedFiles',
             newVal: state.view.gcodefiles.pinnedFiles,
         })
     },
@@ -210,7 +210,7 @@ export const actions: ActionTree<GuiState, RootState> = {
     removePinnedFile({ commit, dispatch, state }, value) {
         commit('removePinnedFile', value)
         dispatch('updateSettings', {
-            keyName: 'gcodefiles.pinnedFiles',
+            keyName: 'view.gcodefiles.pinnedFiles',
             newVal: state.view.gcodefiles.pinnedFiles,
         })
     },
