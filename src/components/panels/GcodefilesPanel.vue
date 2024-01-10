@@ -833,6 +833,8 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
     mdiCheckboxBlankOutline = mdiCheckboxBlankOutline
     mdiCheckboxMarked = mdiCheckboxMarked
     mdiDragVertical = mdiDragVertical
+    mdiPin = mdiPin
+    mdiPinOff = mdiPinOff
 
     formatFilesize = formatFilesize
     formatPrintTime = formatPrintTime
