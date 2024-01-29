@@ -39,6 +39,40 @@
                             @submit="sendCmd" />
                     </v-col>
                 </v-row>
+                <v-row v-if="independent_velocity">
+                    <v-col :class="{ 'col-12': el.is.small, 'col-6': el.is.medium }">
+                        <number-input
+                            :label="$t('Panels.MachineSettingsPanel.MotionSettings.XVelocity')"
+                            param="X_VELOCITY"
+                            :target="x_velocity"
+                            :default-value="defaultXVelocity"
+                            :output-error-msg="true"
+                            :has-spinner="true"
+                            :spinner-factor="5"
+                            :step="1"
+                            :min="1"
+                            :max="null"
+                            :dec="0"
+                            unit="mm/s"
+                            @submit="sendCmdLimited" />
+                    </v-col>
+                    <v-col :class="{ 'col-12': el.is.small, 'col-6': el.is.medium }">
+                        <number-input
+                            :label="$t('Panels.MachineSettingsPanel.MotionSettings.YVelocity')"
+                            param="Y_VELOCITY"
+                            :target="y_velocity"
+                            :default-value="defaultYVelocity"
+                            :output-error-msg="true"
+                            :has-spinner="true"
+                            :spinner-factor="5"
+                            :step="1"
+                            :min="1"
+                            :max="null"
+                            :dec="0"
+                            unit="mm/s"
+                            @submit="sendCmdLimited" />
+                    </v-col>
+                </v-row>
                 <v-row>
                     <v-col :class="{ 'col-12': el.is.small, 'col-6': el.is.medium }">
                         <number-input
@@ -88,6 +122,40 @@
                             @submit="sendCmd" />
                     </v-col>
                 </v-row>
+                <v-row v-if="independent_accel">
+                    <v-col :class="{ 'col-12': el.is.small, 'col-6': el.is.medium }">
+                        <number-input
+                            :label="$t('Panels.MachineSettingsPanel.MotionSettings.XAcceleration')"
+                            param="X_ACCEL"
+                            :target="x_accel"
+                            :default-value="defaultXAccel"
+                            :output-error-msg="true"
+                            :has-spinner="true"
+                            :spinner-factor="5"
+                            :step="1"
+                            :min="1"
+                            :max="null"
+                            :dec="0"
+                            unit="mm/s"
+                            @submit="sendCmdLimited" />
+                    </v-col>
+                    <v-col :class="{ 'col-12': el.is.small, 'col-6': el.is.medium }">
+                        <number-input
+                            :label="$t('Panels.MachineSettingsPanel.MotionSettings.YAcceleration')"
+                            param="Y_ACCEL"
+                            :target="y_accel"
+                            :default-value="defaultYAccel"
+                            :output-error-msg="true"
+                            :has-spinner="true"
+                            :spinner-factor="5"
+                            :step="1"
+                            :min="1"
+                            :max="null"
+                            :dec="0"
+                            unit="mm/s"
+                            @submit="sendCmdLimited" />
+                    </v-col>
+                </v-row>
             </template>
         </responsive>
     </v-container>
@@ -109,8 +177,33 @@ export default class MotionSettings extends Mixins(BaseMixin) {
         return Math.trunc(this.$store.state.printer?.toolhead?.max_velocity ?? 300)
     }
 
+    get x_velocity(): number {
+        return Math.trunc(this.$store.state.printer?.toolhead?.max_x_velocity ?? 300)
+    }
+
+    get y_velocity(): number {
+        return Math.trunc(this.$store.state.printer?.toolhead?.max_y_velocity ?? 300)
+    }
+
     get accel(): number {
         return Math.trunc(this.$store.state.printer?.toolhead?.max_accel ?? 3000)
+    }
+
+    get x_accel(): number {
+        return Math.trunc(this.$store.state.printer?.toolhead?.max_x_accel ?? 3000)
+    }
+
+    get y_accel(): number {
+        return Math.trunc(this.$store.state.printer?.toolhead?.max_y_accel ?? 3000)
+    }
+
+    get independent_accel(): boolean {
+        return (this.$store.state.printer?.toolhead?.kinematics == 'limited_cartesian'
+            || this.$store.state.printer?.toolhead?.kinematics == 'limited_corexy')
+    }
+
+    get independent_velocity(): boolean {
+        return this.$store.state.printer?.toolhead?.kinematics == 'limited_cartesian'
     }
 
     get accelToDecel(): number {
@@ -133,8 +226,24 @@ export default class MotionSettings extends Mixins(BaseMixin) {
         return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_velocity ?? 300)
     }
 
+    get defaultXVelocity(): number {
+        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_x_velocity ?? this.defaultVelocity)
+    }
+
+    get defaultYVelocity(): number {
+        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_y_velocity ?? this.defaultVelocity)
+    }
+
     get defaultAccel(): number {
         return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_accel ?? 3000)
+    }
+
+    get defaultXAccel(): number {
+        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_x_accel ?? this.defaultAccel)
+    }
+
+    get defaultYAccel(): number {
+        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_y_accel ?? this.defaultAccel)
     }
 
     get defaultAccelToDecel(): number {
@@ -156,6 +265,14 @@ export default class MotionSettings extends Mixins(BaseMixin) {
     @Debounce(500)
     sendCmd(params: { name: string; value: number }): void {
         const gcode = `SET_VELOCITY_LIMIT ${params.name}=${params.value}`
+
+        this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
+        this.$socket.emit('printer.gcode.script', { script: gcode })
+    }
+
+    @Debounce(500)
+    sendCmdLimited(params: { name: string; value: number }): void {
+        const gcode = `SET_KINEMATICS_LIMIT ${params.name}=${params.value}`
 
         this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
         this.$socket.emit('printer.gcode.script', { script: gcode })
