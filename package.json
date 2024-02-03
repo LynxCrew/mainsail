@@ -1,6 +1,6 @@
 {
     "name": "mainsail",
-    "version": "2.9.5",
+    "version": "2.9.6",
     "private": true,
     "decription": "a klipper web interface",
     "author": {
