@@ -231,6 +231,27 @@ export const getters: GetterTree<PrinterState, RootState> = {
         return caseInsensitiveSort(array, 'name')
     },
 
+    getPIDProfiles: (state, getters) => {
+        const profiles: Map<String, string[]> = new Map()
+        const config = state.configfile?.config ?? {}
+        const availableHeaters = state.heaters?.available_heaters ?? []
+        for (let i = 0; i < availableHeaters.length; i++) {
+            profiles.set(availableHeaters[i], ["default"])
+        }
+        Object.keys(config)
+            .filter((prop) => prop.startsWith('pid_profile'))
+            .forEach((prop) => {
+                const profile = prop.replace('pid_profile ', '').split(' ')
+                if (profiles.has(profile[0])) {
+                    profiles.get(profile[0])?.push(
+                        profile[1]
+                    )
+                }
+            })
+
+        return profiles
+    },
+
     getLights: (state, getters) => {
         const lights: PrinterStateLight[] = []
         const supportedObjects = ['dotstar', 'led', 'neopixel', 'pca9533', 'pca9632']

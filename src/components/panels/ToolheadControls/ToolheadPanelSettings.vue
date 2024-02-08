@@ -36,6 +36,20 @@
             </v-list-item>
             <v-list-item class="minHeight36">
                 <v-checkbox
+                    v-model="showSaveZOffset"
+                    class="mt-0"
+                    hide-details
+                    :label="$t('Panels.ToolheadControlPanel.SaveZOffset')" />
+            </v-list-item>
+            <v-list-item class="minHeight36">
+                <v-checkbox
+                    v-model="showClearZOffset"
+                    class="mt-0"
+                    hide-details
+                    :label="$t('Panels.ToolheadControlPanel.ClearZOffset')" />
+            </v-list-item>
+            <v-list-item class="minHeight36">
+                <v-checkbox
                     v-model="showSpeedFactor"
                     class="mt-0"
                     hide-details
@@ -85,6 +99,22 @@ export default class ToolheadPanelSettings extends Mixins(BaseMixin) {
 
     set showZOffset(newVal: boolean) {
         this.$store.dispatch('gui/saveSetting', { name: 'view.toolhead.showZOffset', value: newVal })
+    }
+
+    get showSaveZOffset(): boolean {
+        return this.$store.state.gui.view.toolhead.showSaveZOffset ?? true
+    }
+
+    set showSaveZOffset(newVal: boolean) {
+        this.$store.dispatch('gui/saveSetting', { name: 'view.toolhead.showSaveZOffset', value: newVal })
+    }
+
+    get showClearZOffset(): boolean {
+        return this.$store.state.gui.view.toolhead.showClearZOffset ?? true
+    }
+
+    set showClearZOffset(newVal: boolean) {
+        this.$store.dispatch('gui/saveSetting', { name: 'view.toolhead.showClearZOffset', value: newVal })
     }
 
     get showSpeedFactor(): boolean {

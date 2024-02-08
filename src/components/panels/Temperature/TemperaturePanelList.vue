@@ -9,6 +9,9 @@
                     <tr>
                         <th class="icon">&nbsp;</th>
                         <th class="name">{{ $t('Panels.TemperaturePanel.Name') }}</th>
+                        <th v-if="!el.is.mobile && !hidePIDProfiles" class="pid-profile">
+                            {{ $t('Panels.TemperaturePanel.PIDProfile') }}
+                        </th>
                         <th v-if="!el.is.mobile" class="state">
                             {{ $t('Panels.TemperaturePanel.State') }}
                         </th>
@@ -103,6 +106,10 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         return this.$store.state.gui.view.tempchart.hideMonitors ?? false
     }
 
+    get hidePIDProfiles(): boolean {
+        return this.$store.state.gui.view.tempchart.hidePIDProfiles ?? false
+    }
+
     get temperature_sensors() {
         return this.available_sensors
             .filter((fullName: string) => {
@@ -176,17 +183,22 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
     text-align: center;
 }
 
+.temperature-panel-table ::v-deep .pid-profile {
+    text-align: right !important;
+}
+
 .temperature-panel-table ::v-deep .state {
-    width: 100px;
+    width: 75px;
     text-align: right !important;
 }
 
 .temperature-panel-table ::v-deep .current {
-    width: 100px;
+    width: 75px;
     text-align: right !important;
 }
 
 .temperature-panel-table ::v-deep .target {
     width: 140px;
+    text-align: center !important;
 }
 </style>

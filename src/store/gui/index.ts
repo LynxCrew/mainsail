@@ -263,6 +263,7 @@ export const getDefaultState = (): GuiState => {
                 hiddenDataset: [],
                 hideMcuHostSensors: false,
                 hideMonitors: false,
+                hidePIDProfiles: false,
                 autoscale: false,
                 datasetSettings: {},
             },
@@ -279,6 +280,8 @@ export const getDefaultState = (): GuiState => {
                 showCoordinates: true,
                 showControl: true,
                 showZOffset: true,
+                showSaveZOffset: true,
+                showClearZOffset: true,
                 showSpeedFactor: true,
             },
             webcam: {

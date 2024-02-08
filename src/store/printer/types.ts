@@ -33,12 +33,14 @@ export interface PrinterStateHeater {
     temperature: number
     additionalSensors: PrinterStateAdditionalSensor[]
     power: number
+    pid_profile: string
     avgPower: number
     chartColor: string
     chartSeries: string[]
     presets: number[]
     min_temp: number
     max_temp: number
+    max_set_temp: number
 }
 
 export interface PrinterStateTemperatureFan {

@@ -29,6 +29,13 @@
             </v-list-item>
             <v-list-item class="minHeight36">
                 <v-checkbox
+                    v-model="hidePIDProfiles"
+                    class="mt-0"
+                    hide-details
+                    :label="$t('Panels.TemperaturePanel.HidePIDProfiles')" />
+            </v-list-item>
+            <v-list-item class="minHeight36">
+                <v-checkbox
                     v-model="autoscaleTempchart"
                     class="mt-0"
                     hide-details
@@ -78,6 +85,14 @@ export default class TemperaturePanelSettings extends Mixins(BaseMixin) {
 
     set hideMonitors(newVal: boolean) {
         this.$store.dispatch('gui/saveSetting', { name: 'view.tempchart.hideMonitors', value: newVal })
+    }
+
+    get hidePIDProfiles(): boolean {
+        return this.$store.state.gui.view.tempchart.hidePIDProfiles ?? false
+    }
+
+    set hidePIDProfiles(newVal: boolean) {
+        this.$store.dispatch('gui/saveSetting', { name: 'view.tempchart.hidePIDProfiles', value: newVal })
     }
 }
 </script>

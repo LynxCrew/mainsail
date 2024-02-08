@@ -760,6 +760,7 @@
             "Headline": "Temperatures",
             "HideMcuHostSensors": "Hide Host/MCU Sensors",
             "HideMonitors": "Hide Monitors",
+            "HidePIDProfiles": "Hide PID-Profiles",
             "Max": "max",
             "Min": "min",
             "Name": "Name",
@@ -768,6 +769,9 @@
             "ShowChart": "Show Chart",
             "ShowNameInChart": "Show {name} in chart",
             "ShowNameInList": "Show {name} in list",
+            "PIDProfile": "PID-Profile",
+            "UnknownPIDProfile": "Unknown PID-Profile [{profile}] for Heater [{heater}]",
+            "PIDProfileNotAllowed": "PID-Profile does not exist",
             "State": "State",
             "Target": "Target",
             "TemperaturesInChart": "Temperature [°C]",
@@ -788,6 +792,8 @@
             "SettingsInterfaceControl": "Settings > Interface > Control",
             "SpeedFactor": "Speed factor",
             "ZOffset": "Z-Offset",
+            "SaveZOffset": "Save Z-Offset",
+            "ClearZOffset": "Clear Z-Offset",
             "ZTilt": "Z-Tilt"
         },
         "WebcamPanel": {

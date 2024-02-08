@@ -187,6 +187,7 @@ export interface GuiState {
             hiddenDataset: string[]
             hideMcuHostSensors: boolean
             hideMonitors: boolean
+            hidePIDProfiles: boolean
             autoscale: boolean
             datasetSettings: any
         }
@@ -203,6 +204,8 @@ export interface GuiState {
             showCoordinates: boolean
             showControl: boolean
             showZOffset: boolean
+            showSaveZOffset: boolean
+            showClearZOffset: boolean
             showSpeedFactor: boolean
         }
         webcam: {

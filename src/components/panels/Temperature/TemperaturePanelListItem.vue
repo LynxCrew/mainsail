@@ -8,6 +8,21 @@
         <td class="name">
             <span class="cursor-pointer" @click="showEditDialog = true">{{ formatName }}</span>
         </td>
+        <td v-if="!isResponsiveMobile && !hidePIDProfiles" class="pid-profile">
+            <form @submit.prevent="setPIDProfile">
+                <v-text-field
+                v-if="loaded_pid_profile !== null"
+                class="_pid-profile-input pr-1"
+                :rules="[rules.pid_profile]"
+                v-model="pid_profile"
+                dense
+                outlined
+                hide-details
+                hide-spin-buttons
+                @blur="pidProfile = loaded_pid_profile"
+                @focus="$event.target.select()"></v-text-field>
+            </form>
+        </td>
         <td v-if="!isResponsiveMobile" class="state">
             <v-tooltip v-if="state !== null" top>
                 <template #activator="{ on, attrs }">
@@ -62,7 +77,7 @@
 
 <script lang="ts">
 import Component from 'vue-class-component'
-import { Mixins, Prop } from 'vue-property-decorator'
+import {Mixins, Prop, Watch} from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { convertName } from '@/plugins/helpers'
 import {
@@ -83,6 +98,21 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     @Prop({ type: Boolean, required: true }) readonly isResponsiveMobile!: boolean
 
     showEditDialog = false
+    pidProfile = this.printerObject.pid_profile ?? null
+
+    private rules = {
+        pid_profile: (value: string) => this.pidProfileAllowed(value) || this.$t('Panels.TemperaturePanel.PIDProfileNotAllowed')
+    }
+
+    pidProfileAllowed(name: string) {
+        const pidProfiles = this.pidProfiles
+        for (let i = 0; i < pidProfiles.length; i++) {
+            if (name == pidProfiles[i]) {
+                return true
+            }
+        }
+        return false
+    }
 
     get printerObject() {
         if (!(this.objectName in this.$store.state.printer)) return {}
@@ -173,6 +203,57 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         return this.printerObject.power ?? this.printerObject.speed ?? null
     }
 
+    set pid_profile(newval: string) {
+        this.pidProfile = newval
+    }
+
+    get pid_profile(): string {
+        return this.pidProfile
+    }
+
+    get loaded_pid_profile(): string | null {
+        return this.printerObject.pid_profile ?? null
+    }
+
+    get pidProfiles(): string[] {
+        return this.$store.getters['printer/getPIDProfiles']?.get(this.objectName) ?? {}
+    }
+
+    updatePIDProfile() {
+        if (!this.pidProfileAllowed(this.pidProfile)) {
+            this.$toast.error(
+                this.$t('Panels.TemperaturePanel.UnknownPIDProfile', { profile: this.pidProfile, heater: this.objectName }) + ''
+            )
+            return
+        }
+        const gcode = 'PID_PROFILE HEATER=' + this.objectName + ' LOAD=' + this.pidProfile
+        this.$store.dispatch('server/addEvent', {
+            message: gcode,
+            type: 'command',
+        })
+        this.$socket.emit('printer.gcode.script', { script: gcode }, { loading: 'macro_' + gcode })
+    }
+
+    setPIDProfile():void {
+        if (!this.pidProfileAllowed(this.pidProfile)) {
+            this.$toast.error(
+                this.$t('Panels.TemperaturePanel.UnknownPIDProfile', { profile: this.pidProfile, heater: this.objectName }) + ''
+            )
+        } else {
+            const gcode = 'PID_PROFILE HEATER=' + this.objectName + ' LOAD=' + this.pidProfile
+            this.$store.dispatch('server/addEvent', {
+                message: gcode,
+                type: 'command',
+            })
+            this.$socket.emit('printer.gcode.script', {script: gcode}, {loading: 'macro_' + gcode})
+        }
+    }
+
+    @Watch('loaded_pid_profile')
+    pidProfileChanged(newVal: any): void {
+        this.pidProfile = this.printerObject.pid_profile
+    }
+
     get formatState() {
         if (this.state === null) return null
         if (this.target === 0 && this.state === 0) return 'off'
@@ -208,7 +289,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get max_temp() {
-        return parseInt(this.printerObjectSettings.max_temp ?? 0)
+        return parseInt(this.printerObjectSettings.max_set_temp ?? 0)
     }
 
     get measured_min_temp() {
@@ -272,6 +353,10 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
         return ''
     }
+
+    get hidePIDProfiles(): boolean {
+        return this.$store.state.gui.view.tempchart.hidePIDProfiles ?? false
+    }
 }
 </script>
 
@@ -282,5 +367,24 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
 ::v-deep .cursor-pointer {
     cursor: pointer;
+}
+
+._pid-profile-input {
+    min-width: 4.2rem;
+    max-width: 8rem;
+    padding-right: 0 !important;
+}
+
+._pid-profile-input >>> .v-input__slot {
+    min-height: 1rem !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+._pid-profile-input >>> .v-text-field__slot input {
+    text-align: center !important;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    min-width: 4rem;
 }
 </style>
