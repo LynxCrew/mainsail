@@ -184,6 +184,7 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
 }
 
 .temperature-panel-table ::v-deep .pid-profile {
+    width: 75px;
     text-align: right !important;
 }
 
