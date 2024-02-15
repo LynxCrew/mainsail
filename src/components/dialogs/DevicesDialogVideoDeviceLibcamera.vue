@@ -9,15 +9,7 @@
         <v-card-text>
             <v-row class="mb-1">
                 <v-col>
-                    <v-text-field
-                        readonly
-                        dense
-                        outlined
-                        hide-details
-                        :append-icon="mdiContentCopy"
-                        :label="$t('DevicesDialog.LibcameraId')"
-                        :value="device.libcamera_id"
-                        @click:append="copy(device.libcamera_id)" />
+                    <textfield-with-copy :label="$t('DevicesDialog.LibcameraId')" :value="device.libcamera_id" />
                 </v-col>
             </v-row>
             <template v-if="identicalResolutions">
@@ -43,18 +35,18 @@
 <script lang="ts">
 import { Component, Mixins, Prop } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
-import { mdiContentCopy } from '@mdi/js'
 import { LibcameraDevice } from '@/components/dialogs/DevicesDialogVideo.vue'
-import { copyToClipboard } from '@/plugins/helpers'
+import { sortResolutions } from '@/plugins/helpers'
+import TextfieldWithCopy from '@/components/inputs/TextfieldWithCopy.vue'
 
-@Component
+@Component({
+    components: { TextfieldWithCopy },
+})
 export default class DevicesDialogVideoDeviceLibcamera extends Mixins(BaseMixin) {
-    mdiContentCopy = mdiContentCopy
-
     @Prop({ type: Object, required: true }) device!: LibcameraDevice
 
     get identicalResolutions() {
-        const resolutions = this.device.modes.map((mode) => mode.resolutions.join(','))
+        const resolutions = this.device.modes.map((mode) => mode.resolutions.sort(sortResolutions).join(','))
         return resolutions.every((resolution) => resolution === resolutions[0])
     }
 
@@ -64,10 +56,6 @@ export default class DevicesDialogVideoDeviceLibcamera extends Mixins(BaseMixin)
 
     get formats() {
         return this.device.modes.map((mode) => mode.format).join(', ')
-    }
-
-    copy(text: string) {
-        copyToClipboard(text)
     }
 }
 </script>
