@@ -69,6 +69,10 @@ export default class ZoffsetMixin extends Vue {
         return this.$store.state.gui.view.toolhead.showClearZOffset ?? true
     }
 
+    get showZOffsetAdjust(): boolean {
+        return this.$store.state.gui.view.toolhead.showZOffsetAdjust ?? true
+    }
+
     get autoSaveZOffsetOption() {
         if (this.isEndstopProbe && this.existZOffsetApplyProbe) return 'Z_OFFSET_APPLY_PROBE'
 

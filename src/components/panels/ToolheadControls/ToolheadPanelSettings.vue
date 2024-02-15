@@ -50,6 +50,13 @@
             </v-list-item>
             <v-list-item class="minHeight36">
                 <v-checkbox
+                    v-model="showZOffsetAdjust"
+                    class="mt-0"
+                    hide-details
+                    :label="$t('Panels.ToolheadControlPanel.ZOffsetAdjust')" />
+            </v-list-item>
+            <v-list-item class="minHeight36">
+                <v-checkbox
                     v-model="showSpeedFactor"
                     class="mt-0"
                     hide-details
@@ -115,6 +122,14 @@ export default class ToolheadPanelSettings extends Mixins(BaseMixin) {
 
     set showClearZOffset(newVal: boolean) {
         this.$store.dispatch('gui/saveSetting', { name: 'view.toolhead.showClearZOffset', value: newVal })
+    }
+
+    get showZOffsetAdjust(): boolean {
+        return this.$store.state.gui.view.toolhead.showZOffsetAdjust ?? true
+    }
+
+    set showZOffsetAdjust(newVal: boolean) {
+        this.$store.dispatch('gui/saveSetting', { name: 'view.toolhead.showZOffsetAdjust', value: newVal })
     }
 
     get showSpeedFactor(): boolean {

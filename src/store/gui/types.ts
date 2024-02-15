@@ -206,6 +206,7 @@ export interface GuiState {
             showZOffset: boolean
             showSaveZOffset: boolean
             showClearZOffset: boolean
+            showZOffsetAdjust: boolean
             showSpeedFactor: boolean
         }
         webcam: {

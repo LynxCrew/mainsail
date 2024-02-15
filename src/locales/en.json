@@ -794,6 +794,7 @@
             "ZOffset": "Z-Offset",
             "SaveZOffset": "Save Z-Offset",
             "ClearZOffset": "Clear Z-Offset",
+            "ZOffsetAdjust": "Adjust Z-Offset",
             "ZTilt": "Z-Tilt"
         },
         "WebcamPanel": {

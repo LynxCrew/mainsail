@@ -40,7 +40,8 @@
                         </div>
                     </v-col>
                 </v-row>
-                <v-row dense>
+                <v-row dense
+                    v-if="showZOffsetAdjust">
                     <v-col :class="!el.is.medium ? 'order-1 col-6' : 'col-12'">
                         <div class="d-flex align-center">
                             <v-item-group class="_btn-group">

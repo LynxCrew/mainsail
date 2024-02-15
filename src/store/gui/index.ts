@@ -282,6 +282,7 @@ export const getDefaultState = (): GuiState => {
                 showZOffset: true,
                 showSaveZOffset: true,
                 showClearZOffset: true,
+                showZOffsetAdjust: true,
                 showSpeedFactor: true,
             },
             webcam: {
