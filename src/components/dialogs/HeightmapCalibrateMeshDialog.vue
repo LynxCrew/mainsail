@@ -60,12 +60,18 @@ export default class HeightmapRenameProfileDialog extends Mixins(BaseMixin) {
     ]
 
     calibrateMesh(): void {
-        const gcode = `BED_MESH_CALIBRATE PROFILE="${this.name}"`
+        const gcode = this.lynxLayout()
+            ? `LEVEL_AUTO PROFILE="${this.name}"`
+            : `BED_MESH_CALIBRATE PROFILE="${this.name}"`
 
         this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
         this.$socket.emit('printer.gcode.script', { script: gcode }, { loading: 'bedMeshCalibrate' })
 
         this.closeDialog()
+    }
+
+    lynxLayout(): boolean {
+        return this.$store.state.gui.control.lynxLayout ?? false
     }
 
     closeDialog() {
