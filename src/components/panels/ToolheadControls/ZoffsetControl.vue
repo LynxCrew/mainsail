@@ -16,7 +16,7 @@
                     <v-col class="v-subheader justify-end pl-0">
                         <div class="d-flex align-center">
                             <v-btn
-                                v-if="z_gcode_offset !== 0"
+                                v-if="z_gcode_offset !== 0 && showClearZOffset"
                                 :loading="loadings.includes('babySteppingClear')"
                                 text
                                 small
@@ -27,7 +27,7 @@
                                 <span v-if="!el.is.xsmall" class="ml-1">{{ $t('Panels.ZoffsetPanel.Clear') }}</span>
                             </v-btn>
                             <v-btn
-                                v-if="showSaveButton"
+                                v-if="showSaveButton && showSaveZOffset"
                                 color="primary"
                                 text
                                 small
@@ -40,7 +40,8 @@
                         </div>
                     </v-col>
                 </v-row>
-                <v-row dense>
+                <v-row dense
+                    v-if="showZOffsetAdjust">
                     <v-col :class="!el.is.medium ? 'order-1 col-6' : 'col-12'">
                         <div class="d-flex align-center">
                             <v-item-group class="_btn-group">
