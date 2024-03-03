@@ -402,6 +402,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
             if (a.type === 'fan') return -1
             if (b.type === 'fan') return 1
 
+            if (a.type === 'controller_temperature_fan') return 1
+            if (b.type === 'controller_temperature_fan') return -1
+
             if (a.pwm < b.pwm) return 1
             if (a.pwm > b.pwm) return -1
 
