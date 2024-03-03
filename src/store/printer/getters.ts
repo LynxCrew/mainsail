@@ -333,7 +333,17 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
     getMiscellaneous: (state) => {
         const output: PrinterStateMiscellaneous[] = []
-        const supportedObjects = ['controller_fan', 'heater_fan', 'fan_generic', 'fan', 'output_pin']
+        const supportedObjects = [
+            'controller_fan',
+            'temperature_fan',
+            'controller_temperature_fan',
+            'heater_fan',
+            'fan_generic',
+            'fan',
+            'output_pin',
+            'pwm_tool',
+            'pwm_cycle_time',
+        ]
 
         const controllableFans = ['fan_generic', 'fan']
 
@@ -352,10 +362,11 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
                     if (nameSplit[0].toLowerCase() === 'fan') scale = 255
 
-                    if (nameSplit[0].toLowerCase() === 'output_pin') {
+                    if (['output_pin', 'pwm_tool', 'pwm_cycle_time'].includes(nameSplit[0])) {
                         controllable = true
                         pwm = false
                         if ('pwm' in settings) pwm = settings?.pwm ?? false
+                        if (['pwm_tool', 'pwm_cycle_time'].includes(nameSplit[0])) pwm = true
                         if ('scale' in settings) scale = settings?.scale ?? 1
                     }
 

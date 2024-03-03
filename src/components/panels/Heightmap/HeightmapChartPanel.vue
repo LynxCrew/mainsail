@@ -6,7 +6,7 @@
                 tile
                 class="d-none d-sm-flex"
                 :disabled="printerIsPrinting"
-                :color="homedAxes.includes('xyz') ? 'primary' : 'warning'"
+                :color="homedAxes.includes('xyz') ? 'primary' : 'highlight'"
                 :loading="loadings.includes('homeAll')"
                 :title="$t('Heightmap.TitleHomeAll')"
                 :ripple="true"

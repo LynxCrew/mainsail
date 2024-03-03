@@ -105,6 +105,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     pidProfileAllowed(name: string) {
+        if (name == 'autotune') return true;
         const pidProfiles = this.pidProfiles
         for (let i = 0; i < pidProfiles.length; i++) {
             if (name == pidProfiles[i]) {
