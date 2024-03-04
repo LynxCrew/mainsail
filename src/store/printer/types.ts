@@ -26,6 +26,7 @@ export interface PrinterState {
 
 export interface PrinterStateHeater {
     name: string
+    displayName: string
     type: 'extruder' | 'heater_bed' | 'heater_generic'
     icon: string
     iconColor: string
@@ -45,6 +46,7 @@ export interface PrinterStateHeater {
 
 export interface PrinterStateTemperatureFan {
     name: string
+    displayName: string
     icon: string
     target: number
     temperature: number
@@ -61,6 +63,7 @@ export interface PrinterStateTemperatureFan {
 
 export interface PrinterStateTemperatureSensor {
     name: string
+    displayName: string
     temperature: number
     additionalSensors: PrinterStateAdditionalSensor[]
     icon: string
@@ -74,6 +77,7 @@ export interface PrinterStateTemperatureSensor {
 
 export interface PrinterStateTemperatureObject {
     name: string
+    displayName: string
     type: 'extruder' | 'heater_bed' | 'heater_generic' | 'temperature_fan' | 'temperature_sensor'
     icon: string
     iconColor: string

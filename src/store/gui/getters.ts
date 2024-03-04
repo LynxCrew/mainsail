@@ -26,6 +26,16 @@ export const getters: GetterTree<GuiState, any> = {
         return true
     },
 
+    getDisplayName: (state) => (payload: { name: string }) => {
+        if (
+            payload.name in state.view.tempchart.datasetSettings &&
+            'displayName' in state.view.tempchart.datasetSettings[payload.name]
+        )
+            return state.view.tempchart.datasetSettings[payload.name].displayName
+
+        return ''
+    },
+
     getPanelExpand: (state) => (name: string, viewport: string) => {
         if ('dashboard' in state && viewport in state.dashboard.nonExpandPanels) {
             return !state.dashboard.nonExpandPanels[viewport].includes(name) ?? true

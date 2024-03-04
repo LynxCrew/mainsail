@@ -17,6 +17,8 @@
                     :key="additionalSensor"
                     :object-name="objectName"
                     :additional-sensor="additionalSensor" />
+                <temperature-panel-list-item-edit-display-name
+                    :object-name="objectName" />
                 <v-row>
                     <v-col class="col-12 text-center pb-0">
                         <v-color-picker
@@ -40,9 +42,11 @@ import { mdiCloseThick } from '@mdi/js'
 import TemperaturePanelListItemEditChartSerie from '@/components/panels/Temperature/TemperaturePanelListItemEditChartSerie.vue'
 import TemperaturePanelListItemEditAdditionalSensor from '@/components/panels/Temperature/TemperaturePanelListItemEditAdditionalSensor.vue'
 import { Debounce } from 'vue-debounce-decorator'
+import TemperaturePanelListItemEditDisplayName
+    from "@/components/panels/Temperature/TemperaturePanelListItemEditDisplayName.vue";
 
 @Component({
-    components: { TemperaturePanelListItemEditAdditionalSensor, TemperaturePanelListItemEditChartSerie },
+    components: {TemperaturePanelListItemEditDisplayName, TemperaturePanelListItemEditAdditionalSensor, TemperaturePanelListItemEditChartSerie },
 })
 export default class TemperaturePanelListItemEdit extends Mixins(BaseMixin) {
     mdiCloseThick = mdiCloseThick

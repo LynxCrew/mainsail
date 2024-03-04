@@ -138,7 +138,17 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get formatName() {
+        if (this.displayName != '') {
+            return this.displayName
+        }
+
         return convertName(this.name)
+    }
+
+    get displayName() {
+        return this.$store.getters['gui/getDisplayName']({
+            name: this.objectName,
+        })
     }
 
     get icon() {
@@ -218,21 +228,6 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get pidProfiles(): string[] {
         return this.$store.getters['printer/getPIDProfiles']?.get(this.objectName) ?? {}
-    }
-
-    updatePIDProfile() {
-        if (!this.pidProfileAllowed(this.pidProfile)) {
-            this.$toast.error(
-                this.$t('Panels.TemperaturePanel.UnknownPIDProfile', { profile: this.pidProfile, heater: this.objectName }) + ''
-            )
-            return
-        }
-        const gcode = 'PID_PROFILE HEATER=' + this.objectName + ' LOAD=' + this.pidProfile
-        this.$store.dispatch('server/addEvent', {
-            message: gcode,
-            type: 'command',
-        })
-        this.$socket.emit('printer.gcode.script', { script: gcode }, { loading: 'macro_' + gcode })
     }
 
     setPIDProfile():void {

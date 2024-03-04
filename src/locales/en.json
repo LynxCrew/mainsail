@@ -771,6 +771,7 @@
             "ShowChart": "Show Chart",
             "ShowNameInChart": "Show {name} in chart",
             "ShowNameInList": "Show {name} in list",
+            "DisplayName": "Display name",
             "PIDProfile": "PID-Profile",
             "UnknownPIDProfile": "Unknown PID-Profile [{profile}] for Heater [{heater}]",
             "PIDProfileNotAllowed": "PID-Profile does not exist",

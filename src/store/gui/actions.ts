@@ -501,6 +501,18 @@ export const actions: ActionTree<GuiState, RootState> = {
         })
     },
 
+    setDisplayName(
+        { commit, dispatch, state },
+        payload: { objectName: string; value: string }
+    ) {
+        commit('setDisplayName', payload)
+
+        dispatch('updateSettings', {
+            keyName: 'view.tempchart.datasetSettings',
+            newVal: state.view.tempchart.datasetSettings,
+        })
+    },
+
     setChartColor({ commit, dispatch, state }, payload: { objectName: string; value: boolean }) {
         commit('setChartDatasetStatus', {
             objectName: payload.objectName,
