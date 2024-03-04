@@ -120,7 +120,7 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
                 if (this.hideMcuHostSensors && this.checkMcuHostSensor(fullName)) return false
 
                 // hide monitors, if the function is enabled
-                if (this.hideMonitors && this.available_monitors.includes(fullName)) return fals
+                if (this.hideMonitors && this.available_monitors.includes(fullName)) return false
 
                 const splits = fullName.split(' ')
                 let name = splits[0]
