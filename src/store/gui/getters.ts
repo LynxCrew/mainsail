@@ -33,7 +33,7 @@ export const getters: GetterTree<GuiState, any> = {
         )
             return state.view.tempchart.datasetSettings[payload.name].displayName
 
-        return ''
+        return null
     },
 
     getPanelExpand: (state) => (name: string, viewport: string) => {
