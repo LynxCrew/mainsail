@@ -67,6 +67,7 @@ export default class TemperaturePanelListItemEditAdditionalSensor extends Mixins
     padding-left: 4px;
     display: block;
     width: 100%;
+    font-size: 1.2em;
 }
 
 .settings-row-slot {
