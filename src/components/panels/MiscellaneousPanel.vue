@@ -22,7 +22,7 @@
                 :pwm="object.pwm"
                 :off_below="object.off_below"
                 :max="object.max_power"
-                :multi="parseInt(object.scale)"></miscellaneous-slider>
+                :multi="object.scale"></miscellaneous-slider>
         </div>
         <div v-for="(light, index) of lights" :key="'light_' + light.name">
             <v-divider v-if="hideDivider(light, index)"></v-divider>

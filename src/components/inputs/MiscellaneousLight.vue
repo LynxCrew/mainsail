@@ -20,7 +20,7 @@
             </v-col>
         </v-row>
         <miscellaneous-light v-for="group in groups" :key="group.id" :object="object" :group="group" />
-        <v-dialog v-model="boolDialog" persistent :width="400">
+        <v-dialog v-model="boolDialog" persistent :width="400" @keydown.esc="boolDialog = false">
             <panel
                 :title="name"
                 :icon="mdiLightbulbOutline"
