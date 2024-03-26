@@ -258,6 +258,9 @@ export default class TheEditor extends Mixins(BaseMixin) {
         // check for mooncord config files
         if (this.filename.startsWith('mooncord') && this.fileExtension === 'json') return 'mooncord'
 
+        // check for moonraker-telegram-bot config files
+        if (this.filename === 'telegram.conf') return 'moonraker-telegram-bot'
+
         // fallback for moonraker with multi instances
         if (this.filename === 'moonraker.conf') return 'moonraker'
 
