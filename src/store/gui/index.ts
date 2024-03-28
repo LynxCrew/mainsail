@@ -15,6 +15,7 @@ import { notifications } from '@/store/gui/notifications'
 import { reminders } from '@/store/gui/reminders'
 import { presets } from '@/store/gui/presets'
 import { remoteprinters } from '@/store/gui/remoteprinters'
+import { maintenance } from '@/store/gui/maintenance'
 import { webcams } from '@/store/gui/webcams'
 import { heightmap } from '@/store/gui/heightmap'
 
@@ -160,6 +161,7 @@ export const getDefaultState = (): GuiState => {
             confirmOnEmergencyStop: false,
             confirmOnReboot: false,
             confirmOnShutdown: false,
+            confirmOnCoolDown: false,
             confirmOnPowerDeviceChange: false,
             boolBigThumbnail: true,
             bigThumbnailBackground: defaultBigThumbnailBackground,
@@ -253,6 +255,8 @@ export const getDefaultState = (): GuiState => {
                     'object_height',
                 ],
                 selectedJobs: [],
+                showMaintenanceEntries: true,
+                showPrintJobs: true,
             },
             jobqueue: {
                 countPerPage: 10,
@@ -308,6 +312,7 @@ export const gui: Module<GuiState, any> = {
         console,
         gcodehistory,
         macros,
+        maintenance,
         miscellaneous,
         navigation,
         notifications,

@@ -108,6 +108,7 @@ export interface GuiState {
         confirmOnEmergencyStop: boolean
         confirmOnReboot: boolean
         confirmOnShutdown: boolean
+        confirmOnCoolDown: boolean
         confirmOnPowerDeviceChange: boolean
         boolBigThumbnail: boolean
         bigThumbnailBackground: string
@@ -177,6 +178,8 @@ export interface GuiState {
             hidePrintStatus: string[]
             hideColums: string[]
             selectedJobs: ServerHistoryStateJob[]
+            showMaintenanceEntries: boolean
+            showPrintJobs: boolean
         }
         jobqueue: {
             countPerPage: number
