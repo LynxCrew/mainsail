@@ -1621,15 +1621,8 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
 
     outputValue(col: any, item: FileStateGcodefile) {
         const value = col.value in item ? item[col.value] : null
-        return this.formatOutputValue(value, col.outputType)
-    }
 
-    formatOutputValue(value: any, valueType: string) {
-        if (value !== null) {
-            switch (valueType) {
-                case 'filesize':
-                    return formatFilesize(value)
-        else return '--'
+        if (value === null) return '--'
 
         switch (col.outputType) {
             case 'filesize':
