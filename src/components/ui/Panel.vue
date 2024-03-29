@@ -17,6 +17,11 @@
                 <span v-if="title" class="subheading">{{ title }}</span>
             </v-toolbar-title>
             <slot name="buttons-title" />
+            <v-toolbar-items v-show="hasButtonsSlot || collapsible">
+                <div v-if="expand || !hideButtonsOnCollapse" class="d-flex align-center ml-2">
+                    <slot name="buttons-lynxbot" />
+                </div>
+            </v-toolbar-items>
             <v-spacer />
             <v-toolbar-items v-show="hasButtonsSlot || collapsible">
                 <div v-if="expand || !hideButtonsOnCollapse" class="d-flex align-center">

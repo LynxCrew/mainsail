@@ -69,7 +69,9 @@ export default class TheNotificationMenu extends Mixins(BaseMixin) {
     boolMenu = false
 
     get notifications() {
-        return this.$store.getters['gui/notifications/getNotifications'] ?? []
+        const test = this.$store.getters['gui/notifications/getNotifications'] ?? []
+        console.log(test)
+        return test
     }
 
     get existsCriticalAnnouncements() {

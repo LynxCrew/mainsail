@@ -139,6 +139,10 @@
                         hide-spin-buttons
                         @blur="feedBlur"></v-text-field>
                 </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row :title="$t('Settings.GCodeViewerTab.FluiddUrl')">
+                    <v-text-field v-model="fluiddUrl" hide-details outlined dense></v-text-field>
+                </settings-row>
             </v-card-text>
         </v-card>
     </div>
@@ -239,6 +243,14 @@ export default class SettingsGCodeViewerTab extends Mixins(BaseMixin) {
 
     set maxFeedColor(newVal: string) {
         this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.maxFeedColor', value: newVal })
+    }
+
+    get fluiddUrl() {
+        return this.$store.state.gui.gcodeViewer.fluiddUrl
+    }
+
+    set fluiddUrl(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.fluiddUrl', value: newVal })
     }
 
     feedBlur(): void {

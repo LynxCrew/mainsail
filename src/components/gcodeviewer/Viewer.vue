@@ -1,6 +1,17 @@
 <template>
     <div>
         <panel :title="panelTitle" :icon="mdiVideo3d" card-class="gcode-viewer-panel" :margin-bottom="false">
+            <template #buttons-lynxbot>
+                <v-btn
+                    v-if="fluiddViewerUrl != ''"
+                    style="width: 100%"
+                    @click="openFluiddViewer"
+                    text
+                    class="ml-2">
+                    <v-icon left>{{ mdiOpenInNew() }}</v-icon>
+                    <span v-if="!isMobile"> {{ $t('GCodeViewer.OpenFluiddGCodeViewer') }} </span>
+                </v-btn>
+            </template>
             <template #buttons>
                 <v-btn
                     v-show="reloadRequired"
@@ -293,7 +304,7 @@ import {
     mdiPause,
     mdiFastForward,
     mdiBroom,
-    mdiSelectionRemove,
+    mdiSelectionRemove, mdiOpenInNew,
 } from '@mdi/js'
 import { Debounce } from 'vue-debounce-decorator'
 
@@ -308,6 +319,11 @@ interface downloadSnackbar {
 
 let viewer: any = null
 @Component({
+    methods: {
+        mdiOpenInNew() {
+            return mdiOpenInNew
+        }
+    },
     components: { Panel, CodeStream },
 })
 export default class Viewer extends Mixins(BaseMixin) {
@@ -1137,6 +1153,22 @@ export default class Viewer extends Mixins(BaseMixin) {
     cancelObject() {
         this.$socket.emit('printer.gcode.script', { script: 'EXCLUDE_OBJECT NAME=' + this.excludeObject.name })
         this.excludeObject.bool = false
+    }
+
+    get fluiddViewerUrl() {
+        const fluiddURL = this.$store.state.gui.gcodeViewer.fluiddUrl
+        if (fluiddURL == '') {
+            return ''
+        }
+        return "http://" + this.$store.state.gui.gcodeViewer.fluiddUrl + "/#/preview"
+    }
+
+    openFluiddViewer() {
+        window.open(this.fluiddViewerUrl, '_blank')
+    }
+
+    get isMobile() {
+        return this.$vuetify.breakpoint.mobile
     }
 }
 </script>

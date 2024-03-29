@@ -129,6 +129,7 @@ export const getDefaultState = (): GuiState => {
             maxFeed: 100,
             minFeedColor: '#2196f3',
             maxFeedColor: '#D41216',
+            fluiddUrl: '',
             progressColor: '#ECECEC',
             showCursor: true,
             showTravelMoves: false,

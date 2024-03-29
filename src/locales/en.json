@@ -310,6 +310,7 @@
         "Low": "Low",
         "Max": "Max",
         "Medium": "Medium",
+        "OpenFluiddGCodeViewer": "Open Fluidd G-Code Viewer",
         "ReloadRequired": "Reload required",
         "Rendering": "Rendering",
         "RenderQuality": "Render Quality",
@@ -992,7 +993,8 @@
             "MaxFeed": "Max Feed Rate",
             "MinFeed": "Min Feed Rate",
             "ProgressColor": "Progress Color",
-            "ShowAxes": "Show Axes"
+            "ShowAxes": "Show Axes",
+            "FluiddUrl": "Fluidd Instance URL"
         },
         "GeneralTab": {
             "12hours": "12-hours ({time})",
