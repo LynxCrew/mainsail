@@ -42,9 +42,6 @@ export const getters: GetterTree<GuiNotificationState, any> = {
         // browser warnings
         notifications = notifications.concat(getters['getNotificationsBrowserWarnings'])
 
-        // user-created reminders
-        notifications = notifications.concat(getters['getNotificationsOverdueReminders'])
-
         const mapType = {
             normal: 2,
             high: 1,
