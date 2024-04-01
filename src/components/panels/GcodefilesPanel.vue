@@ -1520,6 +1520,26 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
         )
     }
 
+    moveDirectory(item: FileStateGcodefile) {
+        this.dialogMoveDirectory.item = item
+        this.dialogMoveDirectory.newName = item.filename
+        this.dialogMoveDirectory.show = true
+        setTimeout(() => {
+            this.$refs.inputFieldMoveDirectory?.focus()
+        }, 200)
+    }
+    moveDirectoryAction() {
+        this.dialogMoveDirectory.show = false
+        this.$socket.emit(
+            'server.files.move',
+            {
+                source: 'gcodes' + this.currentPath + '/' + this.dialogMoveDirectory.item.filename,
+                dest: 'gcodes' + this.currentPath + '/' + this.dialogMoveDirectory.newName,
+            },
+            { action: 'files/getMove' }
+        )
+    }
+
     removeFile() {
         this.$socket.emit(
             'server.files.delete_file',
