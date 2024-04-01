@@ -1621,33 +1621,36 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
 
     outputValue(col: any, item: FileStateGcodefile) {
         const value = col.value in item ? item[col.value] : null
+        return this.formatOutputValue(value, col.outputType)
+    }
 
-        if (value === null) return '--'
+    formatOutputValue(value: any, valueType: string) {
+        if (value !== null) {
+            switch (valueType) {
+                case 'filesize':
+                    return formatFilesize(value)
 
-        switch (col.outputType) {
-            case 'filesize':
-                return formatFilesize(value)
+                case 'date':
+                    return this.formatDateTime(value)
 
-            case 'date':
-                return this.formatDateTime(value)
+                case 'time':
+                    return this.formatPrintTime(value)
 
-            case 'time':
-                return formatPrintTime(value)
+                case 'temp':
+                    return value.toFixed() + ' °C'
 
-            case 'temp':
-                return value.toFixed() + ' °C'
+                case 'length':
+                    if (value > 1000) return (value / 1000).toFixed(2) + ' m'
 
-            case 'length':
-                if (value > 1000) return (value / 1000).toFixed(2) + ' m'
+                    return value.toFixed(2) + ' mm'
 
-                return value.toFixed(2) + ' mm'
+                case 'weight':
+                    return value.toFixed(2) + ' g'
 
-            case 'weight':
-                return value.toFixed(2) + ' g'
-
-            default:
-                return value
-        }
+                default:
+                    return value
+            }
+        } else return '--'
     }
 }
 </script>

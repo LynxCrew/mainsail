@@ -19,6 +19,7 @@ import {
     mdiTimelapse,
     mdiWrench,
 } from '@mdi/js'
+import Test from "@/pages/Test.vue";
 
 const routes: AppRoute[] = [
     {
@@ -126,6 +127,17 @@ const routes: AppRoute[] = [
         alwaysShow: true,
         showInNavi: true,
         position: 90,
+    },
+    {
+        name: 'test',
+        title: 'Test',
+        path: '/test',
+        icon: mdiWrench,
+        component: Test,
+        alwaysShow: true,
+        showInNavi: true,
+        fullscreen: true,
+        position: 100,
     },
     {
         title: null,

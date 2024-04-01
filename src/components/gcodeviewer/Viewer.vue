@@ -1,5 +1,12 @@
 <template>
-    <div>
+    <div v-if="fluiddViewerUrl != ''">
+        <template>
+            <iframe src="http://192.168.178.135:81/#/preview"
+                    width="100%">
+            </iframe>
+        </template>
+    </div>
+    <div v-else>
         <panel :title="panelTitle" :icon="mdiVideo3d" card-class="gcode-viewer-panel" :margin-bottom="false">
             <template #buttons-lynxbot>
                 <v-btn
@@ -1212,5 +1219,22 @@ export default class Viewer extends Mixins(BaseMixin) {
     left: 0;
     right: 0;
     bottom: 5px;
+}
+
+html {
+    overflow: auto;
+}
+
+html,
+body,
+div,
+
+iframe {
+    display: block;
+    width: 100%;
+    height: var(--app-height);
+    border: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 </style>
