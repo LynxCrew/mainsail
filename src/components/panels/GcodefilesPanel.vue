@@ -785,6 +785,7 @@ export default class GcodefilesPanel extends Mixins(BaseMixin, ControlMixin) {
     mdiPinOff = mdiPinOff
 
     formatFilesize = formatFilesize
+    formatPrintTime = formatPrintTime
     sortFiles = sortFiles
 
     declare $refs: {
