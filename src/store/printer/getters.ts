@@ -356,6 +356,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
                     let controllable = controllableFans.includes(nameSplit[0].toLowerCase())
                     const settings = state.configfile?.settings[key.toLowerCase()] ?? {}
                     const power = 'speed' in value ? value.speed : 'value' in value ? value.value : 0
+                    const normalized_power = 'normalized_speed' in value ? value.normalized_speed : undefined
                     const rpm = 'rpm' in value ? value.rpm : null
                     let pwm = controllable
                     let scale = 1
@@ -374,6 +375,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
                         name: name,
                         type: nameSplit[0],
                         power,
+                        normalized_power,
                         controllable,
                         pwm,
                         rpm,
