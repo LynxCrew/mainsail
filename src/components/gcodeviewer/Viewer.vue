@@ -15,7 +15,8 @@ export default class Viewer extends Mixins(BaseMixin) {
 
     get useFluiddViewer() {
         const fluiddURL = this.$store.state.gui.gcodeViewer.fluiddUrl
-        return this.$store.state.gui.gcodeViewer.useFluiddViewer && fluiddURL != ''
+        const fluiddPort = this.$store.state.gui.gcodeViewer.fluiddPort
+        return this.$store.state.gui.gcodeViewer.useFluiddViewer && (fluiddURL != '' || fluiddPort != '')
     }
 }
 </script>

@@ -15,10 +15,29 @@ import BaseMixin from '../mixins/base'
 export default class Viewer extends Mixins(BaseMixin) {
     get fluiddViewerUrl() {
         const fluiddURL = this.$store.state.gui.gcodeViewer.fluiddUrl
-        if (fluiddURL == '') {
+        const fluiddPort = this.$store.state.gui.gcodeViewer.fluiddPort
+        if (fluiddURL == '' && fluiddPort == '') {
             return ''
         }
-        return "http://" + this.$store.state.gui.gcodeViewer.fluiddUrl + "/#/preview"
+
+        let url = ''
+        if (fluiddURL != '')
+            url = fluiddURL
+        else
+            url = window.location.origin
+
+        if (fluiddPort != '')
+            url = url + fluiddPort
+
+        let http = ''
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            http = "http://"
+
+        let preview = ''
+        if (!url.endsWith("/#/preview"))
+            preview = "/#/preview"
+
+        return http + url + preview
     }
 }
 </script>

@@ -130,6 +130,7 @@ export const getDefaultState = (): GuiState => {
             minFeedColor: '#2196f3',
             maxFeedColor: '#D41216',
             fluiddUrl: '',
+            fluiddPort: '',
             useFluiddViewer: false,
             progressColor: '#ECECEC',
             showCursor: true,

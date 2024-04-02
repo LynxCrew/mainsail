@@ -995,6 +995,7 @@
             "ProgressColor": "Progress Color",
             "ShowAxes": "Show Axes",
             "FluiddUrl": "Fluidd Instance URL",
+            "FluiddPort": "Port of the Fluidd Instance",
             "UseFluiddViewer": "Use the Fluidd GCode-Viewer"
         },
         "GeneralTab": {
