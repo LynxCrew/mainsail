@@ -75,6 +75,7 @@ export interface GuiState {
         minFeedColor: string
         maxFeedColor: string
         fluiddUrl: string
+        useFluiddViewer: boolean
         progressColor: string
         showCursor: boolean
         showTravelMoves: boolean

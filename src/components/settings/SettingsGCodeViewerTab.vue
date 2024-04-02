@@ -143,6 +143,10 @@
                 <settings-row :title="$t('Settings.GCodeViewerTab.FluiddUrl')">
                     <v-text-field v-model="fluiddUrl" hide-details outlined dense></v-text-field>
                 </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row v-if="fluiddUrl != ''" :title="$t('Settings.GCodeViewerTab.UseFluiddViewer')">
+                    <v-switch v-model="useFluiddViewer" hide-details outlined dense></v-switch>
+                </settings-row>
             </v-card-text>
         </v-card>
     </div>
@@ -251,6 +255,14 @@ export default class SettingsGCodeViewerTab extends Mixins(BaseMixin) {
 
     set fluiddUrl(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.fluiddUrl', value: newVal })
+    }
+
+    get useFluiddViewer() {
+        return this.$store.state.gui.gcodeViewer.useFluiddViewer
+    }
+
+    set useFluiddViewer(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.useFluiddViewer', value: newVal })
     }
 
     feedBlur(): void {

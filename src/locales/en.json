@@ -994,7 +994,8 @@
             "MinFeed": "Min Feed Rate",
             "ProgressColor": "Progress Color",
             "ShowAxes": "Show Axes",
-            "FluiddUrl": "Fluidd Instance URL"
+            "FluiddUrl": "Fluidd Instance URL",
+            "UseFluiddViewer": "Use the Fluidd GCode-Viewer"
         },
         "GeneralTab": {
             "12hours": "12-hours ({time})",
