@@ -18,6 +18,7 @@
                     <span>{{ convertName(name) }}</span>
                     <v-spacer />
                     <small v-if="rpm !== null" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                    <small v-if="showRealPWM && normalized_target != undefined" :class="rpmClasses"> {{ Math.round(parseFloat(target) * 100) }}% PWM</small>
                     <span v-if="!controllable" class="font-weight-bold">
                         {{ Math.round(parseFloat(value) * 100) }} %
                     </span>
@@ -339,6 +340,10 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
         }
 
         this.sendCmd(newVal)
+    }
+
+    get showRealPWM() {
+        return this.$store.state.gui.uiSettings.showRealPWM ?? false
     }
 }
 </script>

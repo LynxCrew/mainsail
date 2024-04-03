@@ -11,6 +11,13 @@
         <v-card-text v-else>
             <h3 class="text-h5 mb-3">{{ $t('Settings.MiscellaneousTab.Miscellaneous') }}</h3>
             <settings-row
+                :title="$t('Settings.MiscellaneousTab.ShowRealPWM')"
+                :sub-title="$t('Settings.MiscellaneousTab.ShowRealPWMDescription')"
+                :dynamic-slot-width="true">
+                <v-switch v-model="showRealPWM" hide-details class="mt-0" />
+            </settings-row>
+            <v-divider class="my-2" />
+            <settings-row
                 :title="$t('Settings.MiscellaneousTab.HideMiscellaneousLight')"
                 :sub-title="$t('Settings.MiscellaneousTab.HideMiscellaneousLightDescription')"
                 :dynamic-slot-width="true">
@@ -120,6 +127,14 @@ export default class SettingsMiscellaneousTab extends Mixins(BaseMixin) {
 
     get filteredLights() {
         return this.lights.filter((light: PrinterStateLight) => light.colorOrder.length > 1)
+    }
+
+    get showRealPWM() {
+        return this.$store.state.gui.uiSettings.showRealPWM ?? false
+    }
+
+    set showRealPWM(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'uiSettings.showRealPWM', value: newVal })
     }
 
     get hideMiscellaneousLight() {

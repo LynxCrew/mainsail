@@ -128,6 +128,7 @@ export interface GuiState {
         tempchartHeight: number
         hideUpdateWarnings: boolean
         hideUpdateAnomalies: boolean
+        showRealPWM: boolean
         hideMiscellaneousLight: boolean
         showStateOnDisabled: boolean
         showDetectionLength: boolean

@@ -181,6 +181,7 @@ export const getDefaultState = (): GuiState => {
             tempchartHeight: 250,
             hideUpdateWarnings: false,
             hideUpdateAnomalies: false,
+            showRealPWM: false,
             hideMiscellaneousLight: false,
             showStateOnDisabled: true,
             showDetectionLength: true,

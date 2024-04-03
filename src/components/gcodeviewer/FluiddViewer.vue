@@ -14,8 +14,8 @@ import BaseMixin from '../mixins/base'
 
 export default class Viewer extends Mixins(BaseMixin) {
     get fluiddViewerUrl() {
-        const fluiddURL = this.$store.state.gui.gcodeViewer.fluiddUrl
-        const fluiddPort = this.$store.state.gui.gcodeViewer.fluiddPort
+        const fluiddURL = this.$store.state.gui.gcodeViewer.fluiddUrl ?? ''
+        const fluiddPort = this.$store.state.gui.gcodeViewer.fluiddPort ?? ''
         if (fluiddURL == '' && fluiddPort == '') {
             return ''
         }

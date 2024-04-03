@@ -1093,6 +1093,8 @@
             "Warning": "warning"
         },
         "MiscellaneousTab": {
+            "ShowRealPWM": "Show real PWM value",
+            "ShowRealPWMDescription": "This option will show the real PWM percent for fans in addition to the normalized value.",
             "HideMiscellaneousLight": "Hide RGB-LED color-picker",
             "HideMiscellaneousLightDescription": "This option will hide the RGB-LED color-picker in the Miscellaneous tab on the Dashboard.",
             "ShowStateOnDisabled": "Show state when disabled",
