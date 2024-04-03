@@ -27,7 +27,7 @@ export default class Viewer extends Mixins(BaseMixin) {
             url = window.location.origin
 
         if (fluiddPort != '')
-            url = url + fluiddPort
+            url = url + ":" + fluiddPort
 
         let http = ''
         if (!url.startsWith("http://") && !url.startsWith("https://"))
