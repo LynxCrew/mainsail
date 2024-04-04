@@ -81,7 +81,7 @@
 <script lang="ts">
 import BaseMixin from '@/components/mixins/base'
 import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
-import { mdiClose, mdiLinkVariant, mdiBellOffOutline, mdiCalendarRefreshOutline } from '@mdi/js'
+import { mdiClose, mdiLinkVariant, mdiBellOffOutline } from '@mdi/js'
 import { GuiNotificationStateEntry } from '@/store/gui/notifications/types'
 import { TranslateResult } from 'vue-i18n'
 import { GuiMaintenanceStateEntry } from '@/store/gui/maintenance/types'
@@ -98,7 +98,6 @@ export default class NotificationMenuEntry extends Mixins(BaseMixin) {
     mdiClose = mdiClose
     mdiLinkVariant = mdiLinkVariant
     mdiBellOffOutline = mdiBellOffOutline
-    mdiCalendarRefreshOutline = mdiCalendarRefreshOutline
 
     expand = false
     showMaintenanceDetails = false
@@ -110,7 +109,6 @@ export default class NotificationMenuEntry extends Mixins(BaseMixin) {
     declare readonly parentState: boolean
 
     get formatedText() {
-        console.log(this.entry.id)
         return this.entry.description.replace(
             /(\bhttps?:\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim,
             '<a href="$1" target="_blank" class="' + this.alertColor + '--text">$1</a>'
@@ -180,11 +178,6 @@ export default class NotificationMenuEntry extends Mixins(BaseMixin) {
 
     dismiss(type: 'time' | 'reboot', time: number | null) {
         this.$store.dispatch('gui/notifications/dismiss', { id: this.entry.id, type, time })
-    }
-
-    repeatReminder() {
-        const reminderId = this.entry.id.replace('reminder/', '')
-        this.$store.dispatch('gui/reminders/repeat', { id: reminderId })
     }
 
     @Watch('parentState')

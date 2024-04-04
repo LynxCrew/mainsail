@@ -125,7 +125,7 @@
                 itemsPerPageAllText: $t('History.AllJobs'),
                 itemsPerPageOptions: [10, 25, 50, 100, -1],
             }"
-            item-key="job_id"
+            item-key="select_id"
             :search="search"
             :custom-filter="advancedSearch"
             mobile-breakpoint="0"
@@ -134,17 +134,17 @@
                 <div class="text-center">{{ $t('History.Empty') }}</div>
             </template>
 
-            <template #item="{ index, item, isSelected, select }">
+            <template #item="{ item, isSelected, select }">
                 <history-list-entry-job
                     v-if="item.type === 'job'"
-                    :key="`${index}_${item.job_id}`"
+                    :key="item.select_id"
                     :is-selected="isSelected"
                     :item="item"
                     :table-fields="tableFields"
                     @select="select" />
                 <history-list-entry-maintenance
                     v-else-if="item.type === 'maintenance'"
-                    :key="`${index}_${item.id}`"
+                    :key="item.select_id"
                     :is-selected="isSelected"
                     :item="item"
                     :table-fields="tableFields"
@@ -159,7 +159,7 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
-import { ServerHistoryStateJob } from '@/store/server/history/types'
+import { HistoryListRowJob, ServerHistoryStateJob } from '@/store/server/history/types'
 import { caseInsensitiveSort, formatFilesize } from '@/plugins/helpers'
 import Panel from '@/components/ui/Panel.vue'
 import {
@@ -175,9 +175,11 @@ import {
 import HistoryListPanelDetailsDialog from '@/components/dialogs/HistoryListPanelDetailsDialog.vue'
 import HistoryListEntryJob from '@/components/panels/History/HistoryListEntryJob.vue'
 import HistoryListPanelAddMaintenance from '@/components/dialogs/HistoryListPanelAddMaintenance.vue'
-import { GuiMaintenanceStateEntry } from '@/store/gui/maintenance/types'
+import { GuiMaintenanceStateEntry, HistoryListRowMaintenance } from '@/store/gui/maintenance/types'
 import HistoryListEntryMaintenance from '@/components/panels/History/HistoryListEntryMaintenance.vue'
 import HistoryListPanelDeleteSelectedDialog from '@/components/dialogs/HistoryListPanelDeleteSelectedDialog.vue'
+
+export type HistoryListPanelRow = HistoryListRowJob | HistoryListRowMaintenance
 
 export interface HistoryListPanelCol {
     text: string
@@ -231,11 +233,11 @@ export default class HistoryListPanel extends Mixins(BaseMixin) {
     }
 
     get entries() {
-        let entries = []
+        let entries: HistoryListPanelRow[] = []
 
         if (this.showPrintJobs) {
             entries = [...this.jobs].map((job) => {
-                return { ...job, type: 'job' }
+                return { ...job, type: 'job', select_id: `job_${job.job_id}` }
             })
         }
 
@@ -245,7 +247,7 @@ export default class HistoryListPanel extends Mixins(BaseMixin) {
             entries = [
                 ...entries,
                 ...this.maintenanceEntries.map((entry: GuiMaintenanceStateEntry) => {
-                    return { ...entry, type: 'maintenance' }
+                    return { ...entry, type: 'maintenance', select_id: `maintenance_${entry.id}` }
                 }),
             ]
         }
@@ -538,37 +540,85 @@ export default class HistoryListPanel extends Mixins(BaseMixin) {
         const row: string[] = []
 
         row.push('filename')
+        row.push('type')
         row.push('status')
 
         this.tableFields.forEach((col) => {
             row.push(col.value)
         })
 
-        if (this.headers.find((header) => header.value === 'slicer')?.visible) {
-            row.push('slicer')
-        }
-
         content.push(row)
 
-        let jobs = [...this.jobs]
+        let jobs = [...this.entries]
         if (this.selectedJobs.length) {
             jobs = [...this.selectedJobs]
         }
 
         if (jobs.length) {
-            jobs.forEach((job: ServerHistoryStateJob) => {
+            jobs.sort((a, b) => {
+                return b.start_time - a.start_time
+            }).forEach((entry: HistoryListPanelRow) => {
                 const row: string[] = []
+                const type = entry.type ?? 'job'
 
+                if (type === 'maintenance') {
+                    const maintenance = entry as HistoryListRowMaintenance
+                    row.push(maintenance.name)
+                    row.push('maintenance')
+                    row.push(maintenance.end_time !== null ? 'performed' : 'open') // status
+
+                    // add empty fields for the tableFields
+                    this.tableFields
+                        .filter((header) => header.value !== 'slicer')
+                        .forEach((header) => {
+                            if (header.value === 'start_time') {
+                                row.push(this.formatDateTime(maintenance.start_time * 1000))
+                                return
+                            }
+
+                            if (header.value === 'end_time' && maintenance.end_time !== null) {
+                                row.push(this.formatDateTime(maintenance.end_time * 1000))
+                                return
+                            }
+
+                            if (header.value === 'print_duration' && maintenance.end_printtime !== null) {
+                                const value = maintenance.end_printtime - maintenance.start_printtime
+                                row.push(value.toLocaleString(this.browserLocale, { useGrouping: false }))
+                                return
+                            }
+
+                            if (header.value === 'filament_used' && maintenance.end_filament !== null) {
+                                const value = maintenance.end_filament - maintenance.start_filament
+                                row.push(value.toLocaleString(this.browserLocale, { useGrouping: false }))
+                                return
+                            }
+
+                            row.push('')
+                        })
+
+                    // add empty slicer field
+                    if (this.tableFields.find((header) => header.value === 'slicer')?.visible) {
+                        row.push('')
+                    }
+
+                    content.push(row)
+                    return
+                }
+
+                const job = entry as ServerHistoryStateJob
                 let filename = job.filename
                 if (filename.includes(csvSeperator)) filename = '"' + filename + '"'
                 row.push(filename)
+                row.push('job')
                 row.push(job.status)
 
-                this.tableFields.forEach((col) => {
-                    row.push(this.outputValue(col, job, csvSeperator))
-                })
+                this.tableFields
+                    .filter((header) => header.value !== 'slicer')
+                    .forEach((col) => {
+                        row.push(this.outputValue(col, job, csvSeperator))
+                    })
 
-                if (this.headers.find((header) => header.value === 'slicer')?.visible) {
+                if (this.tableFields.find((header) => header.value === 'slicer')?.visible) {
                     let slicerString = 'slicer' in job.metadata && job.metadata.slicer ? job.metadata.slicer : '--'
                     if ('slicer_version' in job.metadata && job.metadata.slicer_version)
                         slicerString += ' ' + job.metadata.slicer_version
@@ -596,7 +646,7 @@ export default class HistoryListPanel extends Mixins(BaseMixin) {
         link.remove()
     }
 
-    outputValue(col: HistoryListPanelRow, job: ServerHistoryStateJob, csvSeperator: string | null = null) {
+    outputValue(col: HistoryListPanelCol, job: ServerHistoryStateJob, csvSeperator: string | null = null) {
         //@ts-ignore
         let value = col.value in job ? job[col.value] : null
         if (value === null) value = col.value in job.metadata ? job.metadata[col.value] : null
