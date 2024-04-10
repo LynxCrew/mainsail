@@ -14,8 +14,8 @@ export interface GuiState {
         dateFormat: string | null
         timeFormat: string | null
         calcPrintProgress: 'file-relative' | 'file-absolute' | 'slicer' | 'filament'
-        calcEstimateTime: string[] // file, filament are possible values
-        calcEtaTime: string[] // file, filament, slicer are possible values
+        calcEstimateTime: string[] // file, filament, slicer, m73 are possible values
+        calcEtaTime: string[] // file, filament, slicer, m73 are possible values
     }
     console?: GuiConsoleState
     control: {

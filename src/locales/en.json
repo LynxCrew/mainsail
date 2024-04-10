@@ -1026,7 +1026,8 @@
             "EstimateValues": {
                 "Filament": "Filament",
                 "File": "File",
-                "Slicer": "Slicer"
+                "Slicer": "Slicer",
+                "M73": "Slicer (M73)"
             },
             "Everything": "Everything",
             "FactoryDialog": "Please select all the sections you want to reset:",

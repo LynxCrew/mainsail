@@ -26,8 +26,8 @@ export const getDefaultState = (): GuiState => {
             dateFormat: null,
             timeFormat: null,
             calcPrintProgress: 'file-relative',
-            calcEstimateTime: ['file', 'filament'],
-            calcEtaTime: ['file', 'filament', 'slicer'],
+            calcEstimateTime: ['file', 'filament', 'slicer', 'm73'],
+            calcEtaTime: ['file', 'filament', 'slicer', 'm73'],
         },
         control: {
             style: 'bars',
