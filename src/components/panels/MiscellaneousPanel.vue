@@ -13,6 +13,7 @@
                 :name="object.name"
                 :type="object.type"
                 :target="object.power"
+                :normalized_target="object.normalized_power"
                 red="0"
                 green="0"
                 blue="0"
@@ -22,7 +23,7 @@
                 :pwm="object.pwm"
                 :off_below="object.off_below"
                 :max="object.max_power"
-                :multi="parseInt(object.scale)"></miscellaneous-slider>
+                :multi="parseInt(String(object.scale))"></miscellaneous-slider>
         </div>
         <div v-for="(light, index) of lights" :key="'light_' + light.name">
             <v-divider v-if="hideDivider(light, index)"></v-divider>

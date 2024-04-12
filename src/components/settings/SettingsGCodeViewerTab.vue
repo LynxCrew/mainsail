@@ -139,6 +139,18 @@
                         hide-spin-buttons
                         @blur="feedBlur"></v-text-field>
                 </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row :title="$t('Settings.GCodeViewerTab.FluiddUrl')">
+                    <v-text-field v-model="fluiddUrl" hide-details outlined dense></v-text-field>
+                </settings-row>
+                <v-divider class="my-2"></v-divider>
+                <settings-row :title="$t('Settings.GCodeViewerTab.FluiddPort')">
+                    <v-text-field v-model="fluiddPort" hide-details outlined dense></v-text-field>
+                </settings-row>
+                <v-divider v-if="fluiddUrl != '' || fluiddPort != ''" class="my-2"></v-divider>
+                <settings-row v-if="fluiddUrl != '' || fluiddPort != ''" :title="$t('Settings.GCodeViewerTab.UseFluiddViewer')">
+                    <v-switch v-model="useFluiddViewer" hide-details outlined dense></v-switch>
+                </settings-row>
             </v-card-text>
         </v-card>
     </div>
@@ -239,6 +251,30 @@ export default class SettingsGCodeViewerTab extends Mixins(BaseMixin) {
 
     set maxFeedColor(newVal: string) {
         this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.maxFeedColor', value: newVal })
+    }
+
+    get fluiddUrl() {
+        return this.$store.state.gui.gcodeViewer.fluiddUrl
+    }
+
+    set fluiddUrl(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.fluiddUrl', value: newVal })
+    }
+
+    get fluiddPort() {
+        return this.$store.state.gui.gcodeViewer.fluiddPort
+    }
+
+    set fluiddPort(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.fluiddPort', value: newVal })
+    }
+
+    get useFluiddViewer() {
+        return this.$store.state.gui.gcodeViewer.useFluiddViewer
+    }
+
+    set useFluiddViewer(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'gcodeViewer.useFluiddViewer', value: newVal })
     }
 
     feedBlur(): void {

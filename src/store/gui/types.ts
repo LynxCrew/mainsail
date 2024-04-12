@@ -14,8 +14,8 @@ export interface GuiState {
         dateFormat: string | null
         timeFormat: string | null
         calcPrintProgress: 'file-relative' | 'file-absolute' | 'slicer' | 'filament'
-        calcEstimateTime: string[] // file, filament are possible values
-        calcEtaTime: string[] // file, filament, slicer are possible values
+        calcEstimateTime: string[] // file, filament, slicer, m73 are possible values
+        calcEtaTime: string[] // file, filament, slicer, m73 are possible values
     }
     console?: GuiConsoleState
     control: {
@@ -74,6 +74,9 @@ export interface GuiState {
         maxFeed: number
         minFeedColor: string
         maxFeedColor: string
+        fluiddUrl: string
+        fluiddPort: string
+        useFluiddViewer: boolean
         progressColor: string
         showCursor: boolean
         showTravelMoves: boolean
@@ -108,6 +111,7 @@ export interface GuiState {
         confirmOnEmergencyStop: boolean
         confirmOnReboot: boolean
         confirmOnShutdown: boolean
+        confirmOnCoolDown: boolean
         confirmOnPowerDeviceChange: boolean
         boolBigThumbnail: boolean
         bigThumbnailBackground: string
@@ -124,6 +128,7 @@ export interface GuiState {
         tempchartHeight: number
         hideUpdateWarnings: boolean
         hideUpdateAnomalies: boolean
+        showRealPWM: boolean
         hideMiscellaneousLight: boolean
         showStateOnDisabled: boolean
         showDetectionLength: boolean
@@ -177,6 +182,8 @@ export interface GuiState {
             hidePrintStatus: string[]
             hideColums: string[]
             selectedJobs: ServerHistoryStateJob[]
+            showMaintenanceEntries: boolean
+            showPrintJobs: boolean
         }
         jobqueue: {
             countPerPage: number

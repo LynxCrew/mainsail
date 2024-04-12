@@ -125,7 +125,6 @@
                         @dragleave="dragLeaveFilelist"
                         @drop.prevent.stop="dragDropFilelist($event, { isDirectory: true, filename: '..' })">
                         <td class="file-list__select-td pr-0">
-                            <v-simple-checkbox v-ripple disabled class="pa-0 mr-0"></v-simple-checkbox>
                         </td>
                         <td class="px-0 text-center" style="width: 32px">
                             <v-icon>{{ mdiFolderUpload }}</v-icon>

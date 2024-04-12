@@ -120,6 +120,7 @@ Looking for a first issue to tackle?
 - [lixxbox](https://github.com/lixxbox) for the Mainsail logo & Docs
 - [Vue.js](https://vuejs.org/): The Progressive JavaScript Framework
 - [Vuetify](https://vuetifyjs.com/): Material Design Component Framework for Vue.js
+- [Fluidd](https://github.com/fluidd-core/fluidd): For providing inspiration for certain features and providing an improved GCode-Viewer
 
 Massive thanks to the whole [Voron Design](http://vorondesign.com/) community. Without them such a project would not be
 possible.

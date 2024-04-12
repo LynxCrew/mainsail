@@ -12,9 +12,9 @@ import { macros } from '@/store/gui/macros'
 import { miscellaneous } from '@/store/gui/miscellaneous'
 import { navigation } from '@/store/gui/navigation'
 import { notifications } from '@/store/gui/notifications'
-import { reminders } from '@/store/gui/reminders'
 import { presets } from '@/store/gui/presets'
 import { remoteprinters } from '@/store/gui/remoteprinters'
+import { maintenance } from '@/store/gui/maintenance'
 import { webcams } from '@/store/gui/webcams'
 import { heightmap } from '@/store/gui/heightmap'
 
@@ -26,8 +26,8 @@ export const getDefaultState = (): GuiState => {
             dateFormat: null,
             timeFormat: null,
             calcPrintProgress: 'file-relative',
-            calcEstimateTime: ['file', 'filament'],
-            calcEtaTime: ['file', 'filament', 'slicer'],
+            calcEstimateTime: ['file', 'filament', 'slicer', 'm73'],
+            calcEtaTime: ['file', 'filament', 'slicer', 'm73'],
         },
         control: {
             style: 'bars',
@@ -128,6 +128,9 @@ export const getDefaultState = (): GuiState => {
             maxFeed: 100,
             minFeedColor: '#2196f3',
             maxFeedColor: '#D41216',
+            fluiddUrl: '',
+            fluiddPort: '',
+            useFluiddViewer: false,
             progressColor: '#ECECEC',
             showCursor: true,
             showTravelMoves: false,
@@ -160,6 +163,7 @@ export const getDefaultState = (): GuiState => {
             confirmOnEmergencyStop: false,
             confirmOnReboot: false,
             confirmOnShutdown: false,
+            confirmOnCoolDown: false,
             confirmOnPowerDeviceChange: false,
             boolBigThumbnail: true,
             bigThumbnailBackground: defaultBigThumbnailBackground,
@@ -176,6 +180,7 @@ export const getDefaultState = (): GuiState => {
             tempchartHeight: 250,
             hideUpdateWarnings: false,
             hideUpdateAnomalies: false,
+            showRealPWM: false,
             hideMiscellaneousLight: false,
             showStateOnDisabled: true,
             showDetectionLength: true,
@@ -253,6 +258,8 @@ export const getDefaultState = (): GuiState => {
                     'object_height',
                 ],
                 selectedJobs: [],
+                showMaintenanceEntries: true,
+                showPrintJobs: true,
             },
             jobqueue: {
                 countPerPage: 10,
@@ -308,6 +315,7 @@ export const gui: Module<GuiState, any> = {
         console,
         gcodehistory,
         macros,
+        maintenance,
         miscellaneous,
         navigation,
         notifications,
@@ -315,6 +323,5 @@ export const gui: Module<GuiState, any> = {
         remoteprinters,
         webcams,
         heightmap,
-        reminders,
     },
 }

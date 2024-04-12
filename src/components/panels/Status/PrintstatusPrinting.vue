@@ -81,16 +81,16 @@
                                 <strong>{{ $t('Panels.StatusPanel.Estimate') }}</strong>
                                 <br />
                                 <span class="text-no-wrap">
-                                    {{ estimated_time_avg ? formatDuration(estimated_time_avg) : '--' }}
+                                    {{ (estimated_time_avg != -1) ? formatDuration(estimated_time_avg) : '--' }}
                                 </span>
                             </div>
                         </template>
                         <div class="text-right">
                             {{ $t('Panels.StatusPanel.File') }}:
-                            {{ estimated_time_file ? formatDuration(estimated_time_file) : '--' }}
+                            {{ (estimated_time_file != -1) ? formatDuration(estimated_time_file) : '--' }}
                             <br />
                             {{ $t('Panels.StatusPanel.Filament') }}:
-                            {{ estimated_time_filament ? formatDuration(estimated_time_filament) : '--' }}
+                            {{ (estimated_time_filament != -1) ? formatDuration(estimated_time_filament) : '--' }}
                         </div>
                     </v-tooltip>
                 </v-col>
@@ -98,7 +98,7 @@
                     <strong>{{ $t('Panels.StatusPanel.Slicer') }}</strong>
                     <br />
                     <span class="text-no-wrap">
-                        {{ estimated_time_slicer ? formatDuration(estimated_time_slicer) : '--' }}
+                        {{ (estimated_time_slicer != -1) ? formatDuration(estimated_time_slicer) : '--' }}
                     </span>
                 </v-col>
                 <v-col class="col-3 pa-0">

@@ -190,6 +190,8 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin, SettingsGenera
         return [
             { value: 'file', text: this.$t('Settings.GeneralTab.EstimateValues.File') },
             { value: 'filament', text: this.$t('Settings.GeneralTab.EstimateValues.Filament') },
+            { value: 'slicer', text: this.$t('Settings.GeneralTab.EstimateValues.Slicer') },
+            { value: 'm73', text: this.$t('Settings.GeneralTab.EstimateValues.M73') },
         ]
     }
 
@@ -206,6 +208,7 @@ export default class SettingsGeneralTab extends Mixins(BaseMixin, SettingsGenera
             { value: 'file', text: this.$t('Settings.GeneralTab.EstimateValues.File') },
             { value: 'filament', text: this.$t('Settings.GeneralTab.EstimateValues.Filament') },
             { value: 'slicer', text: this.$t('Settings.GeneralTab.EstimateValues.Slicer') },
+            { value: 'm73', text: this.$t('Settings.GeneralTab.EstimateValues.M73') },
         ]
     }
 

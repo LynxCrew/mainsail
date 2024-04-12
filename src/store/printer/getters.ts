@@ -356,6 +356,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
                     let controllable = controllableFans.includes(nameSplit[0].toLowerCase())
                     const settings = state.configfile?.settings[key.toLowerCase()] ?? {}
                     const power = 'speed' in value ? value.speed : 'value' in value ? value.value : 0
+                    const normalized_power = 'normalized_speed' in value ? value.normalized_speed : undefined
                     const rpm = 'rpm' in value ? value.rpm : null
                     let pwm = controllable
                     let scale = 1
@@ -374,6 +375,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
                         name: name,
                         type: nameSplit[0],
                         power,
+                        normalized_power,
                         controllable,
                         pwm,
                         rpm,
@@ -746,33 +748,25 @@ export const getters: GetterTree<PrinterState, RootState> = {
         return 0
     },
 
+    getEstimatedTimeM73: (state) => {
+        if (
+            'display_status' in state &&
+            'remaining' in state.display_status &&
+            state.display_status.remaining > 0
+        ) {
+            return (state.display_status.remaining * 60).toFixed(0)
+        }
+
+        return 0
+    },
+
     getEstimatedTimeAvg: (state, getters, rootState) => {
         let time = 0
         let timeCount = 0
         const boolFileCalc = rootState.gui?.general?.calcEstimateTime?.includes('file') ?? false
         const boolFilamentCalc = rootState.gui?.general?.calcEstimateTime?.includes('filament') ?? false
-
-        if (boolFileCalc && getters.getEstimatedTimeFile > 0) {
-            time += parseInt(getters.getEstimatedTimeFile)
-            timeCount++
-        }
-
-        if (boolFilamentCalc && getters.getEstimatedTimeFilament > 0) {
-            time += parseInt(getters.getEstimatedTimeFilament)
-            timeCount++
-        }
-
-        if (time && timeCount) return time / timeCount
-
-        return 0
-    },
-
-    getEstimatedTimeETA: (state, getters, rootState) => {
-        let time = 0
-        let timeCount = 0
-        const boolFileCalc = rootState.gui?.general?.calcEtaTime?.includes('file') ?? false
-        const boolFilamentCalc = rootState.gui?.general?.calcEtaTime?.includes('filament') ?? false
-        const boolSlicerCalc = rootState.gui?.general?.calcEtaTime?.includes('slicer') ?? false
+        const boolSlicerCalc = rootState.gui?.general?.calcEstimateTime?.includes('slicer') ?? false
+        const boolM73Calc = rootState.gui?.general?.calcEstimateTime?.includes('m73') ?? false
 
         if (boolFileCalc && getters.getEstimatedTimeFile > 0) {
             time += parseInt(getters.getEstimatedTimeFile)
@@ -789,15 +783,53 @@ export const getters: GetterTree<PrinterState, RootState> = {
             timeCount++
         }
 
-        if (time && timeCount) return Math.round(Date.now() + (time / timeCount) * 1000)
+        if (boolM73Calc && getters.getEstimatedTimeM73 > 0) {
+            time += parseInt(getters.getEstimatedTimeM73)
+            timeCount++
+        }
 
-        return 0
+        if (timeCount) return time / timeCount
+
+        return -1
+    },
+
+    getEstimatedTimeETA: (state, getters, rootState) => {
+        let time = 0
+        let timeCount = 0
+        const boolFileCalc = rootState.gui?.general?.calcEtaTime?.includes('file') ?? false
+        const boolFilamentCalc = rootState.gui?.general?.calcEtaTime?.includes('filament') ?? false
+        const boolSlicerCalc = rootState.gui?.general?.calcEtaTime?.includes('slicer') ?? false
+        const boolM73Calc = rootState.gui?.general?.calcEtaTime?.includes('m73') ?? false
+
+        if (boolFileCalc && getters.getEstimatedTimeFile > 0) {
+            time += parseInt(getters.getEstimatedTimeFile)
+            timeCount++
+        }
+
+        if (boolFilamentCalc && getters.getEstimatedTimeFilament > 0) {
+            time += parseInt(getters.getEstimatedTimeFilament)
+            timeCount++
+        }
+
+        if (boolSlicerCalc && getters.getEstimatedTimeSlicer > 0) {
+            time += parseInt(getters.getEstimatedTimeSlicer)
+            timeCount++
+        }
+
+        if (boolM73Calc && getters.getEstimatedTimeM73 > 0) {
+            time += parseInt(getters.getEstimatedTimeM73)
+            timeCount++
+        }
+
+        if (timeCount) return Math.round(Date.now() + (time / timeCount) * 1000)
+
+        return -1
     },
 
     getEstimatedTimeETAFormat: (state, getters, rootState, rootGetters) => {
         const hours12Format = rootGetters['gui/getHours12Format'] ?? false
         const eta = getters['getEstimatedTimeETA']
-        if (eta === 0) return '--'
+        if (eta === -1) return '--'
 
         const date = new Date(eta)
         let am = true
@@ -833,7 +865,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     existsZtilt: (state) => {
         if (!state.configfile?.settings) return false
 
-        return 'z_tilt' in state.configfile.settings
+        return 'z_tilt' in state.configfile.settings || 'z_tilt_ng' in state.configfile.settings
     },
 
     existsBedTilt: (state) => {
