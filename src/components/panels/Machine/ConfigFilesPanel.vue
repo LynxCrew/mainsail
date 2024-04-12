@@ -112,7 +112,7 @@
                 }"
                 mobile-breakpoint="0"
                 item-key="filename"
-                show-select>
+                :show-select="files.length > 0">
                 <template #no-data>
                     <div class="text-center">{{ $t('Machine.ConfigFilesPanel.Empty') }}</div>
                 </template>
@@ -956,7 +956,6 @@ export default class ConfigFilesPanel extends Mixins(BaseMixin, ThemeMixin) {
                     !file.filename.endsWith('.bkp')
             )
         }
-
         return files
     }
 
