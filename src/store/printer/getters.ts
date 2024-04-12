@@ -709,7 +709,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             ).toFixed(0)
         }
 
-        return -1
+        return 0
     },
 
     getEstimatedTimeFilament: (state) => {
@@ -730,7 +730,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             ).toFixed(0)
         }
 
-        return -1
+        return 0
     },
 
     getEstimatedTimeSlicer: (state) => {
@@ -745,7 +745,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             return (state.current_file.estimated_time - state.print_stats.print_duration).toFixed(0)
         }
 
-        return -1
+        return 0
     },
 
     getEstimatedTimeM73: (state) => {
@@ -757,7 +757,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             return (state.display_status.remaining * 60).toFixed(0)
         }
 
-        return -1
+        return 0
     },
 
     getEstimatedTimeAvg: (state, getters, rootState) => {
@@ -788,7 +788,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             timeCount++
         }
 
-        if (time && timeCount) return time / timeCount
+        if (timeCount) return time / timeCount
 
         return -1
     },
@@ -821,7 +821,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             timeCount++
         }
 
-        if (time && timeCount) return Math.round(Date.now() + (time / timeCount) * 1000)
+        if (timeCount) return Math.round(Date.now() + (time / timeCount) * 1000)
 
         return -1
     },
