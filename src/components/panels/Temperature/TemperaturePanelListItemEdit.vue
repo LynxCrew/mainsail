@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="boolShow" persistent :width="400">
+    <v-dialog v-model="boolShow" persistent :width="400" @keydown.esc="closeDialog">
         <panel :title="formatName" :icon="icon" card-class="temperature-edit-heater-dialog" :margin-bottom="false">
             <template #buttons>
                 <v-btn icon tile @click="closeDialog">

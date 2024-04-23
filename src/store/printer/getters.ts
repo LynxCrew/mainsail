@@ -235,7 +235,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
         const config = state.configfile?.config ?? {}
         const availableHeaters = state.heaters?.available_heaters ?? []
         for (let i = 0; i < availableHeaters.length; i++) {
-            profiles.set(availableHeaters[i], ["default"])
+            const heater_name = availableHeaters[i].startsWith("extruder")
+                ? "hotend" + availableHeaters[i].replace("extruder", "")
+                : availableHeaters[i]
+            profiles.set(heater_name, ["default"])
         }
         Object.keys(config)
             .filter((prop) => prop.startsWith('pid_profile'))
@@ -657,7 +660,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
         let maxtemp = 0
 
         state.heaters?.available_sensors?.forEach((sensorName: string) => {
-            const settings = state.configfile?.settings[sensorName]
+            const sensor_name = state.toolhead?.improved_axes_def && sensorName.startsWith("extruder")
+                ? "hotend" + sensorName.replace("extruder", "")
+                : sensorName
+            const settings = state.configfile?.settings[sensor_name]
             if (
                 settings &&
                 'max_temp' in settings &&

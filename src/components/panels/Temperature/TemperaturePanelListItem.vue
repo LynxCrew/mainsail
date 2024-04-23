@@ -67,11 +67,11 @@
             :bool-show="showEditDialog"
             :object-name="objectName"
             :name="name"
-            :format-name="formatName"
+            :format-name="defaultName"
             :additional-sensor-name="additionalSensorName"
             :icon="icon"
             :color="color"
-            @close-dialog="showEditDialog = false" />
+            @close-dialog="showEditDialog = false"/>
     </tr>
 </template>
 
@@ -99,6 +99,9 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     showEditDialog = false
     pidProfile = this.printerObject.pid_profile ?? null
+    heater_name = this.$store.state.printer?.toolhead?.improved_axes_def && this.objectName.startsWith("extruder")
+        ? "hotend" + this.objectName.replace("extruder", "")
+        : this.objectName
 
     private rules = {
         pid_profile: (value: string) => this.pidProfileAllowed(value) || this.$t('Panels.TemperaturePanel.PIDProfileNotAllowed')
@@ -135,6 +138,10 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         if (splits.length === 1) return this.objectName
 
         return splits[1]
+    }
+
+    get defaultName() {
+        return convertName(this.name)
     }
 
     get formatName() {
@@ -225,16 +232,16 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get pidProfiles(): string[] {
-        return this.$store.getters['printer/getPIDProfiles']?.get(this.objectName) ?? {}
+        return this.$store.getters['printer/getPIDProfiles']?.get(this.heater_name) ?? {}
     }
 
     setPIDProfile():void {
         if (!this.pidProfileAllowed(this.pidProfile)) {
             this.$toast.error(
-                this.$t('Panels.TemperaturePanel.UnknownPIDProfile', { profile: this.pidProfile, heater: this.objectName }) + ''
+                this.$t('Panels.TemperaturePanel.UnknownPIDProfile', { profile: this.pidProfile, heater: this.heater_name }) + ''
             )
         } else {
-            const gcode = 'PID_PROFILE HEATER=' + this.objectName + ' LOAD=' + this.pidProfile
+            const gcode = 'PID_PROFILE HEATER=' + this.heater_name + ' LOAD=' + this.pidProfile
             this.$store.dispatch('server/addEvent', {
                 message: gcode,
                 type: 'command',
