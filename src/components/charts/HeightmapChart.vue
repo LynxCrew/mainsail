@@ -199,7 +199,7 @@ export default class HeightmapChart extends Mixins(BaseMixin, BedmeshMixin, Them
             const data: any[] = []
 
             let yPoint = 0
-            this.bed_mesh.probed_matrix.forEach((meshRow: number[]) => {
+            this.bed_mesh.probed_matrix?.forEach((meshRow: number[]) => {
                 let xPoint = 0
                 meshRow.forEach((value: number) => {
                     data.push([xMin + xStep * xPoint, yMin + yStep * yPoint, value])

@@ -11,7 +11,7 @@
                 <v-col>{{ $t('Heightmap.CurrentMesh.Name') }}</v-col>
                 <v-col class="text-right">
                     <span
-                        v-if="!name.startsWith('adaptive-')"
+                        v-if="!name?.startsWith('adaptive-')"
                         class="currentMeshName cursor-pointer font-weight-bold"
                         @click="showRename = true">
                         <v-icon left small color="primary">{{ mdiPencil }}</v-icon>

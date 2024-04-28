@@ -99,7 +99,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     showEditDialog = false
     pidProfile = this.printerObject.pid_profile ?? null
-    heater_name = this.$store.state.printer?.toolhead?.improved_axes_def && this.objectName.startsWith("extruder")
+    heater_name = (this.$store.state.printer?.toolhead?.improved_axes_def && this.objectName.startsWith("extruder"))
         ? "hotend" + this.objectName.replace("extruder", "")
         : this.objectName
 
@@ -126,7 +126,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get printerObjectSettings() {
         // convert objectName to lowercase, because klipper only user lowercase in configfile.settings
-        const lowerCaseObjectName = this.objectName.toLowerCase()
+        const lowerCaseObjectName = this.heater_name.toLowerCase()
 
         if (!(lowerCaseObjectName in (this.$store.state.printer?.configfile?.settings ?? {}))) return {}
 

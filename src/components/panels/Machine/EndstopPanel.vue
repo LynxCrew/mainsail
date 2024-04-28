@@ -86,13 +86,15 @@ export default class EndstopPanel extends Mixins(BaseMixin) {
     }
 
     get existProbe() {
-        return 'probe' in this.$store.state.printer.configfile.settings
+        console.log(this.$store.state.printer.configfile.settings)
+        return 'probe' in this.$store.state.printer.configfile.settings || 'beacon' in this.$store.state.printer.configfile.settings
     }
 
     get probe() {
         if ('probe' in this.$store.state.printer && 'last_query' in this.$store.state.printer.probe)
             return this.$store.state.printer.probe.last_query
-
+        if ('beacon' in this.$store.state.printer && 'last_query' in this.$store.state.printer.beacon)
+            return this.$store.state.printer.beacon.last_query
         return false
     }
 
