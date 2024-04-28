@@ -985,7 +985,9 @@
             "TabSize": "TAB Size",
             "TabSizeDescription": "Adjusts how many spaces should be indented for TAB",
             "UseEscToClose": "Use ESC to close editor",
-            "UseEscToCloseDescription": "Allows the ESC key to close the editor"
+            "UseEscToCloseDescription": "Allows the ESC key to close the editor",
+            "SaveAndClose": "Save & Close button",
+            "SaveAndCloseDescription": "Utilize the old style with Save & Close button"
         },
         "GCodeViewerTab": {
             "BackgroundColor": "Background Color",

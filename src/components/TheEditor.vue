@@ -28,6 +28,15 @@
                         {{ $t('Editor.ConfigReference') }}
                     </v-btn>
                     <v-btn
+                        v-if="isWriteable && saveAndClose"
+                        text
+                        tile
+                        :color="restartServiceName === null ? 'primary' : ''"
+                        @click="save(null)">
+                        <v-icon small class="mr-1">{{ mdiContentSave }}</v-icon>
+                        <span class="d-none d-sm-inline">{{ $t('Editor.SaveClose') }}</span>
+                    </v-btn>
+                    <v-btn
                         v-if="restartServiceNameExists"
                         color="primary"
                         text
@@ -37,7 +46,7 @@
                         <v-icon small class="mr-1">{{ mdiRestart }}</v-icon>
                         {{ $t('Editor.SaveRestart') }}
                     </v-btn>
-                    <v-btn v-if="isWriteable" icon tile @click="save(null)">
+                    <v-btn v-if="isWriteable && !saveAndClose" icon tile @click="save(null)">
                         <v-icon>{{ mdiContentSave }}</v-icon>
                     </v-btn>
                     <v-btn icon tile @click="close">
@@ -209,6 +218,10 @@ export default class TheEditor extends Mixins(BaseMixin) {
         return this.permissions.includes('w')
     }
 
+    get saveAndClose() {
+        return this.$store.state.gui.editor.saveAndClose ?? false
+    }
+
     get sourcecode() {
         return this.$store.state.editor.sourcecode ?? ''
     }
@@ -333,19 +346,27 @@ export default class TheEditor extends Mixins(BaseMixin) {
         this.$store.dispatch('editor/saveFile', {
             content: this.sourcecode,
             restartServiceName: restartServiceName,
+            close: this.saveAndClose
         })
     }
 
     @Watch('changed')
     changedChanged(newVal: boolean) {
-        if (!this.confirmUnsavedChanges) return
+        if (this.saveAndClose) {
+            if (this.confirmUnsavedChanges) {
+                if (newVal) window.addEventListener('beforeunload', windowBeforeUnloadFunction)
+                else window.removeEventListener('beforeunload', windowBeforeUnloadFunction)
+            }
+        } else {
+            if (!this.confirmUnsavedChanges) return
 
-        if (newVal) {
-            window.addEventListener('beforeunload', windowBeforeUnloadFunction)
-            return
+            if (newVal) {
+                window.addEventListener('beforeunload', windowBeforeUnloadFunction)
+                return
+            }
+
+            window.removeEventListener('beforeunload', windowBeforeUnloadFunction)
         }
-
-        window.removeEventListener('beforeunload', windowBeforeUnloadFunction)
     }
 }
 </script>

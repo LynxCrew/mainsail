@@ -17,6 +17,13 @@
                 </settings-row>
                 <v-divider class="my-2" />
                 <settings-row
+                    :title="$t('Settings.EditorTab.SaveAndClose')"
+                    :sub-title="$t('Settings.EditorTab.SaveAndCloseDescription')"
+                    :dynamic-slot-width="true">
+                    <v-switch v-model="saveAndClose" hide-details class="mt-0" />
+                </settings-row>
+                <v-divider class="my-2" />
+                <settings-row
                     :title="$t('Settings.EditorTab.TabSize')"
                     :sub-title="$t('Settings.EditorTab.TabSizeDescription')"
                     :dynamic-slot-width="true">
@@ -81,6 +88,14 @@ export default class SettingsEditorTab extends Mixins(BaseMixin) {
 
     set confirmUnsavedChanges(newVal) {
         this.$store.dispatch('gui/saveSetting', { name: 'editor.confirmUnsavedChanges', value: newVal })
+    }
+
+    get saveAndClose() {
+        return this.$store.state.gui.editor.saveAndClose ?? false
+    }
+
+    set saveAndClose(newVal) {
+        this.$store.dispatch('gui/saveSetting', { name: 'editor.saveAndClose', value: newVal })
     }
 
     get tabSize() {

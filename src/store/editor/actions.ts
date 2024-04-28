@@ -93,7 +93,7 @@ export const actions: ActionTree<EditorState, RootState> = {
 
     async saveFile(
         { state, commit, getters, rootGetters, dispatch },
-        payload: { content: string; restartServiceName: string | null }
+        payload: { content: string; restartServiceName: string | null; close: boolean }
     ) {
         const content = new Blob([payload.content], { type: 'text/plain' })
         const formData = new FormData()
@@ -134,9 +134,13 @@ export const actions: ActionTree<EditorState, RootState> = {
                     Vue.$socket.emit('machine.services.restart', { service: payload.restartServiceName })
                 }
 
-                commit('updateLoadedHash', payload.content)
+                if (payload.close) {
+                    dispatch('close')
+                } else {
+                    commit('updateLoadedHash', payload.content)
 
-                if (payload.restartServiceName !== null) dispatch('close')
+                    if (payload.restartServiceName !== null) dispatch('close')
+                }
             })
             .catch((error) => {
                 window.console.log(error.response?.data.error)

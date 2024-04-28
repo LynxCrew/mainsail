@@ -211,9 +211,7 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
             this.sliderValue = this.off_below
         }
 
-        console.log(this.value)
         this.sendCmd(this.sliderValue)
-        console.log(this.lights[0].singleChannelTarget)
     }
 
     get lights() {

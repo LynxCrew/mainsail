@@ -61,6 +61,7 @@ export interface GuiState {
     editor: {
         escToClose: boolean
         confirmUnsavedChanges: boolean
+        saveAndClose: boolean
         klipperRestartMethod: 'FIRMWARE_RESTART' | 'RESTART'
         tabSize: number
     }

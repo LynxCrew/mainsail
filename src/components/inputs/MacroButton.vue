@@ -23,7 +23,7 @@
                         :disabled="disabled"
                         :color="color"
                         v-bind="attrs"
-                        class="minwidth-0 px-1 rounded-l-0"
+                        class="minwidth-0 px-1 btnMacroMenu"
                         small
                         v-on="on"
                         @click="paramsDialog = true">
@@ -106,7 +106,7 @@
                 <v-btn
                     :disabled="disabled"
                     :color="color"
-                    class="minwidth-0 px-1 rounded-l-0"
+                    class="minwidth-0 px-1 btnMacroMenu"
                     small
                     @click="paramsDialog = true">
                     <v-icon>{{ mdiMenuDown }}</v-icon>
@@ -357,5 +357,15 @@ export default class MacroButton extends Mixins(BaseMixin) {
     display: grid;
     grid-template-columns: auto;
     gap: 1.5rem;
+}
+
+.btnMacroMenu {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.macroWithParameters {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 </style>
