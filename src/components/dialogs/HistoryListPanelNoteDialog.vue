@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="show" :max-width="600" persistent @keydown.esc="closeDialog">
-        <panel :title="panelTitle" :icon="panelIcon" card-class="history-note-dialog" :margin-bottom="false">
+        <panel :title="panelTitle" :icon="icon" card-class="history-note-dialog" :margin-bottom="false">
             <template #buttons>
                 <v-btn icon tile @click="closeDialog">
                     <v-icon>{{ mdiCloseThick }}</v-icon>
@@ -14,7 +14,7 @@
                 </v-row>
             </v-card-text>
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn color="" text @click="closeDialog">{{ $t('History.Cancel') }}</v-btn>
                 <v-btn color="primary" text @click="saveNote">{{ $t('History.Save') }}</v-btn>
             </v-card-actions>
@@ -28,7 +28,7 @@ import BaseMixin from '@/components/mixins/base'
 import SettingsRow from '@/components/settings/SettingsRow.vue'
 import Panel from '@/components/ui/Panel.vue'
 import { ServerHistoryStateJob } from '@/store/server/history/types'
-import { mdiCloseThick, mdiNotebookEdit, mdiNotebookPlus } from '@mdi/js'
+import { mdiCloseThick, mdiNoteEditOutline, mdiNotePlusOutline } from '@mdi/js'
 
 @Component({
     components: {
@@ -39,7 +39,7 @@ import { mdiCloseThick, mdiNotebookEdit, mdiNotebookPlus } from '@mdi/js'
 export default class HistoryListPanelNoteDialog extends Mixins(BaseMixin) {
     mdiCloseThick = mdiCloseThick
 
-    private note: string = ''
+    note: string = ''
 
     @Prop({ type: Boolean, required: true }) readonly show!: boolean
     @Prop({ type: String, required: true }) readonly type!: 'create' | 'edit'
@@ -51,10 +51,10 @@ export default class HistoryListPanelNoteDialog extends Mixins(BaseMixin) {
         return this.$t('History.EditNote').toString()
     }
 
-    get panelIcon() {
-        if (this.type === 'create') return mdiNotebookPlus
+    get icon() {
+        if (this.type === 'create') return mdiNotePlusOutline
 
-        return mdiNotebookEdit
+        return mdiNoteEditOutline
     }
 
     saveNote() {

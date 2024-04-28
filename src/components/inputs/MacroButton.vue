@@ -1,14 +1,21 @@
 <template>
     <v-item-group class="d-inline-block">
-        <v-btn
-            small
-            :color="color"
-            :class="paramArray.length ? 'rounded-r-0' : ''"
-            :loading="loadings.includes('macro_' + macro.name)"
-            :disabled="disabled || paramsRequired"
-            @click="doSendMacro(macro.name)">
-            {{ macroAlias(macro) }}
-        </v-btn>
+        <v-tooltip :disabled="!hasDescription" top>
+            <template #activator="{ on, attrs }">
+                <v-btn
+                    small
+                    :color="color"
+                    :class="paramArray.length ? 'macroWithParameters' : ''"
+                    :loading="loadings.includes('macro_' + macro.name)"
+                    :disabled="disabled || paramsRequired"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="doSendMacro(macro.name)">
+                    {{ macroAlias(macro) }}
+                </v-btn>
+            </template>
+            <span>{{ klipperMacro.description }}</span>
+        </v-tooltip>
         <template v-if="paramArray.length">
             <v-menu v-if="!isMobile" v-model="paramsDialog" offset-y :close-on-content-click="false">
                 <template #activator="{ on, attrs }">
@@ -203,6 +210,8 @@ interface NamedUiParam extends PrinterStateMacroParam {
     components: { Panel },
 })
 export default class MacroButton extends Mixins(BaseMixin) {
+    DEFAULT_DESC = 'G-Code macro'
+
     /**
      * Icons
      */
@@ -298,6 +307,10 @@ export default class MacroButton extends Mixins(BaseMixin) {
 
     macroAlias(macro: GuiMacrosStateMacrogroupMacro|PrinterStateMacro) {
         return (macro.alias ?? '') != '' ? macro.alias : (this.alias ? this.alias : macro.name.replace(/_/g, ' '))
+    }
+
+    get hasDescription(): boolean {
+        return this.klipperMacro.description && this.klipperMacro.description !== this.DEFAULT_DESC
     }
 
     @Watch('klipperMacro', { deep: true, immediate: true })

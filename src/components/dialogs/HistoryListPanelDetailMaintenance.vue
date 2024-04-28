@@ -50,7 +50,8 @@
         <history-list-panel-perform-maintenance
             :show="showPerformDialog"
             :item="item"
-            @close="showPerformDialog = false" />
+            @close="showPerformDialog = false"
+            @close-both="closePerform" />
         <history-list-panel-edit-maintenance :show="showEditDialog" :item="item" @close="showEditDialog = false" />
     </v-dialog>
 </template>
@@ -111,6 +112,7 @@ export default class HistoryListPanelDetailMaintenance extends Mixins(BaseMixin)
     }
 
     get outputFirstPointOfHistory() {
+        if (this.item.reminder.type === null) return this.$t('History.EntrySince')
         if (this.item.end_time === null) return this.$t('History.EntryNextPerform')
 
         return this.$t('History.EntryPerformedAt', { date: this.formatDateTime(this.item.end_time * 1000) })
@@ -118,6 +120,11 @@ export default class HistoryListPanelDetailMaintenance extends Mixins(BaseMixin)
 
     closeDialog() {
         this.$emit('close')
+    }
+
+    closePerform() {
+        this.showPerformDialog = false
+        this.closeDialog()
     }
 }
 </script>

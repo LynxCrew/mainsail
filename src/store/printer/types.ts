@@ -237,7 +237,7 @@ export interface PrinterStateKlipperConfigWarning {
     message: string
     option: string
     section: string
-    type: 'deprecated_value' | 'deprecated_option'
+    type: 'deprecated_value' | 'deprecated_option' | 'runtime_warning'
     value: string
 }
 
