@@ -9,10 +9,12 @@
             <span class="cursor-pointer" @click="showEditDialog = true">{{ formatName }}</span>
         </td>
         <td v-if="!isResponsiveMobile && !hidePIDProfiles" class="pid-profile">
-            <form @submit.prevent="setPIDProfile">
+            <form @submit.prevent="setPIDProfile"
+                  @mouseover="focused = true"
+                  @mouseleave="focused = false">
                 <v-text-field
                 v-if="loaded_pid_profile !== null"
-                class="_pid-profile-input pr-1"
+                class="_pid-profile-input pr-6"
                 :rules="[rules.pid_profile]"
                 v-model="pid_profile"
                 dense
@@ -20,7 +22,13 @@
                 hide-details
                 hide-spin-buttons
                 @blur="pidProfile = loaded_pid_profile"
-                @focus="$event.target.select()"></v-text-field>
+                @focus="$event.target.select()">
+                    <template v-if="pid_profile !== 'default' && focused" #append>
+                        <v-btn icon tile @click="resetPIDProfile" class="_pid-profile-reset">
+                            <v-icon>{{ mdiRefresh }}</v-icon>
+                        </v-btn>
+                    </template>
+                </v-text-field>
             </form>
         </td>
         <td v-if="!isResponsiveMobile" class="state">
@@ -89,15 +97,19 @@ import {
     mdiRadiator,
     mdiRadiatorDisabled,
     mdiThermometer,
+    mdiRefresh,
 } from '@mdi/js'
 import { additionalSensors, opacityHeaterActive, opacityHeaterInactive } from '@/store/variables'
 
 @Component
 export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
+    mdiRefresh = mdiRefresh
+
     @Prop({ type: String, required: true }) readonly objectName!: string
     @Prop({ type: Boolean, required: true }) readonly isResponsiveMobile!: boolean
 
     showEditDialog = false
+    focused = false
     pidProfile = this.printerObject.pid_profile ?? null
     heater_name = (this.$store.state.printer?.toolhead?.improved_axes_def && this.objectName.startsWith("extruder"))
         ? "hotend" + this.objectName.replace("extruder", "")
@@ -233,6 +245,11 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get pidProfiles(): string[] {
         return this.$store.getters['printer/getPIDProfiles']?.get(this.heater_name) ?? {}
+    }
+
+    resetPIDProfile():void {
+        this.pidProfile = "default"
+        this.setPIDProfile()
     }
 
     setPIDProfile():void {
@@ -387,5 +404,14 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     padding-top: 4px;
     padding-bottom: 4px;
     min-width: 4rem;
+}
+
+._pid-profile-reset {
+    margin-top: -6px;
+    margin-left: -4px;
+    margin-right: -4px;
+    height: 24px;
+    width: 24px;
+    padding: 0;
 }
 </style>
