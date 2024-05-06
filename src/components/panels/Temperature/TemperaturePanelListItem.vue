@@ -24,7 +24,12 @@
                 @blur="pidProfile = loaded_pid_profile"
                 @focus="$event.target.select()">
                     <template v-if="pid_profile !== 'default' && focused" #append>
-                        <v-btn icon tile @click="resetPIDProfile" class="_pid-profile-reset">
+                        <v-btn
+                            icon
+                            tile
+                            variant="plain"
+                            class="_pid-profile-reset"
+                            @click="resetPIDProfile">
                             <v-icon>{{ mdiRefresh }}</v-icon>
                         </v-btn>
                     </template>
