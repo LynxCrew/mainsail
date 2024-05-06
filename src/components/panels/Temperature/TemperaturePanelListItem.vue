@@ -26,8 +26,6 @@
                     <template v-if="pid_profile !== 'default' && focused" #append>
                         <v-btn
                             icon
-                            tile
-                            variant="plain"
                             class="_pid-profile-reset"
                             @click="resetPIDProfile">
                             <v-icon>{{ mdiRefresh }}</v-icon>
