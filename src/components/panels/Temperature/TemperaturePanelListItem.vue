@@ -283,11 +283,11 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get avgPower() {
-        return this.$store.getters['printer/tempHistory/getAvgPower'](this.name) ?? 0
+        return this.$store.getters['printer/tempHistory/getAvgPower'](this.objectName) ?? 0
     }
 
     get avgSpeed() {
-        return this.$store.getters['printer/tempHistory/getAvgSpeed'](this.name) ?? 0
+        return this.$store.getters['printer/tempHistory/getAvgSpeed'](this.objectName) ?? 0
     }
 
     get avgState() {

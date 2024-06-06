@@ -90,7 +90,11 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
 
     get temperature_fans() {
         return this.available_sensors
-            .filter((name: string) => name.startsWith('temperature_fan') && !name.startsWith('temperature_fan _'))
+            .filter((name: string) => (
+                (name.startsWith('temperature_fan') || name.startsWith('controller_temperature_fan'))
+                && !name.startsWith('temperature_fan _')
+                && !name.startsWith('controller_temperature_fan _'))
+            )
             .sort(this.sortObjectName)
     }
 
