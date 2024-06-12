@@ -10,8 +10,8 @@
             @keydown.esc="escClose"
             @keydown.ctrl.shift.s.prevent="restartServiceNameExists && save(restartServiceName)"
             @keydown.meta.shift.s.prevent="restartServiceNameExists && save(restartServiceName)"
-            @keydown.ctrl.s.prevent="save(null)"
-            @keydown.meta.s.prevent="save(null)">
+            @keydown.ctrl.s.prevent="save(null, false)"
+            @keydown.meta.s.prevent="save(null, false)">
             <panel
                 card-class="editor-dialog"
                 :icon="isWriteable ? mdiFileDocumentEditOutline : mdiFileDocumentOutline"
@@ -344,13 +344,13 @@ export default class TheEditor extends Mixins(BaseMixin) {
         else this.dialogConfirmChange = true
     }
 
-    save(restartServiceName: string | null = null) {
+    save(restartServiceName: string | null = null, close: boolean = this.saveAndClose) {
         this.dialogConfirmChange = false
 
         this.$store.dispatch('editor/saveFile', {
             content: this.sourcecode,
             restartServiceName: restartServiceName,
-            close: this.saveAndClose
+            close: close
         })
     }
 
