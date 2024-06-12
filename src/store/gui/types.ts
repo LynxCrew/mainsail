@@ -130,6 +130,7 @@ export interface GuiState {
         tempchartHeight: number
         hideUpdateWarnings: boolean
         hideUpdateAnomalies: boolean
+        printstatusThumbnailZoom: boolean
         showRealPWM: boolean
         hideMiscellaneousLight: boolean
         showStateOnDisabled: boolean
@@ -196,7 +197,7 @@ export interface GuiState {
             hiddenDataset: string[]
             hideMcuHostSensors: boolean
             hideMonitors: boolean
-            hidePIDProfiles: boolean
+            hideHeaterProfiles: boolean
             autoscale: boolean
             datasetSettings: any
         }

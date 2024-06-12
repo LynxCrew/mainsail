@@ -230,7 +230,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
         return caseInsensitiveSort(array, 'name')
     },
 
-    getPIDProfiles: (state, getters) => {
+    getHeaterProfiles: (state, getters) => {
         const profiles: Map<String, string[]> = new Map()
         const config = state.configfile?.config ?? {}
         const availableHeaters = state.heaters?.available_heaters ?? []
@@ -241,9 +241,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
             profiles.set(heater_name, ["default"])
         }
         Object.keys(config)
-            .filter((prop) => prop.startsWith('pid_profile'))
+            .filter((prop) => prop.startsWith('heater_profile'))
             .forEach((prop) => {
-                const profile = prop.replace('pid_profile ', '').split(' ')
+                const profile = prop.replace('heater_profile ', '').split(' ')
                 if (profiles.has(profile[0])) {
                     profiles.get(profile[0])?.push(
                         profile[1]

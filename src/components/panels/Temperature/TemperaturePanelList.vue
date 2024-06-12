@@ -9,8 +9,8 @@
                     <tr>
                         <th class="icon">&nbsp;</th>
                         <th class="name">{{ $t('Panels.TemperaturePanel.Name') }}</th>
-                        <th v-if="!el.is.mobile && !hidePIDProfiles" class="pid-profile">
-                            {{ $t('Panels.TemperaturePanel.PIDProfile') }}
+                        <th v-if="!el.is.mobile && !hideHeaterProfiles" class="heater-profile">
+                            {{ $t('Panels.TemperaturePanel.HeaterProfile') }}
                         </th>
                         <th v-if="!el.is.mobile" class="state">
                             {{ $t('Panels.TemperaturePanel.State') }}
@@ -76,6 +76,16 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
             .sort(this.sortObjectName)
     }
 
+    get blockTemperatures() {
+        return this.available_sensors
+            .filter((fullName: string) => {
+                if (!(fullName.toLowerCase() in (this.$store.state.printer?.configfile?.settings ?? {}))) return false
+                if (!("sensor_type" in (this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()] ?? {}))) return false
+                return this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()]["sensor_type"] == "block_temperature"
+            })
+            .sort(this.sortObjectName)
+    }
+
     get available_sensors() {
         return this.$store.state.printer?.heaters?.available_sensors ?? []
     }
@@ -110,8 +120,8 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         return this.$store.state.gui.view.tempchart.hideMonitors ?? false
     }
 
-    get hidePIDProfiles(): boolean {
-        return this.$store.state.gui.view.tempchart.hidePIDProfiles ?? false
+    get hideHeaterProfiles(): boolean {
+        return this.$store.state.gui.view.tempchart.hideHeaterProfiles ?? false
     }
 
     get temperature_sensors() {
@@ -130,13 +140,13 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
                 let name = splits[0]
                 if (splits.length > 1) name = splits[1]
 
-                return !name.startsWith('_')
+                return !name.startsWith('_') && !this.blockTemperatures.includes(fullName)
             })
             .sort(this.sortObjectName)
     }
 
     get heaterObjects() {
-        return [...this.filteredHeaters, ...this.temperature_fans]
+        return [...this.filteredHeaters, ...this.blockTemperatures, ...this.temperature_fans]
     }
 
     get settings() {
@@ -187,7 +197,7 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
     text-align: center;
 }
 
-.temperature-panel-table ::v-deep .pid-profile {
+.temperature-panel-table ::v-deep .heater-profile {
     width: 75px;
     text-align: right !important;
 }

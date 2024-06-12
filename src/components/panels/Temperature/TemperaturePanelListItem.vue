@@ -8,26 +8,26 @@
         <td class="name">
             <span class="cursor-pointer" @click="showEditDialog = true">{{ formatName }}</span>
         </td>
-        <td v-if="!isResponsiveMobile && !hidePIDProfiles" class="pid-profile">
-            <form @submit.prevent="setPIDProfile"
+        <td v-if="!isResponsiveMobile && !hideHeaterProfiles" class="heater-profile">
+            <form @submit.prevent="setHeaterProfile"
                   @mouseover="focused = true"
                   @mouseleave="focused = false">
                 <v-text-field
-                v-if="loaded_pid_profile !== null"
-                class="_pid-profile-input pr-6"
-                :rules="[rules.pid_profile]"
-                v-model="pid_profile"
+                v-if="loaded_heater_profile !== null"
+                class="_heater-profile-input pr-6"
+                :rules="[rules.heater_profile]"
+                v-model="heater_profile"
                 dense
                 outlined
                 hide-details
                 hide-spin-buttons
-                @blur="pidProfile = loaded_pid_profile"
+                @blur="heaterProfile = loaded_heater_profile"
                 @focus="$event.target.select()">
-                    <template v-if="pid_profile !== 'default' && focused" #append>
+                    <template v-if="heater_profile !== 'default' && focused" #append>
                         <v-btn
                             icon
-                            class="_pid-profile-reset"
-                            @click="resetPIDProfile">
+                            class="_heater-profile-reset"
+                            @click="resetHeaterProfile">
                             <v-icon>{{ mdiRefresh }}</v-icon>
                         </v-btn>
                     </template>
@@ -113,20 +113,20 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     showEditDialog = false
     focused = false
-    pidProfile = this.printerObject.pid_profile ?? null
+    heaterProfile = this.printerObject.heater_profile ?? null
     heater_name = (this.$store.state.printer?.toolhead?.improved_axes_def && this.objectName.startsWith("extruder"))
         ? "hotend" + this.objectName.replace("extruder", "")
         : this.objectName
 
     private rules = {
-        pid_profile: (value: string) => this.pidProfileAllowed(value) || this.$t('Panels.TemperaturePanel.PIDProfileNotAllowed')
+        heater_profile: (value: string) => this.heaterProfileAllowed(value) || this.$t('Panels.TemperaturePanel.HeaterProfileNotAllowed')
     }
 
-    pidProfileAllowed(name: string) {
+    heaterProfileAllowed(name: string) {
         if (name == 'autotune') return true;
-        const pidProfiles = this.pidProfiles
-        for (let i = 0; i < pidProfiles.length; i++) {
-            if (name == pidProfiles[i]) {
+        const heaterProfiles = this.heaterProfiles
+        for (let i = 0; i < heaterProfiles.length; i++) {
+            if (name == heaterProfiles[i]) {
                 return true
             }
         }
@@ -234,34 +234,34 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         return this.printerObject.power ?? this.printerObject.speed ?? null
     }
 
-    set pid_profile(newval: string) {
-        this.pidProfile = newval
+    set heater_profile(newval: string) {
+        this.heaterProfile = newval
     }
 
-    get pid_profile(): string {
-        return this.pidProfile
+    get heater_profile(): string {
+        return this.heaterProfile
     }
 
-    get loaded_pid_profile(): string | null {
-        return this.printerObject.pid_profile ?? null
+    get loaded_heater_profile(): string | null {
+        return this.printerObject.heater_profile ?? null
     }
 
-    get pidProfiles(): string[] {
-        return this.$store.getters['printer/getPIDProfiles']?.get(this.heater_name) ?? {}
+    get heaterProfiles(): string[] {
+        return this.$store.getters['printer/getHeaterProfiles']?.get(this.heater_name) ?? {}
     }
 
-    resetPIDProfile():void {
-        this.pidProfile = "default"
-        this.setPIDProfile()
+    resetHeaterProfile():void {
+        this.heaterProfile = "default"
+        this.setHeaterProfile()
     }
 
-    setPIDProfile():void {
-        if (!this.pidProfileAllowed(this.pidProfile)) {
+    setHeaterProfile():void {
+        if (!this.heaterProfileAllowed(this.heaterProfile)) {
             this.$toast.error(
-                this.$t('Panels.TemperaturePanel.UnknownPIDProfile', { profile: this.pidProfile, heater: this.heater_name }) + ''
+                this.$t('Panels.TemperaturePanel.UnknownHeaterProfile', { profile: this.heaterProfile, heater: this.heater_name }) + ''
             )
         } else {
-            const gcode = 'PID_PROFILE HEATER=' + this.heater_name + ' LOAD=' + this.pidProfile
+            const gcode = 'HEATER_PROFILE HEATER=' + this.heater_name + ' LOAD=' + this.heaterProfile
             this.$store.dispatch('server/addEvent', {
                 message: gcode,
                 type: 'command',
@@ -270,9 +270,9 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         }
     }
 
-    @Watch('loaded_pid_profile')
-    pidProfileChanged(newVal: any): void {
-        this.pidProfile = this.printerObject.pid_profile
+    @Watch('loaded_heater_profile')
+    heaterProfileChanged(newVal: any): void {
+        this.heaterProfile = this.printerObject.heater_profile
     }
 
     get formatState() {
@@ -375,8 +375,8 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         return ''
     }
 
-    get hidePIDProfiles(): boolean {
-        return this.$store.state.gui.view.tempchart.hidePIDProfiles ?? false
+    get hideHeaterProfiles(): boolean {
+        return this.$store.state.gui.view.tempchart.hideHeaterProfiles ?? false
     }
 }
 </script>
@@ -390,26 +390,26 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     cursor: pointer;
 }
 
-._pid-profile-input {
+._heater-profile-input {
     min-width: 4.2rem;
     max-width: 8rem;
     padding-right: 0 !important;
 }
 
-._pid-profile-input >>> .v-input__slot {
+._heater-profile-input >>> .v-input__slot {
     min-height: 1rem !important;
     padding-left: 8px !important;
     padding-right: 8px !important;
 }
 
-._pid-profile-input >>> .v-text-field__slot input {
+._heater-profile-input >>> .v-text-field__slot input {
     text-align: center !important;
     padding-top: 4px;
     padding-bottom: 4px;
     min-width: 4rem;
 }
 
-._pid-profile-reset {
+._heater-profile-reset {
     margin-top: -6px;
     margin-left: -4px;
     margin-right: -4px;
