@@ -146,24 +146,33 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
     getMacros: (state) => {
         const array: PrinterStateMacro[] = []
-        const config = state.configfile?.config ?? {}
         const settings = state.configfile?.settings ?? null
+        const printerGcodes = state.gcode?.commands ?? {}
 
-        Object.keys(config)
-            .filter((prop) => prop.startsWith('gcode_macro') && !settings[prop.toLowerCase()]?.rename_existing)
+        const prefix = 'gcode_macro '
+        const prefixLength = prefix.length
+
+        Object.keys(state)
+            .filter((prop) => prop.toLowerCase().startsWith(prefix))
             .forEach((prop) => {
-                const name = prop.replace('gcode_macro ', '')
+                const name = prop.slice(prefixLength)
+                const printerGcode = printerGcodes[name.toUpperCase()] ?? {}
                 const variables = state[prop] ?? {}
                 const hints = variables?.front_end_hints
+
+                // remove macros with a '_' as first char
+
                 if (hints && 'hidden' in hints ? hints.hidden : name.startsWith('_')) return
 
+                // remove macros with rename_existing in the config
                 const propLower = prop.toLowerCase()
-                const propSettings = settings[propLower]
+                const propSettings = settings[propLower] ?? {}
+                if ('rename_existing' in propSettings) return
 
                 array.push({
                     name,
                     alias: '',
-                    description: settings[propLower].description ?? null,
+                    description: printerGcode?.help ?? null,
                     prop: propSettings,
                     params: hints ? getMacroParamsFromState(hints) : getMacroParamsFromConfig(propSettings),
                     hidden: hints && 'hidden' in hints ? hints.hidden : name.startsWith('_'),
@@ -480,7 +489,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
         Object.keys(state).forEach((key) => {
             if (key === 'mcu' || key.startsWith('mcu ')) {
                 const mcu = state[key]
-                const versionOutput = (mcu.mcu_version ?? 'unknown').split('-').slice(0, 4).join('-')
+                let versionOutput = (mcu.mcu_version ?? 'unknown').split('-').slice(0, 4).join('-')
+
+                if ('app' in mcu && mcu.app !== 'Klipper') versionOutput = mcu.app + ' ' + versionOutput
 
                 let load = 0
                 if (mcu.last_stats?.mcu_task_avg && mcu.last_stats?.mcu_task_stddev) {

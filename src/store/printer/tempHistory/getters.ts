@@ -104,7 +104,7 @@ export const getters: GetterTree<PrinterTempHistoryState, RootState> = {
 
         Object.keys(viewSettings).forEach((key) => {
             // break if this element doesn't exist in available_sensors
-            if (!(available_sensors.includes(key) || available_monitors.includes(key))) return
+            if (!available_sensors.includes(key) && !available_monitors.includes(key)) return
 
             Object.keys(viewSettings[key]).forEach((attrKey) => {
                 // break if this element isn't a valid datasetType
