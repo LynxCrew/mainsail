@@ -65,7 +65,7 @@ export default class ControlMixin extends Vue {
     }
 
     get colorZTilt() {
-        const status = this.$store.state.printer.z_tilt?.applied ?? true
+        const status = (this.$store.state.printer.z_tilt?.applied || this.$store.state.printer.z_tilt_ng?.applied) ?? true
 
         return status ? 'primary' : 'highlight'
     }
