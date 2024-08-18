@@ -271,7 +271,11 @@ export default class TheEditor extends Mixins(BaseMixin) {
         if (this.filename === 'telegram.conf') return 'moonraker-telegram-bot'
 
         // fallback for moonraker with multi instances
-        if (this.filename === 'moonraker.conf' || this.filepath === 'Moonraker') return 'moonraker'
+        if (this.filename === 'moonraker.conf' || this.filepath.toLowerCase().startsWith('moonraker')) return 'moonraker'
+
+        if (this.filename === 'KlipperScreen.conf' || this.filepath.toLowerCase().startsWith('klipperscreen')
+            || this.fileExtension === 'ks_include' || this.fileExtension === 'ks')
+            return 'KlipperScreen'
 
         // all .cfg files will be klipper config files
         if (this.fileExtension === 'cfg' || this.fileExtension === 'include') return 'klipper'

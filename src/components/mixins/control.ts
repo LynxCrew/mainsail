@@ -53,25 +53,25 @@ export default class ControlMixin extends Vue {
     }
 
     get colorQuadGantryLevel() {
-        const status = this.$store.state.printer.quad_gantry_level?.applied ?? true
+        const status = this.$store.state.printer.quad_gantry_level?.applied ?? false
 
         return status ? 'primary' : 'highlight'
     }
 
     get colorQuadGantryLevelCircle() {
-        const status = this.$store.state.printer.quad_gantry_level?.applied ?? true
+        const status = this.$store.state.printer.quad_gantry_level?.applied ?? false
 
         return status ? 'highlight' : 'primary'
     }
 
     get colorZTilt() {
-        const status = (this.$store.state.printer.z_tilt?.applied || this.$store.state.printer.z_tilt_ng?.applied) ?? true
+        const status = (this.$store.state.printer.z_tilt?.applied ?? false) || (this.$store.state.printer.z_tilt_ng?.applied ?? false)
 
         return status ? 'primary' : 'highlight'
     }
 
     get colorZTiltCircle() {
-        const status = (this.$store.state.printer.z_tilt?.applied || this.$store.state.printer.z_tilt_ng?.applied) ?? true
+        const status = (this.$store.state.printer.z_tilt?.applied ?? false) || (this.$store.state.printer.z_tilt_ng?.applied ?? false)
 
         return status ? 'highlight' : 'primary'
     }
