@@ -157,7 +157,7 @@ export const actions: ActionTree<GuiMaintenanceState, RootState> = {
         entry.end_time = Date.now() / 1000
         entry.end_filament = totalFilament
         entry.end_printtime = totalPrintTime
-        entry.perform_note = payload.note.trim() || null
+        entry.perform_note = payload.note?.trim() || null
 
         dispatch('update', entry)
 

@@ -17,10 +17,11 @@
                     <v-icon v-else-if="type.includes('fan')" small :class="fanClasses">{{ mdiFan }}</v-icon>
                     <span>{{ convertName(name) }}</span>
                     <v-spacer />
-                    <small v-if="rpm !== null" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                    <small v-if="rpm !== null && !(showRealPWM && normalized_target != undefined)" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                    <small v-if="rpm !== null && showRealPWM && normalized_target != undefined" :class="pwmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
                     <small v-if="showRealPWM && normalized_target != undefined" :class="rpmClasses"> {{ Math.round(parseFloat(target) * 100) }}% PWM</small>
                     <span v-if="!controllable" class="font-weight-bold">
-                        {{ Math.round(parseFloat(value) * 100) }} %
+                        {{ Math.round(value * 100) }} %
                     </span>
                     <v-icon v-if="controllable && !pwm" @click="switchOutputPin">
                         {{ value ? mdiToggleSwitch : mdiToggleSwitchOffOutline }}
@@ -315,6 +316,15 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
         const output = []
         if (!this.controllable) output.push(['mr-3', 'mt-1'])
         else output.push(['mt-2'])
+        if (this.rpm === 0 && this.value > 0) output.push('red--text')
+
+        return output
+    }
+
+    get pwmClasses() {
+        const output = []
+        if (!this.controllable) output.push(['mr-3', 'mt-1'])
+        else output.push(['mr-3', 'mt-2'])
         if (this.rpm === 0 && this.value > 0) output.push('red--text')
 
         return output

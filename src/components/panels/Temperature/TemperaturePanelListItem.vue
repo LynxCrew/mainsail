@@ -43,16 +43,16 @@
             </v-tooltip>
         </td>
         <td class="current">
-            <v-tooltip top :disabled="!(measured_min_temp !== null || measured_max_temp !== null)">
+            <v-tooltip top :disabled="(measured_min_temp === null && measured_max_temp === null) || (measured_min_temp === '0.0' && measured_max_temp === '0.0')">
                 <template #activator="{ on, attrs }">
                     <span style="cursor: default" v-bind="attrs" v-on="on">
                         {{ formatTemperature }}
                     </span>
                 </template>
                 <span>
-                    {{ $t('Panels.TemperaturePanel.Max') }}: {{ measured_max_temp }}°C
+                    {{ $t('Panels.TemperaturePanel.Max') }}: {{ measured_max_temp ?? "--" }}°C
                     <br />
-                    {{ $t('Panels.TemperaturePanel.Min') }}: {{ measured_min_temp }}°C
+                    {{ $t('Panels.TemperaturePanel.Min') }}: {{ measured_min_temp ?? "--" }}°C
                 </span>
             </v-tooltip>
             <div v-if="rpm !== null">

@@ -166,7 +166,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
                 // remove macros with rename_existing in the config
                 const propLower = prop.toLowerCase()
-                const propSettings = settings[propLower] ?? {}
+                const propSettings = settings != undefined ? settings[propLower] ?? {} : {}
                 if ('rename_existing' in propSettings) return
 
                 array.push({
