@@ -173,6 +173,7 @@ export const getDefaultState = (): GuiState => {
             confirmOnShutdown: false,
             confirmOnCoolDown: false,
             confirmOnPowerDeviceChange: false,
+            confirmOnCancelJob: false,
             boolBigThumbnail: true,
             bigThumbnailBackground: defaultBigThumbnailBackground,
             boolWideNavDrawer: false,
