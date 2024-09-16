@@ -2,144 +2,146 @@
     <div>
         <v-card flat>
             <v-card-text>
-                <settings-row :title="$t('Settings.GCodeViewerTab.ShowAxes')">
-                    <v-switch v-model="showAxes" class="mt-0" hide-details></v-switch>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.GCodeViewerTab.BackgroundColor')">
-                    <v-menu :close-on-content-click="false" bottom left offset-y>
-                        <template #activator="{ on, attrs }">
-                            <v-btn
-                                :color="backgroundColor"
-                                class="minwidth-0 px-5"
-                                small
-                                v-bind="attrs"
-                                v-on="on"></v-btn>
-                        </template>
-                        <v-color-picker
-                            :value="backgroundColor"
-                            hide-mode-switch
-                            mode="rgba"
-                            @update:color="updateColorValue('backgroundColor', $event)"></v-color-picker>
-                    </v-menu>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.GCodeViewerTab.GridColor')">
-                    <v-menu :close-on-content-click="false" bottom left offset-y>
-                        <template #activator="{ on, attrs }">
-                            <v-btn :color="gridColor" class="minwidth-0 px-5" small v-bind="attrs" v-on="on"></v-btn>
-                        </template>
-                        <v-color-picker
-                            :value="gridColor"
-                            hide-mode-switch
-                            mode="rgba"
-                            @update:color="updateColorValue('gridColor', $event)"></v-color-picker>
-                    </v-menu>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.GCodeViewerTab.ProgressColor')">
-                    <v-menu :close-on-content-click="false" bottom left offset-y>
-                        <template #activator="{ on, attrs }">
-                            <v-btn
-                                :color="progressColor"
-                                class="minwidth-0 px-5"
-                                small
-                                v-bind="attrs"
-                                v-on="on"></v-btn>
-                        </template>
-                        <v-color-picker
-                            :value="progressColor"
-                            hide-mode-switch
-                            mode="rgba"
-                            @update:color="updateColorValue('progressColor', $event)"></v-color-picker>
-                    </v-menu>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.GCodeViewerTab.ExtruderColor')">
-                    <v-row no-gutters>
-                        <v-menu
-                            v-for="(extruderColor, index) in extruderColors"
-                            :key="index"
-                            :close-on-content-click="false"
-                            bottom
-                            left
-                            offset-y>
+                <div v-if="!useFluiddViewer">
+                    <settings-row :title="$t('Settings.GCodeViewerTab.ShowAxes')">
+                        <v-switch v-model="showAxes" class="mt-0" hide-details></v-switch>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.GCodeViewerTab.BackgroundColor')">
+                        <v-menu :close-on-content-click="false" bottom left offset-y>
                             <template #activator="{ on, attrs }">
-                                <v-col align="right" class="mt-1" cols="12">
-                                    <span class="mr-2">{{ index }}</span>
-                                    <v-btn
-                                        :color="extruderColors[index]"
-                                        class="minwidth-0 px-5"
-                                        small
-                                        v-bind="attrs"
-                                        v-on="on"></v-btn>
-                                </v-col>
+                                <v-btn
+                                    :color="backgroundColor"
+                                    class="minwidth-0 px-5"
+                                    small
+                                    v-bind="attrs"
+                                    v-on="on"></v-btn>
                             </template>
                             <v-color-picker
-                                :value="extruderColors[index]"
+                                :value="backgroundColor"
                                 hide-mode-switch
                                 mode="rgba"
-                                @update:color="colorsUpdated($event, index)"></v-color-picker>
+                                @update:color="updateColorValue('backgroundColor', $event)"></v-color-picker>
                         </v-menu>
-                    </v-row>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.GCodeViewerTab.MinFeed')">
-                    <v-menu :close-on-content-click="false" bottom left offset-y>
-                        <template #activator="{ on, attrs }">
-                            <v-btn
-                                :color="minFeedColor"
-                                class="minwidth-0 px-5 mr-3"
-                                small
-                                v-bind="attrs"
-                                v-on="on"></v-btn>
-                        </template>
-                        <v-color-picker
-                            :value="minFeedColor"
-                            hide-mode-switch
-                            mode="rgba"
-                            @update:color="updateColorValue('minFeedColor', $event)"></v-color-picker>
-                    </v-menu>
-                    <v-text-field
-                        v-model="minFeed"
-                        :rules="[(v) => v > 0 || 'Minimum speed is 1']"
-                        dense
-                        hide-details="auto"
-                        outlined
-                        suffix="mm/s"
-                        type="number"
-                        hide-spin-buttons
-                        @blur="feedBlur"></v-text-field>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
-                <settings-row :title="$t('Settings.GCodeViewerTab.MaxFeed')">
-                    <v-menu :close-on-content-click="false" bottom left offset-y>
-                        <template #activator="{ on, attrs }">
-                            <v-btn
-                                :color="maxFeedColor"
-                                class="minwidth-0 px-5 mr-3"
-                                small
-                                v-bind="attrs"
-                                v-on="on"></v-btn>
-                        </template>
-                        <v-color-picker
-                            :value="maxFeedColor"
-                            hide-mode-switch
-                            mode="rgba"
-                            @update:color="updateColorValue('maxFeedColor', $event)"></v-color-picker>
-                    </v-menu>
-                    <v-text-field
-                        v-model="maxFeed"
-                        :rules="[(v) => v > 0 || 'Minimum speed is 1']"
-                        dense
-                        hide-details="auto"
-                        outlined
-                        suffix="mm/s"
-                        type="number"
-                        hide-spin-buttons
-                        @blur="feedBlur"></v-text-field>
-                </settings-row>
-                <v-divider class="my-2"></v-divider>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.GCodeViewerTab.GridColor')">
+                        <v-menu :close-on-content-click="false" bottom left offset-y>
+                            <template #activator="{ on, attrs }">
+                                <v-btn :color="gridColor" class="minwidth-0 px-5" small v-bind="attrs" v-on="on"></v-btn>
+                            </template>
+                            <v-color-picker
+                                :value="gridColor"
+                                hide-mode-switch
+                                mode="rgba"
+                                @update:color="updateColorValue('gridColor', $event)"></v-color-picker>
+                        </v-menu>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.GCodeViewerTab.ProgressColor')">
+                        <v-menu :close-on-content-click="false" bottom left offset-y>
+                            <template #activator="{ on, attrs }">
+                                <v-btn
+                                    :color="progressColor"
+                                    class="minwidth-0 px-5"
+                                    small
+                                    v-bind="attrs"
+                                    v-on="on"></v-btn>
+                            </template>
+                            <v-color-picker
+                                :value="progressColor"
+                                hide-mode-switch
+                                mode="rgba"
+                                @update:color="updateColorValue('progressColor', $event)"></v-color-picker>
+                        </v-menu>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.GCodeViewerTab.ExtruderColor')">
+                        <v-row no-gutters>
+                            <v-menu
+                                v-for="(extruderColor, index) in extruderColors"
+                                :key="index"
+                                :close-on-content-click="false"
+                                bottom
+                                left
+                                offset-y>
+                                <template #activator="{ on, attrs }">
+                                    <v-col align="right" class="mt-1" cols="12">
+                                        <span class="mr-2">{{ index }}</span>
+                                        <v-btn
+                                            :color="extruderColors[index]"
+                                            class="minwidth-0 px-5"
+                                            small
+                                            v-bind="attrs"
+                                            v-on="on"></v-btn>
+                                    </v-col>
+                                </template>
+                                <v-color-picker
+                                    :value="extruderColors[index]"
+                                    hide-mode-switch
+                                    mode="rgba"
+                                    @update:color="colorsUpdated($event, index)"></v-color-picker>
+                            </v-menu>
+                        </v-row>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.GCodeViewerTab.MinFeed')">
+                        <v-menu :close-on-content-click="false" bottom left offset-y>
+                            <template #activator="{ on, attrs }">
+                                <v-btn
+                                    :color="minFeedColor"
+                                    class="minwidth-0 px-5 mr-3"
+                                    small
+                                    v-bind="attrs"
+                                    v-on="on"></v-btn>
+                            </template>
+                            <v-color-picker
+                                :value="minFeedColor"
+                                hide-mode-switch
+                                mode="rgba"
+                                @update:color="updateColorValue('minFeedColor', $event)"></v-color-picker>
+                        </v-menu>
+                        <v-text-field
+                            v-model="minFeed"
+                            :rules="[(v) => v > 0 || 'Minimum speed is 1']"
+                            dense
+                            hide-details="auto"
+                            outlined
+                            suffix="mm/s"
+                            type="number"
+                            hide-spin-buttons
+                            @blur="feedBlur"></v-text-field>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                    <settings-row :title="$t('Settings.GCodeViewerTab.MaxFeed')">
+                        <v-menu :close-on-content-click="false" bottom left offset-y>
+                            <template #activator="{ on, attrs }">
+                                <v-btn
+                                    :color="maxFeedColor"
+                                    class="minwidth-0 px-5 mr-3"
+                                    small
+                                    v-bind="attrs"
+                                    v-on="on"></v-btn>
+                            </template>
+                            <v-color-picker
+                                :value="maxFeedColor"
+                                hide-mode-switch
+                                mode="rgba"
+                                @update:color="updateColorValue('maxFeedColor', $event)"></v-color-picker>
+                        </v-menu>
+                        <v-text-field
+                            v-model="maxFeed"
+                            :rules="[(v) => v > 0 || 'Minimum speed is 1']"
+                            dense
+                            hide-details="auto"
+                            outlined
+                            suffix="mm/s"
+                            type="number"
+                            hide-spin-buttons
+                            @blur="feedBlur"></v-text-field>
+                    </settings-row>
+                    <v-divider class="my-2"></v-divider>
+                </div>
                 <settings-row :title="$t('Settings.GCodeViewerTab.FluiddUrl')">
                     <v-text-field v-model="fluiddUrl" hide-details outlined dense></v-text-field>
                 </settings-row>
