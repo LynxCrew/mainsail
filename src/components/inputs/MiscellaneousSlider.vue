@@ -19,7 +19,7 @@
                     <v-spacer />
                     <small v-if="rpm !== null && !(showRealPWM && normalized_target != undefined)" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
                     <small v-if="rpm !== null && showRealPWM && normalized_target != undefined" :class="pwmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
-                    <small v-if="showRealPWM && normalized_target != undefined" :class="rpmClasses"> {{ Math.round(parseFloat(target) * 100) }}% PWM</small>
+                    <small v-if="showRealPWM && normalized_target != undefined" :class="rpmClasses"> {{ Math.round((target ?? 0) * 100) }}% PWM</small>
                     <span v-if="!controllable" class="font-weight-bold">
                         {{ Math.round(value * 100) }} %
                     </span>

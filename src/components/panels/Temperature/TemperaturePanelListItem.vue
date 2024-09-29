@@ -102,7 +102,13 @@ import {
     mdiThermometer,
     mdiRefresh,
 } from '@mdi/js'
-import { additionalSensors, opacityHeaterActive, opacityHeaterInactive } from '@/store/variables'
+import {
+    additionalSensors,
+    opacityHeaterActive,
+    opacityHeaterInactive,
+    opacityStepperActive,
+    opacityStepperInactive,
+} from '@/store/variables'
 
 @Component
 export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
@@ -119,12 +125,12 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         : this.objectName
 
     private rules = {
-        heater_profile: (value: string) => this.heaterProfileAllowed(value) || this.$t('Panels.TemperaturePanel.HeaterProfileNotAllowed')
+        heater_profile: (value: string) => this.heaterProfileExists(value) || this.$t('Panels.TemperaturePanel.HeaterProfileNotAllowed')
     }
 
-    heaterProfileAllowed(name: string) {
+    heaterProfileExists(name: string) {
         if (name == 'autotune') return true;
-        const heaterProfiles = this.heaterProfiles
+        const heaterProfiles = this.getHeaterProfiles
         for (let i = 0; i < heaterProfiles.length; i++) {
             if (name == heaterProfiles[i]) {
                 return true
@@ -207,6 +213,15 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get iconColor() {
+        if (this.objectName.startsWith('tmc')) {
+            const steppers = this.$store.state.printer.stepper_enable?.steppers
+            const stepper_name = this.objectName.split(" ").pop()
+            if (steppers != undefined && stepper_name != undefined && (steppers[stepper_name] ?? true)) {
+                return `${this.color}${opacityStepperActive}`
+            }
+
+            return `${this.color}${opacityStepperInactive}`
+        }
         // set icon color to active, if no target exists (temperature_sensors) or a heater is active
         if (this.target === null || this.target > 0) return `${this.color}${opacityHeaterActive}`
 
@@ -231,7 +246,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get state(): number | null {
-        return this.printerObject.power ?? this.printerObject.speed ?? null
+        return this.printerObject.power ?? this.printerObject.normalized_power ?? this.printerObject.speed ?? null
     }
 
     set heater_profile(newval: string) {
@@ -246,7 +261,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         return this.printerObject.heater_profile ?? null
     }
 
-    get heaterProfiles(): string[] {
+    get getHeaterProfiles(): string[] {
         return this.$store.getters['printer/getHeaterProfiles']?.get(this.heater_name) ?? {}
     }
 
@@ -256,7 +271,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     setHeaterProfile():void {
-        if (!this.heaterProfileAllowed(this.heaterProfile)) {
+        if (!this.heaterProfileExists(this.heaterProfile)) {
             this.$toast.error(
                 this.$t('Panels.TemperaturePanel.UnknownHeaterProfile', { profile: this.heaterProfile, heater: this.heater_name }) + ''
             )
