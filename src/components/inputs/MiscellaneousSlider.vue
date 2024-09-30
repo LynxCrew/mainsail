@@ -17,9 +17,13 @@
                     <v-icon v-else-if="type.includes('fan')" small :class="fanClasses">{{ mdiFan }}</v-icon>
                     <span>{{ convertName(name) }}</span>
                     <v-spacer />
-                    <small v-if="rpm !== null && !(showRealPWM && normalized_target != undefined)" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
-                    <small v-if="rpm !== null && showRealPWM && normalized_target != undefined" :class="pwmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
-                    <small v-if="showRealPWM && normalized_target != undefined" :class="rpmClasses"> {{ Math.round((target ?? 0) * 100) }}% PWM</small>
+                    <div v-if="showRealPWM && real_target != undefined">
+                        <small v-else-if="rpm !== null" :class="pwmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                        <small :class="rpmClasses"> {{ Math.round((real_target ?? 0) * 100) }}% PWM</small>
+                    </div>
+                    <div v-else>
+                        <small v-if="rpm !== null" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                    </div>
                     <span v-if="!controllable" class="font-weight-bold">
                         {{ Math.round(value * 100) }} %
                     </span>
@@ -38,7 +42,7 @@
                             outlined
                             dense
                             class="_slider-input pt-1"
-                            @blur="inputValue = Math.round(parseFloat(sliderValue) * 100)"
+                            @blur="inputValue = Math.round(parseFloat(String(sliderValue)) * 100)"
                             @focus="$event.target.select()"
                             @keydown="checkInvalidChars" />
                     </form>
@@ -125,20 +129,8 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     private inputValue = 0
     private sliderValue = 0
 
-    @Prop({ type: Number, required: true })
+    @Prop({ type: Number, default: 0 })
     declare target: number
-
-    @Prop({ type: Number, required: true })
-    declare red: number
-
-    @Prop({ type: Number, required: true })
-    declare green: number
-
-    @Prop({ type: Number, required: true })
-    declare blue: number
-
-    @Prop({ type: Number, required: true })
-    declare white: number
 
     @Prop({ type: Number, default: 1 })
     declare max: number
@@ -156,7 +148,7 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     declare pwm: boolean
 
     @Prop({ type: [Number, Boolean], default: false })
-    declare rpm: number | boolean | null
+    declare rpm: number | null
 
     @Prop({ type: Number, default: 1 })
     declare multi: number
@@ -165,15 +157,15 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     declare off_below: number
 
     @Prop({ type: Number, default: undefined })
-    declare normalized_target: number | undefined
+    declare real_target: number | undefined
 
     @Prop({ type: String, default: '' })
     declare colorOrder: string
 
     get value(): number {
-        if (this.normalized_target == undefined)
+        if (this.real_target == undefined)
             return Math.round((this.target / this.max) * 100) / 100
-        return Math.round((this.normalized_target * 100)) / 100
+        return Math.round((this.target * 100)) / 100
     }
 
     @Watch('lockSliders', { immediate: true })

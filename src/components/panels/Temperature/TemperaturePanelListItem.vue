@@ -246,7 +246,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get state(): number | null {
-        return this.printerObject.power ?? this.printerObject.normalized_power ?? this.printerObject.speed ?? null
+        return this.printerObject.power ?? this.printerObject.real_power ?? this.printerObject.speed ?? null
     }
 
     set heater_profile(newval: string) {

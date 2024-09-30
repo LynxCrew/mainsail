@@ -131,7 +131,7 @@ export interface PrinterStateMiscellaneous {
     name: string
     type: string
     power: number
-    normalized_power: number
+    real_power: number
     controllable: boolean
     pwm: boolean
     rpm: number
