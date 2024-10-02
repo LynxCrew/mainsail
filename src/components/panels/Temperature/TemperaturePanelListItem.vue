@@ -1,7 +1,10 @@
 <template>
     <tr>
         <td class="icon">
-            <v-icon :color="iconColor" :class="iconClass" tabindex="-1" @click="showEditDialog = true">
+            <v-icon :color="iconColor"
+                    :class="iconClass"
+                    tabindex="-1"
+                    @click="showEditDialog = true">
                 {{ icon }}
             </v-icon>
         </td>
@@ -205,6 +208,12 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         // show fan icon, if it is a fan
         if (this.isFan) return mdiFan
 
+        if (this.isBeacon) return "$vuetify.icons.beacon_icon"
+
+        if (this.isHost) return "$vuetify.icons.host_icon"
+
+        if (this.isMcu) return "$vuetify.icons.mcu_icon"
+
         return mdiThermometer
     }
 
@@ -263,6 +272,18 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get getHeaterProfiles(): string[] {
         return this.$store.getters['printer/getHeaterProfiles']?.get(this.heater_name) ?? {}
+    }
+
+    get isBeacon(): boolean {
+        return this.printerObjectSettings.sensor_type?.startsWith("beacon_coil") || (this.printerObjectSettings.sensor_type === "temperature_mcu" && this.printerObjectSettings.sensor_mcu?.startsWith("beacon"))
+    }
+
+    get isHost(): boolean {
+        return this.printerObjectSettings.sensor_type === "temperature_host"
+    }
+
+    get isMcu(): boolean {
+        return this.printerObjectSettings.sensor_type === "temperature_mcu"
     }
 
     resetHeaterProfile():void {

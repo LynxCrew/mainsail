@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import { Touch, Ripple } from 'vuetify/lib/directives'
+import BeaconIcon from "@/components/icons/BeaconIcon.vue";
+import HostIcon from "@/components/icons/HostIcon.vue";
+import CustomTempSensorIcon from "@/components/icons/HostIcon.vue";
+import McuIcon from "@/components/icons/McuIcon.vue";
 
 Vue.use(Vuetify, {
     directives: { Touch, Ripple },
@@ -27,6 +31,17 @@ export default new Vuetify({
         options: { customProperties: true },
     },
     icons: {
+        values: {
+            beacon_icon: {
+                component: BeaconIcon,
+            },
+            host_icon: {
+                component: HostIcon,
+            },
+            mcu_icon: {
+                component: McuIcon,
+            },
+        },
         iconfont: 'mdiSvg',
     },
     breakpoint: {
