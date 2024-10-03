@@ -505,9 +505,17 @@ export const actions: ActionTree<GuiState, RootState> = {
 
     setDisplayName(
         { commit, dispatch, state },
-        payload: { objectName: string; value: string }
+        payload: { objectName: string; value: string|null }
     ) {
-        commit('setDisplayName', payload)
+        if (payload.value == undefined || payload.value == "") {
+            Vue.delete(state.view.tempchart.datasetSettings[payload.objectName], 'displayName')
+        } else {
+            commit('setChartDatasetStatus', {
+                objectName: payload.objectName,
+                dataset: 'displayName',
+                value: payload.value,
+            })
+        }
 
         dispatch('updateSettings', {
             keyName: 'view.tempchart.datasetSettings',

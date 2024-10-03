@@ -1,6 +1,15 @@
 <template>
     <v-dialog v-model="boolShow" persistent :width="400" @keydown.esc="closeDialog">
-        <panel :title="formatName" :icon="icon" card-class="temperature-edit-heater-dialog" :margin-bottom="false">
+        <panel :title="formatName" card-class="temperature-edit-heater-dialog" :margin-bottom="false">
+            <template #icon>
+                <DynamicIcon
+                    :name="name"
+                    :default-icon="icon"
+                    :color="iconColor"
+                    :class="iconClass"
+                    tabindex="-1"
+                />
+            </template>
             <template #buttons>
                 <v-btn icon tile @click="closeDialog">
                     <v-icon>{{ mdiCloseThick }}</v-icon>
@@ -46,7 +55,8 @@ import TemperaturePanelListItemEditDisplayName
     from "@/components/panels/Temperature/TemperaturePanelListItemEditDisplayName.vue";
 
 @Component({
-    components: {TemperaturePanelListItemEditDisplayName, TemperaturePanelListItemEditAdditionalSensor, TemperaturePanelListItemEditChartSerie },
+    components: {
+        TemperaturePanelListItemEditDisplayName, TemperaturePanelListItemEditAdditionalSensor, TemperaturePanelListItemEditChartSerie },
 })
 export default class TemperaturePanelListItemEdit extends Mixins(BaseMixin) {
     mdiCloseThick = mdiCloseThick
@@ -58,6 +68,7 @@ export default class TemperaturePanelListItemEdit extends Mixins(BaseMixin) {
     @Prop({ type: String, required: true }) readonly formatName!: string
     @Prop({ type: String, required: true }) readonly icon!: string
     @Prop({ type: String, required: true }) readonly color!: string
+    @Prop({ type: String, required: true }) readonly iconColor!: string
 
     get chartSeries() {
         return this.$store.getters['printer/tempHistory/getSerieNames'](this.objectName) ?? []
@@ -74,6 +85,16 @@ export default class TemperaturePanelListItemEdit extends Mixins(BaseMixin) {
         if (this.objectName === 'nevermore') return ['temperature', 'pressure', 'humidity', 'rpm']
 
         return Object.keys(this.printerObjectAdditionalSensor).filter((key) => key !== 'temperature')
+    }
+
+    get iconClass() {
+        const classes = ['v-icon', 'notranslate', 'v-icon--left']
+        if (this.$store.state.gui.uiSettings.mode == "light") {
+            classes.push("theme--light")
+        } else {
+            classes.push("theme--dark")
+        }
+        return classes
     }
 
     @Debounce(500)

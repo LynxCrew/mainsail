@@ -44,8 +44,9 @@ export const getters: GetterTree<GuiState, any> = {
         if (
             payload.name in state.view.tempchart.datasetSettings &&
             'displayName' in state.view.tempchart.datasetSettings[payload.name]
-        )
+        ) {
             return state.view.tempchart.datasetSettings[payload.name].displayName
+        }
 
         return null
     },

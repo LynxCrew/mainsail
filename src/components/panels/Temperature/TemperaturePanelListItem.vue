@@ -1,12 +1,17 @@
 <template>
     <tr>
         <td class="icon">
-            <v-icon :color="iconColor"
+            <template @click="showEditDialog = true">
+                <DynamicIcon
+                    :name="name"
+                    :default-source="iconSource"
+                    :default-icon="icon"
+                    :color="iconColor"
                     :class="iconClass"
                     tabindex="-1"
-                    @click="showEditDialog = true">
-                {{ icon }}
-            </v-icon>
+                    enable-click
+                    @click="showEditDialog = true"/>
+            </template>
         </td>
         <td class="name">
             <span class="cursor-pointer" @click="showEditDialog = true">{{ formatName }}</span>
@@ -84,6 +89,7 @@
             :format-name="defaultName"
             :additional-sensor-name="additionalSensorName"
             :icon="icon"
+            :icon-color="iconColor"
             :color="color"
             @close-dialog="showEditDialog = false"/>
     </tr>
@@ -104,6 +110,7 @@ import {
     mdiRadiatorDisabled,
     mdiThermometer,
     mdiRefresh,
+    mdiPrinter3dNozzleOff,
 } from '@mdi/js'
 import {
     additionalSensors,
@@ -112,8 +119,11 @@ import {
     opacityStepperActive,
     opacityStepperInactive,
 } from '@/store/variables'
+import DynamicIcon from "@/components/icons/DynamicIcon.vue";
 
-@Component
+@Component({
+    components: {DynamicIcon},
+})
 export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     mdiRefresh = mdiRefresh
 
@@ -185,7 +195,12 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         if (this.objectName.startsWith('extruder')) {
             if (this.printerObject.can_extrude ?? false) return mdiPrinter3dNozzle
 
-            return mdiPrinter3dNozzleAlert
+            if (
+                (this.temperature !== null && this.temperature > 50) ||
+                (this.target && this.temperature && this.temperature > this.target - 5)
+            ) return mdiPrinter3dNozzleAlert
+
+            return mdiPrinter3dNozzleOff
         }
 
         // show heater_bed icon
@@ -208,13 +223,13 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         // show fan icon, if it is a fan
         if (this.isFan) return mdiFan
 
-        if (this.isBeacon) return "$vuetify.icons.beacon_icon"
-
-        if (this.isHost) return "$vuetify.icons.host_icon"
-
-        if (this.isMcu) return "$vuetify.icons.mcu_icon"
-
         return mdiThermometer
+    }
+
+    get iconSource() {
+        if (this.isBeacon) return "/img/beacon-icon.svg"
+
+        return undefined
     }
 
     get color() {
@@ -239,19 +254,16 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get iconClass() {
         const classes = ['_no-focus-style', 'cursor-pointer']
-
         // add icon animation, when it is a fan and state > 0
         if (this.isFan) {
             const disableFanAnimation = this.$store.state.gui?.uiSettings.disableFanAnimation ?? false
-
             if (!disableFanAnimation && (this.state ?? 0) > 0) classes.push('icon-rotate')
         }
-
         return classes
     }
 
     get isFan() {
-        return this.objectName.startsWith('temperature_fan')
+        return this.objectName.startsWith('temperature_fan') || this.objectName.startsWith('controller_temperature_fan')
     }
 
     get state(): number | null {
@@ -276,14 +288,6 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get isBeacon(): boolean {
         return this.printerObjectSettings.sensor_type?.startsWith("beacon_coil") || (this.printerObjectSettings.sensor_type === "temperature_mcu" && this.printerObjectSettings.sensor_mcu?.startsWith("beacon"))
-    }
-
-    get isHost(): boolean {
-        return this.printerObjectSettings.sensor_type === "temperature_host"
-    }
-
-    get isMcu(): boolean {
-        return this.printerObjectSettings.sensor_type === "temperature_mcu"
     }
 
     resetHeaterProfile():void {

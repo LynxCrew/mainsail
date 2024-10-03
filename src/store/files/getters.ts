@@ -232,10 +232,10 @@ export const getters: GetterTree<FileState, any> = {
         return getters['getThemeFileUrl'](acceptName, acceptExtensions)
     },
 
-    getCustomTempSensorIcon: (state, getters) => (sensor_name: string) => {
+    getCustomIcon: (state, getters) => (name: string) => {
         const acceptExtensions = ['svg']
 
-        return getters['getThemeFileUrl'](sensor_name, acceptExtensions)
+        return getters['getThemeFileUrl'](name, acceptExtensions) ?? getters['getThemeFileUrl'](name.toLowerCase(), acceptExtensions)
     },
 
     getCustomStylesheet: (state, getters) => {

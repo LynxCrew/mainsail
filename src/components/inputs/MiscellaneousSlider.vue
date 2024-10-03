@@ -18,7 +18,7 @@
                     <span>{{ convertName(name) }}</span>
                     <v-spacer />
                     <div v-if="showRealPWM && real_target != undefined">
-                        <small v-else-if="rpm !== null" :class="pwmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                        <small v-if="rpm !== null" :class="pwmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
                         <small :class="rpmClasses"> {{ Math.round((real_target ?? 0) * 100) }}% PWM</small>
                     </div>
                     <div v-else>
@@ -315,8 +315,8 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
 
     get pwmClasses() {
         const output = []
-        if (!this.controllable) output.push(['mr-3', 'mt-1'])
-        else output.push(['mr-3', 'mt-2'])
+        if (!this.controllable) output.push(['mr-2', 'mt-1'])
+        else output.push(['mr-2', 'mt-2'])
         if (this.rpm === 0 && this.value > 0) output.push('red--text')
 
         return output
