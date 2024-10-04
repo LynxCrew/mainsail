@@ -824,6 +824,7 @@
             "ShowNameInChart": "Show {name} in chart",
             "ShowNameInList": "Show {name} in list",
             "DisplayName": "Display name",
+            "Animation": "Disable Animation",
             "HeaterProfile": "PID-Profile",
             "UnknownHeaterProfile": "Unknown PID-Profile [{profile}] for Heater [{heater}]",
             "HeaterProfileNotAllowed": "PID-Profile does not exist",

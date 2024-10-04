@@ -256,10 +256,17 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
         const classes = ['_no-focus-style', 'cursor-pointer']
         // add icon animation, when it is a fan and state > 0
         if (this.isFan) {
-            const disableFanAnimation = this.$store.state.gui?.uiSettings.disableFanAnimation ?? false
-            if (!disableFanAnimation && (this.state ?? 0) > 0) classes.push('icon-rotate')
+            if (!this.disableFanAnimation && (this.state ?? 0) > 0) classes.push('icon-rotate')
         }
+
         return classes
+    }
+
+    get disableFanAnimation() {
+        return (this.$store.state.gui?.uiSettings.disableFanAnimation ?? false)
+            || this.$store.getters['gui/getDisableTempSensorAnimation']({
+            name: this.objectName,
+        })
     }
 
     get isFan() {

@@ -503,6 +503,22 @@ export const actions: ActionTree<GuiState, RootState> = {
         })
     },
 
+    setDisableTempSensorAnimation(
+        { commit, dispatch, state },
+        payload: { objectName: string; value: boolean }
+    ) {
+        commit('setChartDatasetStatus', {
+            objectName: payload.objectName,
+            dataset: 'disableTempSensorAnimation',
+            value: payload.value,
+        })
+
+        dispatch('updateSettings', {
+            keyName: 'view.tempchart.datasetSettings',
+            newVal: state.view.tempchart.datasetSettings,
+        })
+    },
+
     setDisplayName(
         { commit, dispatch, state },
         payload: { objectName: string; value: string|null }

@@ -26,6 +26,8 @@
                     :key="additionalSensor"
                     :object-name="objectName"
                     :additional-sensor="additionalSensor" />
+                <temperature-panel-list-item-edit-animation v-if="this.isFan"
+                                                            :object-name="objectName" />
                 <temperature-panel-list-item-edit-display-name
                     :object-name="objectName" />
                 <v-row>
@@ -53,9 +55,12 @@ import TemperaturePanelListItemEditAdditionalSensor from '@/components/panels/Te
 import { Debounce } from 'vue-debounce-decorator'
 import TemperaturePanelListItemEditDisplayName
     from "@/components/panels/Temperature/TemperaturePanelListItemEditDisplayName.vue";
+import TemperaturePanelListItemEditAnimation
+    from "@/components/panels/Temperature/TemperaturePanelListItemEditAnimation.vue";
 
 @Component({
     components: {
+        TemperaturePanelListItemEditAnimation,
         TemperaturePanelListItemEditDisplayName, TemperaturePanelListItemEditAdditionalSensor, TemperaturePanelListItemEditChartSerie },
 })
 export default class TemperaturePanelListItemEdit extends Mixins(BaseMixin) {
@@ -95,6 +100,10 @@ export default class TemperaturePanelListItemEdit extends Mixins(BaseMixin) {
             classes.push("theme--dark")
         }
         return classes
+    }
+
+    get isFan() {
+        return this.objectName.startsWith('temperature_fan') || this.objectName.startsWith('controller_temperature_fan')
     }
 
     @Debounce(500)
