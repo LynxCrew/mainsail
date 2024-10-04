@@ -264,7 +264,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get disableFanAnimation() {
         return (this.$store.state.gui?.uiSettings.disableFanAnimation ?? false)
-            || this.$store.getters['gui/getDisableTempSensorAnimation']({
+            || this.$store.getters['gui/getDisableFanAnimation']({
             name: this.objectName,
         })
     }

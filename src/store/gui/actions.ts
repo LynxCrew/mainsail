@@ -503,13 +503,13 @@ export const actions: ActionTree<GuiState, RootState> = {
         })
     },
 
-    setDisableTempSensorAnimation(
+    setDisableFanAnimation(
         { commit, dispatch, state },
         payload: { objectName: string; value: boolean }
     ) {
         commit('setChartDatasetStatus', {
             objectName: payload.objectName,
-            dataset: 'disableTempSensorAnimation',
+            dataset: 'disableFanAnimation',
             value: payload.value,
         })
 

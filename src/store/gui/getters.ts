@@ -40,12 +40,12 @@ export const getters: GetterTree<GuiState, any> = {
         return true
     },
 
-    getDisableTempSensorAnimation: (state) => (payload: { name: string }) => {
+    getDisableFanAnimation: (state) => (payload: { name: string }) => {
         if (
             payload.name in state.view.tempchart.datasetSettings &&
-            'disableTempSensorAnimation' in state.view.tempchart.datasetSettings[payload.name]
+            'disableFanAnimation' in state.view.tempchart.datasetSettings[payload.name]
         ) {
-            return state.view.tempchart.datasetSettings[payload.name].disableAnimation
+            return state.view.tempchart.datasetSettings[payload.name].disableFanAnimation
         }
 
         return false

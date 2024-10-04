@@ -17,13 +17,13 @@ export default class TemperaturePanelListItemEditAdditionalSensor extends Mixins
     @Prop({ type: String, required: true }) readonly objectName!: string
 
     get disableAnimation() {
-        return this.$store.getters['gui/getDisableTempSensorAnimation']({
+        return this.$store.getters['gui/getDisableFanAnimation']({
             name: this.objectName,
         })
     }
 
     set disableAnimation(newVal) {
-        this.$store.dispatch('gui/setDisableTempSensorAnimation', {
+        this.$store.dispatch('gui/setDisableFanAnimation', {
             objectName: this.objectName,
             value: newVal,
         })
