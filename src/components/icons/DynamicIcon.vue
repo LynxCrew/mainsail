@@ -28,7 +28,6 @@ import {Mixins, Prop} from "vue-property-decorator";
 import BaseMixin from "@/components/mixins/base";
 import Component from "vue-class-component";
 
-
 @Component({
     components: {InlineSvg,}
 })
