@@ -3,7 +3,8 @@
             type="button"
             :class="buttonClasses"
             :style="{ color: color, caretColor: strokeColor }"
-            @click="enableClick && $emit('click')">
+            @click="enableClick && $emit('click')"
+            :inert="!enableClick">
         <inline-svg :src="iconSource"
                     :width="width || size"
                     :height="height || size"
@@ -15,8 +16,9 @@
     <v-icon v-else
             :width="width || size"
             :height="height || size"
-            :color="color"
-            @click="enableClick && $emit('click')">
+            :style="{ color: color, caretColor: strokeColor }"
+            @click="enableClick && $emit('click')"
+            :inert="!enableClick">
         {{ defaultIcon }}
     </v-icon>
 </template>
@@ -48,12 +50,18 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     get buttonClasses(){
-        const classes = ["v-icon", "notranslate", "v-icon--link", "_no-focus-style", "cursor-pointer"]
+        const classes = ["v-icon", "notranslate", "v-icon--link", "_no-focus-style"]
+
+        if (this.enableClick) {
+            classes.push("cursor-pointer")
+        }
+
         if (this.$store.state.gui.uiSettings.mode == "light") {
             classes.push("theme--light")
         } else {
             classes.push("theme--dark")
         }
+
         return classes
     }
 }
