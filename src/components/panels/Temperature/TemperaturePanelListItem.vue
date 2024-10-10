@@ -31,7 +31,7 @@
                 hide-spin-buttons
                 @blur="heaterProfile = loaded_heater_profile"
                 @focus="$event.target.select()">
-                    <template v-if="heater_profile !== 'default'" #append>
+                    <template v-if="heater_profile !== 'default' && focused" #append>
                         <v-btn
                             icon
                             class="_heater-profile-reset"
@@ -442,8 +442,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 }
 
 ._heater-profile-input {
-    min-width: 4.2rem;
-    max-width: 8rem;
+    width: 6.0rem;
     padding-right: 0 !important;
 }
 
@@ -462,7 +461,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
 ._heater-profile-reset {
     margin-top: -6px;
-    margin-left: -4px;
+    margin-left: -5px;
     margin-right: -4px;
     height: 24px;
     width: 24px;
