@@ -768,8 +768,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     getEstimatedTimeM73: (state) => {
         if (
             'display_status' in state &&
-            'remaining' in state.display_status &&
-            state.display_status.remaining > 0
+            'remaining' in state.display_status
         ) {
             return (state.display_status.remaining * 60).toFixed(0)
         }
