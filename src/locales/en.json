@@ -98,9 +98,9 @@
                     "KlipperFirmwareRestart": "Restarting the Klipper Firmware will cause the current print to fail!",
                     "KlipperRestart": "Restarting Klipper will cause the current print to fail!",
                     "KlipperStop": "Stopping Klipper will cause the current print to fail!",
-                    "ServiceRestart": "Restarting this service may cause the current print to fail!",
-                    "ServiceStart": "Starting this service may cause the current print to fail!",
-                    "ServiceStop": "Stopping this service may cause the current print to fail!"
+                    "ServiceRestart": "Restarting '{serviceName}' may cause the current print to fail!",
+                    "ServiceStart": "Starting '{serviceName}' service may cause the current print to fail!",
+                    "ServiceStop": "Stopping '{serviceName}' service may cause the current print to fail!"
                 },
                 "Title": {
                     "HostReboot": "Host Reboot",
@@ -825,9 +825,9 @@
             "ShowNameInList": "Show {name} in list",
             "DisplayName": "Display name",
             "Animation": "Disable Animation",
-            "HeaterProfile": "PID-Profile",
-            "UnknownHeaterProfile": "Unknown PID-Profile [{profile}] for Heater [{heater}]",
-            "HeaterProfileNotAllowed": "PID-Profile does not exist",
+            "HeaterProfile": "Heater-Profile",
+            "UnknownHeaterProfile": "Unknown Heater-Profile [{profile}] for Heater [{heater}]",
+            "HeaterProfileNotAllowed": "Heater-Profile does not exist",
             "State": "State",
             "Target": "Target",
             "TemperaturesInChart": "Temperature [°C]",

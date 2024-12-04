@@ -400,28 +400,20 @@ export default class MiscellaneousLight extends Mixins(BaseMixin) {
         const blue = Math.round(((color.blue ?? 0) / 255) * 10000) / 10000
         const white = Math.round(((color.white ?? 0) / 255) * 10000) / 10000
 
-        let clear_gcode = `SET_LED_TEMPLATE LED="${this.object.name}" TEMPLATE=""`
         let gcode = `SET_LED LED="${this.object.name}" RED=${red} GREEN=${green} BLUE=${blue}`
         if (this.existWhite) gcode += ` WHITE=${white}`
         gcode += ` SYNC=0`
 
         if (this.group && this.group.indices != '') {
-            clear_gcode += ` Index=${this.group.indices}`
             gcode += ` Index=${this.group.indices}`
         }
 
-        gcode += ` TRANSMIT=1`
-
-        this.$store.dispatch('server/addEvent', {
-            message: clear_gcode,
-            type: 'command',
-        })
+        gcode += ` DISABLE_TEMPLATE=1 TRANSMIT=1`
 
         this.$store.dispatch('server/addEvent', {
             message: gcode,
             type: 'command',
         })
-        this.$socket.emit('printer.gcode.script', { script: clear_gcode })
         this.$socket.emit('printer.gcode.script', { script: gcode })
     }
 

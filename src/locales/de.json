@@ -98,9 +98,9 @@
                     "KlipperFirmwareRestart": "Ein Neustart der Klipper Firmware wird zum Abbruch des aktuellen Druckauftrags führen!",
                     "KlipperRestart": "Ein Neustart von Klipper wird zum Abbruch des aktuellen Druckauftrags führen!",
                     "KlipperStop": "Ein Stopp von Klipper wird zum Abbruch des aktuellen Druckauftrags führen!",
-                    "ServiceRestart": "Ein Neustart dieses Dienstes kann zum Abbruch des aktuellen Druckauftrags führen!",
-                    "ServiceStart": "Ein Start dieses Dienstes kann zum Abbruch des aktuellen Druckauftrags führen!",
-                    "ServiceStop": "Ein Stopp dieses Dienstes kann zum Abbruch des aktuellen Druckauftrags führen!"
+                    "ServiceRestart": "Ein Neustart von '{serviceName}' kann zum Abbruch des aktuellen Druckauftrags führen!",
+                    "ServiceStart": "Ein Start von '{serviceName}' kann zum Abbruch des aktuellen Druckauftrags führen!",
+                    "ServiceStop": "Ein Stopp von '{serviceName}' kann zum Abbruch des aktuellen Druckauftrags führen!"
                 },
                 "Title": {
                     "HostReboot": "Host Neustart",

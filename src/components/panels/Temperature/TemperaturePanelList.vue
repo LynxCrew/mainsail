@@ -76,12 +76,22 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
             .sort(this.sortObjectName)
     }
 
-    get blockTemperatures() {
+    get mpcBlockTemperatures() {
         return this.available_sensors
             .filter((fullName: string) => {
                 if (!(fullName.toLowerCase() in (this.$store.state.printer?.configfile?.settings ?? {}))) return false
                 if (!("sensor_type" in (this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()] ?? {}))) return false
-                return this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()]["sensor_type"] == "block_temperature"
+                return this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()]["sensor_type"] == "mpc_block_temperature"
+            })
+            .sort(this.sortObjectName)
+    }
+
+    get mpcAmbientTemperatures() {
+        return this.available_sensors
+            .filter((fullName: string) => {
+                if (!(fullName.toLowerCase() in (this.$store.state.printer?.configfile?.settings ?? {}))) return false
+                if (!("sensor_type" in (this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()] ?? {}))) return false
+                return this.$store.state.printer?.configfile?.settings[fullName.toLowerCase()]["sensor_type"] == "mpc_ambient_temperature"
             })
             .sort(this.sortObjectName)
     }
@@ -140,13 +150,15 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
                 let name = splits[0]
                 if (splits.length > 1) name = splits[1]
 
-                return !name.startsWith('_') && !this.blockTemperatures.includes(fullName)
+                return !name.startsWith('_')
+                    && !this.mpcBlockTemperatures.includes(fullName)
+                    && !this.mpcAmbientTemperatures.includes(fullName)
             })
             .sort(this.sortObjectName)
     }
 
     get heaterObjects() {
-        return [...this.filteredHeaters, ...this.blockTemperatures, ...this.temperature_fans]
+        return [...this.filteredHeaters, ...this.mpcBlockTemperatures, ...this.mpcAmbientTemperatures, ...this.temperature_fans]
     }
 
     get settings() {

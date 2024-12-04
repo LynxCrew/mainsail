@@ -306,7 +306,8 @@ export default class TheTopCornerMenu extends Mixins(BaseMixin) {
 
             const actionUppercase = action.trim().charAt(0).toUpperCase() + action.trim().slice(1)
             let titleKey = 'App.TopCornerMenu.ConfirmationDialog.Title.Service' + actionUppercase
-            let descriptionKey = 'App.TopCornerMenu.ConfirmationDialog.Description.Service' + actionUppercase
+            let descriptionKey = this.$t('App.TopCornerMenu.ConfirmationDialog.Description.Service' + actionUppercase,
+                {serviceName: serviceName}).toString()
             let buttonKey = 'App.TopCornerMenu.' + actionUppercase
 
             if (serviceName === 'klipper' && ['stop', 'restart', 'firmwareRestart'].includes(action)) {
