@@ -5,70 +5,13 @@
             hide-default-footer
             class="dashboard-gcodes-table"
             sort-by="time_added"
-            mobile-breakpoint="0"
-            @current-items="setFirst">
+            mobile-breakpoint="0">
             <template #no-data>
                 <div class="text-center">{{ $t('Panels.StatusPanel.EmptyGcodes') }}</div>
             </template>
 
             <template #item="{ item }">
-                <tr
-                    :key="item.filename"
-                    v-longpress:600="(e) => showContextMenu(e, item)"
-                    class="cursor-pointer"
-                    @contextmenu="showContextMenu($event, item)"
-                    @click="showDialog(item)">
-                    <td class="pr-0 text-center" style="width: 32px">
-                        <template v-if="item.small_thumbnail">
-                            <v-tooltip
-                                top
-                                content-class="tooltip__content-opacity1"
-                                :disabled="!item.big_thumbnail"
-                                :color="bigThumbnailTooltipColor">
-                                <template #activator="{ on, attrs }">
-                                    <vue-load-image class="d-flex">
-                                        <img
-                                            slot="image"
-                                            :src="item.small_thumbnail"
-                                            :alt="item.filename"
-                                            width="32"
-                                            height="32"
-                                            v-bind="attrs"
-                                            v-on="on" />
-                                        <div slot="preloader">
-                                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                                        </div>
-                                        <div slot="error">
-                                            <v-icon>{{ mdiFile }}</v-icon>
-                                        </div>
-                                    </vue-load-image>
-                                </template>
-                                <span><img :src="item.big_thumbnail" :alt="item.filename" width="250" /></span>
-                            </v-tooltip>
-                        </template>
-                        <template v-else>
-                            <v-icon>{{ mdiFile }}</v-icon>
-                        </template>
-                    </td>
-                    <td class="pr-2">
-                        <div class="d-block text-truncate" :style="styleContentTdWidth">{{ item.filename }}</div>
-                        <div v-if="existMetadata(item)">
-                            <small>{{ getDescription(item) }}</small>
-                        </div>
-                    </td>
-                    <td>
-                        <v-tooltip v-if="item.last_status" top>
-                            <template #activator="{ on, attrs }">
-                                <span v-bind="attrs" v-on="on">
-                                    <v-icon small :color="getStatusColor(item.last_status)">
-                                        {{ getStatusIcon(item.last_status) }}
-                                    </v-icon>
-                                </span>
-                            </template>
-                            <span>{{ item.last_status.replace(/_/g, ' ') }}</span>
-                        </v-tooltip>
-                    </td>
-                </tr>
+                <status-panel-gcodefiles-entry :key="item.filename" :content-td-width="contentTdWidth" :item="item" />
             </template>
         </v-data-table>
         <resize-observer @notify="handleResize" />
@@ -236,14 +179,8 @@ import {
     mdiPinOff,
 } from '@mdi/js'
 import Panel from '@/components/ui/Panel.vue'
-import { defaultBigThumbnailBackground } from '@/store/variables'
-import AddBatchToQueueDialog from '@/components/dialogs/AddBatchToQueueDialog.vue'
-
-interface dialogRenameObject {
-    show: boolean
-    newName: string
-    item: FileStateGcodefile
-}
+import StatusPanelGcodefilesEntry from '@/components/panels/Status/GcodefilesEntry.vue'
+import Vue from 'vue'
 
 interface dialogMoveObject {
     show: boolean
@@ -258,11 +195,7 @@ interface dialogAddBatchToQueue {
 }
 
 @Component({
-    components: {
-        Panel,
-        StartPrintDialog,
-        AddBatchToQueueDialog,
-    },
+    components: { Panel, StatusPanelGcodefilesEntry },
 })
 export default class StatusPanelGcodefiles extends Mixins(BaseMixin, ControlMixin) {
     mdiFile = mdiFile
@@ -307,18 +240,12 @@ export default class StatusPanelGcodefiles extends Mixins(BaseMixin, ControlMixi
         inputFieldMoveFile: HTMLInputElement
     }
 
-    private contextMenu = {
-        shown: false,
-        touchTimer: undefined,
-        x: 0,
-        y: 0,
-        item: { ...this.dialogFile },
+    get filesLimit() {
+        return this.$store.state.gui.uiSettings.dashboardFilesLimit ?? 5
     }
 
-    private dialogRenameFile: dialogRenameObject = {
-        show: false,
-        newName: '',
-        item: { ...this.dialogFile },
+    get filesFilter() {
+        return this.$store.state.gui.uiSettings.dashboardFilesFilter ?? []
     }
 
     private dialogMoveFile: dialogMoveObject = {
@@ -340,12 +267,27 @@ export default class StatusPanelGcodefiles extends Mixins(BaseMixin, ControlMixi
 
     get gcodeFiles() {
         let gcodes = this.$store.getters['files/getAllGcodes'] ?? []
+
+        if (this.filesFilter.length > 0 && this.filesFilter.length < 3) {
+            gcodes = gcodes.filter((file: FileStateGcodefile) => {
+                if (this.filesFilter.includes('new') && file.last_status === null) return true
+                if (this.filesFilter.includes('completed') && file.last_status === 'completed') return true
+                if (
+                    this.filesFilter.includes('failed') &&
+                    file.last_status !== null &&
+                    file.last_status !== 'completed'
+                )
+                    return true
+
+                return false
+            })
+        }
+
         gcodes = gcodes
-            .slice()
             .sort((a: FileStateGcodefile, b: FileStateGcodefile) => {
                 return b.modified.getTime() - a.modified.getTime()
             })
-            .slice(0, 5)
+            .slice(0, this.filesLimit)
 
         const requestItems = gcodes.filter(
             (file: FileStateGcodefile) => !file.metadataRequested && !file.metadataPulled
@@ -586,7 +528,7 @@ export default class StatusPanelGcodefiles extends Mixins(BaseMixin, ControlMixi
     }
 
     calcContentTdWidth() {
-        this.contentTdWidth = this.$refs.filesGcodeCard?.$el?.clientWidth - 48 - 48 - 32
+        this.contentTdWidth = this.$refs.filesGcodeCard.$el.clientWidth - 48 - 48 - 32
     }
 
     handleResize() {
