@@ -197,7 +197,6 @@ export default class StatusPanel extends Mixins(BaseMixin) {
     mdiAlertOutline = mdiAlertOutline
     mdiCloseCircle = mdiCloseCircle
     mdiDotsVertical = mdiDotsVertical
-    mdiAlertOutline = mdiAlertOutline
     mdiPin = mdiPin
     mdiFile = mdiFile
     mdiFormatListCheckbox = mdiFormatListCheckbox

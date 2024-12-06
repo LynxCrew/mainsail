@@ -179,6 +179,13 @@ import {
     mdiPinOff,
 } from '@mdi/js'
 import Panel from '@/components/ui/Panel.vue'
+import { defaultBigThumbnailBackground } from '@/store/variables'
+import AddBatchToQueueDialog from '@/components/dialogs/AddBatchToQueueDialog.vue'
+interface dialogRenameObject {
+    show: boolean
+    newName: string
+    item: FileStateGcodefile
+}
 import StatusPanelGcodefilesEntry from '@/components/panels/Status/GcodefilesEntry.vue'
 import Vue from 'vue'
 
@@ -195,7 +202,7 @@ interface dialogAddBatchToQueue {
 }
 
 @Component({
-    components: { Panel, StatusPanelGcodefilesEntry },
+    components: { Panel, StatusPanelGcodefilesEntry, AddBatchToQueueDialog },
 })
 export default class StatusPanelGcodefiles extends Mixins(BaseMixin, ControlMixin) {
     mdiFile = mdiFile
@@ -238,6 +245,20 @@ export default class StatusPanelGcodefiles extends Mixins(BaseMixin, ControlMixi
         filesGcodeCard: any
         inputFieldRenameFile: HTMLInputElement
         inputFieldMoveFile: HTMLInputElement
+    }
+
+    private contextMenu = {
+        shown: false,
+        touchTimer: undefined,
+        x: 0,
+        y: 0,
+        item: {...this.dialogFile},
+    }
+
+    private dialogRenameFile: dialogRenameObject = {
+        show: false,
+        newName: '',
+        item: {...this.dialogFile},
     }
 
     get filesLimit() {
