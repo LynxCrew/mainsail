@@ -35,6 +35,10 @@
             <template v-else>
                 <v-icon>{{ mdiFile }}</v-icon>
             </template>
+
+            <span v-if="item.isPinned" class="pin">
+                <v-icon>{{ mdiPin }}</v-icon>
+            </span>
         </td>
         <td class="pr-2">
             <div class="d-block text-truncate" :style="styleContentTdWidth">{{ item.filename }}</div>
@@ -52,6 +56,14 @@
         </td>
         <v-menu v-model="contextMenuShow" :position-x="contextMenuX" :position-y="contextMenuY" absolute offset-y>
             <v-list>
+                <v-list-item v-if="!item.isPinned" @click="pinFile(item)">
+                    <v-icon class="mr-1">{{ mdiPin }}</v-icon>
+                    {{ $t('Files.Pin') }}
+                </v-list-item>
+                <v-list-item v-else @click="unPinFile(item)">
+                    <v-icon class="mr-1">{{ mdiPinOff }}</v-icon>
+                    {{ $t('Files.Unpin') }}
+                </v-list-item>
                 <v-list-item :disabled="printerIsPrinting || !klipperReadyForGui" @click="showPrintDialog = true">
                     <v-icon class="mr-1">{{ mdiPlay }}</v-icon>
                     {{ $t('Files.PrintStart') }}
@@ -156,7 +168,7 @@ import Component from 'vue-class-component'
 import { Mixins, Prop } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import ControlMixin from '@/components/mixins/control'
-import { FileStateGcodefile } from '@/store/files/types'
+import { FileStateFile, FileStateGcodefile } from '@/store/files/types'
 import StartPrintDialog from '@/components/dialogs/StartPrintDialog.vue'
 import {
     mdiFile,
@@ -169,6 +181,8 @@ import {
     mdiRenameBox,
     mdiDelete,
     mdiCloseThick,
+    mdiPin,
+    mdiPinOff,
 } from '@mdi/js'
 import Panel from '@/components/ui/Panel.vue'
 import { defaultBigThumbnailBackground } from '@/store/variables'
@@ -193,6 +207,8 @@ export default class StatusPanelGcodefilesEntry extends Mixins(BaseMixin, Contro
     mdiRenameBox = mdiRenameBox
     mdiDelete = mdiDelete
     mdiCloseThick = mdiCloseThick
+    mdiPin = mdiPin
+    mdiPinOff = mdiPinOff
 
     @Prop({ type: Object, required: true }) item!: FileStateGcodefile
     @Prop({ type: Number, required: true }) contentTdWidth!: number
@@ -284,6 +300,14 @@ export default class StatusPanelGcodefilesEntry extends Mixins(BaseMixin, Contro
         this.$nextTick(() => {
             this.contextMenuShow = true
         })
+    }
+
+    pinFile(item: FileStateFile) {
+        this.$store.dispatch('gui/addPinnedFile', item.filename)
+    }
+
+    unPinFile(item: FileStateFile) {
+        this.$store.dispatch('gui/removePinnedFile', item.filename)
     }
 
     addToQueue() {
