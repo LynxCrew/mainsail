@@ -71,6 +71,10 @@
                         class="codemirror"
                         :class="{ withSidebar: fileStructureSidebar }"
                         @lineChange="lineChanges" />
+                    <v-divider
+                        v-if="fileStructureSidebar"
+                        vertical
+                        class="_divider secondary" />
                     <div v-if="fileStructureSidebar" class="d-none d-md-flex structure-sidebar">
                         <v-treeview
                             activatable
@@ -83,10 +87,25 @@
                             @update:active="activeChanges">
                             <template #label="{ item }">
                                 <div
+                                    v-if="item.name.split(' ').length == 1"
                                     class="cursor-pointer _structure-sidebar-item"
-                                    :class="item.type == 'item' ? 'ͼp' : 'ͼt'"
+                                    :class="item.type == 'item' ? '_structure-sidebar-item-sub-section' : '_structure-sidebar-item-section'"
                                     @click="activeChangesItemClick">
-                                    {{ item.name }}
+                                    {{ item.name.split(" ")[0] }}
+                                </div>
+                                <div
+                                    v-else
+                                    class="cursor-pointer _structure-sidebar-item"
+                                    :class="item.type == 'item' ? '_structure-sidebar-item-sub-section' : '_structure-sidebar-item-section-name'"
+                                    @click="activeChangesItemClick">
+                                    <span
+                                        :class="item.type == 'item' ? '_structure-sidebar-item-sub-section' : '_structure-sidebar-item-section'">
+                                        {{ item.name.split(" ")[0] }}
+                                    </span>
+                                    <span
+                                    :class="item.type == 'item' ? '_structure-sidebar-item-sub-section' : '_structure-sidebar-item-section-name'">
+                                        {{ item.name.split(" ")[1] }}
+                                    </span>
                                 </div>
                             </template>
                             <template v-if="restartServiceName === 'klipper'" #append="{ item }">
@@ -367,10 +386,10 @@ export default class TheEditor extends Mixins(BaseMixin) {
     get klipperConfigReference(): string {
         const currentLanguage = this.currentLanguage
         const translations = availableKlipperConfigReferenceTranslations
-        let url = 'https://www.klipper3d.org/Config_Reference.html'
+        let url = 'https://docs.kalico.gg/Config_Reference.html'
 
         if (translations.includes(currentLanguage)) {
-            url = `https://www.klipper3d.org/${currentLanguage}/Config_Reference.html`
+            url = `https://docs.kalico.gg/${currentLanguage}/Config_Reference.html`
         }
 
         return url
@@ -568,13 +587,26 @@ export default class TheEditor extends Mixins(BaseMixin) {
 }
 
 .structure-sidebar {
-    width: 300px;
+    width: 304px;
     overflow-y: auto;
 }
 ._structure-sidebar-item {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+._structure-sidebar-item-section {
+    color: #569cd6;
+}
+._structure-sidebar-item-section-name {
+    color: #c586c0;
+}
+._structure-sidebar-item-sub-section {
+    color: #9cdcfe;
+}
+._divider {
+    padding-left: 4px;
+    border-width: 0;
 }
 
 ::v-deep .v-treeview-node__level + .v-treeview-node__level {

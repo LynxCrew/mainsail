@@ -134,7 +134,8 @@ export const hiddenDirectories = ['.git']
  * List of available Klipper config reference translations
  * https://www.klipper3d.org/Config_Reference.html
  */
-export const availableKlipperConfigReferenceTranslations = ['it', 'hu', 'zh']
+//export const availableKlipperConfigReferenceTranslations = ['it', 'hu', 'zh']
+export const availableKlipperConfigReferenceTranslations: string[] = []
 
 /*
  * List of all downloadable logfiles

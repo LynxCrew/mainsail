@@ -66,6 +66,7 @@ body {
 
 .editor-dialog .cm-editor {
     height: calc(100vh - 48px);
+    outline: none
 }
 
 ::-webkit-scrollbar {

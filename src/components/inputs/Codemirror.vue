@@ -118,7 +118,10 @@ export default class Codemirror extends Mixins(BaseMixin) {
 
         this.cminstance?.dispatch({
             selection: { head: l.from, anchor: l.to },
-            scrollIntoView: true,
+            effects: [
+                EditorView.scrollIntoView(l.to,
+                    {y: "start", yMargin: 2, })
+            ]
         })
     }
 }
