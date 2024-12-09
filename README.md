@@ -1,3 +1,6 @@
+Modified Mainsail that is utilizing the pin gcode files pr from mainsail itself https://github.com/mainsail-crew/mainsail/pull/1684 and the improved macro button code https://github.com/mainsail-crew/mainsail/pull/1401
+Other than that there are a lot of modifications I did myself in there
+
 <p align="center">
   <a>
     <img src="https://raw.githubusercontent.com/mainsail-crew/docs/master/assets/img/logo.png" alt='Mainsail logo' height="152">
