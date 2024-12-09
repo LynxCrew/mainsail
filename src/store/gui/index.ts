@@ -198,6 +198,10 @@ export const getDefaultState = (): GuiState => {
             hideDetectionLengthOnDisabled: true,
             showRunoutDistance: true,
             hideRunoutDistanceOnDisabled: true,
+            dashboardFilesLimit: 5,
+            dashboardFilesFilter: ['new', 'failed', 'completed'],
+            dashboardHistoryLimit: 5,
+            hideOtherInstances: false,
         },
         view: {
             blockFileUpload: false,

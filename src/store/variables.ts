@@ -22,7 +22,7 @@ export const themeDir = '.theme'
 export const datasetInterval = 1000
 export const datasetTypes = ['temperature', 'target', 'power', 'speed']
 export const datasetTypesInPercents = ['power', 'speed']
-export const additionalSensors = ['bme280', 'aht10', 'htu21d']
+export const additionalSensors = ['aht10', 'bme280', 'htu21d', 'sgp40']
 
 /*
  * List of valid gcode file extensions
@@ -134,7 +134,8 @@ export const hiddenDirectories = ['.git']
  * List of available Klipper config reference translations
  * https://www.klipper3d.org/Config_Reference.html
  */
-export const availableKlipperConfigReferenceTranslations = ['it', 'hu', 'zh']
+//export const availableKlipperConfigReferenceTranslations = ['it', 'hu', 'zh']
+export const availableKlipperConfigReferenceTranslations: string[] = []
 
 /*
  * List of all downloadable logfiles
@@ -183,6 +184,7 @@ export const themes: Theme[] = [
         colorLogo: '#FF0000',
         logo: { show: true, light: false },
         sidebarBackground: { show: true, light: false },
+        css: true,
     },
     {
         name: 'prusa',

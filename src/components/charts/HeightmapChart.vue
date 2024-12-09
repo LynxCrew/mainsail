@@ -51,7 +51,6 @@ export default class HeightmapChart extends Mixins(BaseMixin, BedmeshMixin, Them
 
     @Ref('heightmap') heightmap!: any
 
-
     get chart(): ECharts | null {
         return this.heightmap?.chart ?? null
     }
@@ -391,6 +390,7 @@ export default class HeightmapChart extends Mixins(BaseMixin, BedmeshMixin, Them
 
     get defaultOrientation() {
         const orientation = this.$store.state.gui.heightmap.defaultOrientation ?? 'rightFront'
+
         switch (orientation) {
             case 'leftFront':
                 return { alpha: 25, beta: -40 }
