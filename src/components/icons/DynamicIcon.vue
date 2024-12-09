@@ -33,7 +33,7 @@ import Component from "vue-class-component";
 @Component({
     components: {InlineSvg,}
 })
-export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
+export default class DynamicIcon extends Mixins(BaseMixin) {
     @Prop({ type: String, required: true }) readonly name!: String
     @Prop({ type: String, default: undefined }) readonly defaultSource!: String
     @Prop({ type: String, default: mdiThermometer }) readonly defaultIcon!: String

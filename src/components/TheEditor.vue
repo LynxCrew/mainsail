@@ -61,7 +61,8 @@
                         <v-icon>{{ mdiCloseThick }}</v-icon>
                     </v-btn>
                 </template>
-                <v-card-text class="pa-0 d-flex">
+                <v-card-text class="pa-0"
+                             :class="this.windowWidth > 960 ? 'd-flex' : ''">
                     <codemirror-async
                         v-if="show"
                         ref="editor"
@@ -72,10 +73,10 @@
                         :class="{ withSidebar: fileStructureSidebar }"
                         @lineChange="lineChanges" />
                     <v-divider
-                        v-if="fileStructureSidebar"
+                        v-if="fileStructureSidebar && this.windowWidth > 960"
                         vertical
                         class="_divider secondary" />
-                    <div v-if="fileStructureSidebar" class="d-none d-md-flex structure-sidebar">
+                    <div v-if="fileStructureSidebar && this.windowWidth > 960" class="d-none d-md-flex structure-sidebar">
                         <v-treeview
                             activatable
                             dense
@@ -222,6 +223,7 @@ export default class TheEditor extends Mixins(BaseMixin) {
     structureActive: number[] = []
     structureOpen: number[] = []
     structureActiveChangedBySidebar: boolean = false
+    windowWidth: number = 0
 
     formatFilesize = formatFilesize
 
@@ -491,6 +493,7 @@ export default class TheEditor extends Mixins(BaseMixin) {
         }
 
         this.editor?.gotoLine(activeItems[0])
+        this.structureActive = []
     }
 
     lineChanges(line: number) {
@@ -525,6 +528,21 @@ export default class TheEditor extends Mixins(BaseMixin) {
 
             window.removeEventListener('beforeunload', windowBeforeUnloadFunction)
         }
+    }
+
+    mounted() {
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+            this.onResize()
+        })
+    }
+
+    beforeDestroy() {
+        window.removeEventListener('resize', this.onResize);
+    }
+
+    onResize() {
+        this.windowWidth = window.innerWidth
     }
 }
 </script>
@@ -582,7 +600,7 @@ export default class TheEditor extends Mixins(BaseMixin) {
         width: 100%;
     }
     .codemirror.withSidebar {
-        width: calc(100% - 300px);
+        width: calc(100% - 304px);
     }
 }
 
@@ -590,20 +608,25 @@ export default class TheEditor extends Mixins(BaseMixin) {
     width: 304px;
     overflow-y: auto;
 }
+
 ._structure-sidebar-item {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
+
 ._structure-sidebar-item-section {
     color: #569cd6;
 }
+
 ._structure-sidebar-item-section-name {
     color: #c586c0;
 }
+
 ._structure-sidebar-item-sub-section {
     color: #9cdcfe;
 }
+
 ._divider {
     padding-left: 4px;
     border-width: 0;
