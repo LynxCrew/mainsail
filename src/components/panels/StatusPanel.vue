@@ -88,20 +88,20 @@
                 </v-container>
                 <v-divider class="mt-0 mb-0" />
             </template>
-            <v-tabs v-model="activeTab" fixed-tabs>
+            <v-tabs v-model="activeTab" fixed-tabs show-arrows>
                 <v-tab v-if="current_filename" href="#status">
                     <v-icon>{{ mdiSpeedometer }}</v-icon>
                 </v-tab>
                 <v-tab v-if="displayFilesTab" href="#files">
                     <v-icon>{{ mdiFileDocumentMultipleOutline }}</v-icon>
                 </v-tab>
-                <v-tab v-if="$store.state.gui.view.gcodefiles.pinnedFiles?.length" href="#pinnedfiles">
+                <v-tab v-if="displayPinnedTab" href="#pinnedfiles">
                     <v-icon>{{ mdiPin }}</v-icon>
                 </v-tab>
                 <v-tab v-if="displayHistoryTab" href="#history">
                     <v-icon>{{ mdiHistory }}</v-icon>
                 </v-tab>
-                <v-tab href="#jobqueue">
+                <v-tab v-if="displayQueueTab" href="#jobqueue">
                     <v-badge :color="jobQueueBadgeColor" :content="jobsCount.toString()" :inline="true">
                         <v-icon color="disabled">{{ mdiTrayFull }}</v-icon>
                     </v-badge>
@@ -115,13 +115,13 @@
                 <v-tab-item v-if="displayFilesTab" value="files">
                     <status-panel-gcodefiles />
                 </v-tab-item>
-                <v-tab-item v-if="$store.state.gui.view.gcodefiles.pinnedFiles?.length" value="pinnedfiles">
+                <v-tab-item v-if="displayPinnedTab" value="pinnedfiles">
                     <status-panel-pinned-gcodefiles />
                 </v-tab-item>
                 <v-tab-item v-if="displayHistoryTab" value="history">
                     <status-panel-history />
                 </v-tab-item>
-                <v-tab-item value="jobqueue">
+                <v-tab-item v-if="displayQueueTab" value="jobqueue">
                     <status-panel-jobqueue />
                 </v-tab-item>
             </v-tabs-items>
@@ -408,8 +408,21 @@ export default class StatusPanel extends Mixins(BaseMixin) {
         return count > 0
     }
 
+    get displayPinnedTab() {
+        const count = this.$store.state.gui.view.gcodefiles.pinnedFiles?.length
+
+        return count > 0
+    }
+
     get displayHistoryTab() {
         const count = this.$store.state.gui.uiSettings.dashboardHistoryLimit ?? 5
+
+        return count > 0
+    }
+
+    get displayQueueTab() {
+        const jobs = this.$store.getters['server/jobQueue/getJobs'] ?? []
+        const count = jobs.length
 
         return count > 0
     }
