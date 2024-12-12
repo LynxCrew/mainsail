@@ -108,7 +108,7 @@
         <start-print-dialog
             :bool="showPrintDialog"
             :file="item"
-            :current-path="pathOfFile"
+            current-path=""
             @closeDialog="showPrintDialog = false" />
         <add-batch-to-queue-dialog
             :is-visible="showAddBatchToQueueDialog"
