@@ -195,7 +195,7 @@ import { Component, Mixins, Ref, Watch } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { capitalize, formatFilesize, windowBeforeUnloadFunction } from '@/plugins/helpers'
 import Panel from '@/components/ui/Panel.vue'
-import { availableKlipperConfigReferenceTranslations } from '@/store/variables'
+import { klipperRepos } from '@/store/variables'
 import CodemirrorAsync from '@/components/inputs/CodemirrorAsync'
 import {
     mdiClose,
@@ -387,12 +387,15 @@ export default class TheEditor extends Mixins(BaseMixin) {
 
     get klipperConfigReference(): string {
         const currentLanguage = this.currentLanguage
-        const translations = availableKlipperConfigReferenceTranslations
-        let url = 'https://docs.kalico.gg/Config_Reference.html'
+        const klipperRepo = klipperRepos[this.klipperAppName] ?? klipperRepos.Klipper
 
-        if (translations.includes(currentLanguage)) {
-            url = `https://docs.kalico.gg/${currentLanguage}/Config_Reference.html`
+
+        let url = klipperRepo.url
+        if (klipperRepo.docsLanguages?.includes(currentLanguage)) {
+            url += `${currentLanguage}/`
         }
+
+        url += 'Config_Reference.html'
 
         return url
     }
