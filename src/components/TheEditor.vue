@@ -116,7 +116,7 @@
                                     small
                                     plain
                                     color="grey darken-2"
-                                    :href="klipperConfigReference + '#' + item.name.split(' ')[0]"
+                                    :href="configSectionReference(item.name.split(' ')[0])"
                                     target="_blank">
                                     <v-icon small class="mr-1">{{ mdiHelpCircle }}</v-icon>
                                 </v-btn>
@@ -401,7 +401,7 @@ export default class TheEditor extends Mixins(BaseMixin) {
     }
 
     get configFileStructure() {
-        if (!['conf', 'cfg'].includes(this.fileExtension)) {
+        if (!['conf', 'ks', 'include', 'cfg'].includes(this.fileExtension)) {
             this.fileStructureSidebar = false
             return null
         }
@@ -440,6 +440,44 @@ export default class TheEditor extends Mixins(BaseMixin) {
 
         this.fileStructureSidebar = true
         return structure
+    }
+
+    configSectionReference(itemName: string): string {
+        switch (itemName) {
+            case 'beacon': {
+                return 'https://docs.beacon3d.com/config/#beacon'
+            }
+            case 'shaketune': {
+                return 'https://github.com/LynxCrew/klippain-shaketune'
+            }
+            case 'autotune_tmc': {
+                return 'https://github.com/LynxCrew/klipper_tmc_autotune'
+            }
+            case 'state_notify': {
+                return 'https://github.com/LynxCrew/voron-klipper-extensions/tree/master/state_notify'
+            }
+            case 'led_interpolate': {
+                return 'https://github.com/LynxCrew/voron-klipper-extensions/tree/master/state_notify'
+            }
+            case 'loop_macro': {
+                return 'https://github.com/LynxCrew/voron-klipper-extensions/tree/master/loop_macro'
+            }
+            case 'settling_probe': {
+                return 'https://github.com/LynxCrew/voron-klipper-extensions/tree/master/settling_probe'
+            }
+            case 'temp_tracker': {
+                return 'https://github.com/LynxCrew/voron-klipper-extensions/tree/master/temp_tracker'
+            }
+            case 'led_effect': {
+                return 'https://github.com/LynxCrew/klipper-led_effect'
+            }
+            case 'mcu_flasher': {
+                return 'https://github.com/LynxCrew/moonraker-mcu-flasher'
+            }
+            default: {
+                return this.klipperConfigReference + '#' + itemName
+            }
+        }
     }
 
     cancelDownload() {
