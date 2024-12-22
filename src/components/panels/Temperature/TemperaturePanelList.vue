@@ -136,6 +136,8 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
             // hide MCU & Host sensors, if the function is enabled
             if (this.hideMcuHostSensors && this.checkMcuHostSensor(fullName)) return false
 
+            if (this.mcuSensorDisconnected(fullName)) return false
+
             return !this.mpcBlockTemperatures.includes(fullName)
                 && !this.mpcAmbientTemperatures.includes(fullName)
         })
@@ -158,6 +160,17 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
         const sensor_type = settingsObject.sensor_type ?? ''
 
         return ['temperature_mcu', 'temperature_host'].includes(sensor_type)
+    }
+
+    mcuSensorDisconnected(fullName: string) {
+        const settingsObject = this.settings[fullName.toLowerCase()] ?? {}
+        const sensor_type = settingsObject.sensor_type ?? ''
+
+        if (sensor_type != "temperature_mcu") return false
+        if (!(("mcu " + settingsObject.sensor_mcu) in this.$store.state.printer)) return false
+
+        const mcu = this.$store.state.printer["mcu " + settingsObject.sensor_mcu]
+        return mcu.non_critical_disconnected ?? false
     }
 
     filterNamesAndSort(fullNames: string[]) {

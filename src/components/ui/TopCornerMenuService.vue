@@ -20,6 +20,14 @@
             </v-btn>
         </v-list-item-action>
         <confirmation-dialog
+            :show="showStartDialog"
+            :title="dialogStartTitle"
+            :text="dialogStartDescription"
+            :action-button-text="$t('App.TopCornerMenu.Start')"
+            :cancel-button-text="$t('App.TopCornerMenu.Cancel')"
+            @action="serviceStart"
+            @close="showStartDialog = false" />
+        <confirmation-dialog
             :show="showRestartDialog"
             :title="dialogRestartTitle"
             :text="dialogRestartDescription"
@@ -55,6 +63,7 @@ export default class TopCornerMenuService extends Mixins(BaseMixin, ServiceMixin
 
     showRestartDialog = false
     showStopDialog = false
+    showStartDialog = false
 
     get name() {
         if (this.hideOtherInstances && this.service === this.klipperInstance) return 'Klipper'
@@ -79,6 +88,10 @@ export default class TopCornerMenuService extends Mixins(BaseMixin, ServiceMixin
         return null
     }
 
+    get dialogStartTitle() {
+        return this.$t('App.TopCornerMenu.ConfirmationDialog.Title.ServiceStart')
+    }
+
     get dialogRestartTitle() {
         if (this.service === this.klipperInstance)
             return this.$t('App.TopCornerMenu.ConfirmationDialog.Title.KlipperRestart')
@@ -90,18 +103,22 @@ export default class TopCornerMenuService extends Mixins(BaseMixin, ServiceMixin
         return this.$t('App.TopCornerMenu.ConfirmationDialog.Title.ServiceStop')
     }
 
+    get dialogStartDescription() {
+        return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.ServiceStart', {serviceName: this.service}).toString()
+    }
+
     get dialogRestartDescription() {
         if (this.service === this.klipperInstance)
             return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.KlipperRestart')
 
-        return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.ServiceRestart')
+        return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.ServiceRestart', {serviceName: this.service}).toString()
     }
 
     get dialogStopDescription() {
         if (this.service === this.klipperInstance)
             return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.KlipperStop')
 
-        return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.ServiceStop')
+        return this.$t('App.TopCornerMenu.ConfirmationDialog.Description.ServiceStop', {serviceName: this.service}).toString()
     }
 
     get disableStopButton() {
@@ -113,8 +130,12 @@ export default class TopCornerMenuService extends Mixins(BaseMixin, ServiceMixin
     }
 
     clickStart() {
-        this.$socket.emit('machine.services.start', { service: this.service })
-        this.closeMenu()
+        if (this.printerIsPrinting) {
+            this.showStartDialog = true
+            return
+        }
+
+        this.serviceStart()
     }
 
     clickRestart() {
@@ -133,6 +154,12 @@ export default class TopCornerMenuService extends Mixins(BaseMixin, ServiceMixin
         }
 
         this.serviceStop()
+    }
+
+    serviceStart() {
+        this.showStartDialog = false
+        this.$socket.emit('machine.services.start', { service: this.service })
+        this.closeMenu()
     }
 
     serviceRestart() {
