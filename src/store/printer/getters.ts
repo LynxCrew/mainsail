@@ -885,9 +885,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
     },
 
     existsZtilt: (state) => {
-        if (!state.configfile?.settings) return false
+        if (!state.gcode) return false
 
-        return 'z_tilt' in state.configfile.settings || 'z_tilt_ng' in state.configfile.settings
+        return 'Z_TILT_ADJUST' in state.gcode.commands
     },
 
     existsBedTilt: (state) => {

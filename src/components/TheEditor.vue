@@ -389,7 +389,6 @@ export default class TheEditor extends Mixins(BaseMixin) {
         const currentLanguage = this.currentLanguage
         const klipperRepo = klipperRepos[this.klipperAppName] ?? klipperRepos.Klipper
 
-
         let url = klipperRepo.url
         if (klipperRepo.docsLanguages?.includes(currentLanguage)) {
             url += `${currentLanguage}/`
