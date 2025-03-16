@@ -85,6 +85,7 @@
                             :item-key="treeviewItemKeyProp"
                             :items="configFileStructure"
                             class="w-100"
+                            color="highlight"
                             @update:active="activeChanges">
                             <template #label="{ item }">
                                 <div

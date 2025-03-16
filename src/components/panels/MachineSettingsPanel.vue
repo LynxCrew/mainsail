@@ -201,11 +201,11 @@ export default class MachineSettingsPanel extends Mixins(BaseMixin) {
     }
 
     get x_velocity(): number {
-        return Math.trunc(this.$store.state.printer?.toolhead?.max_x_velocity ?? 300)
+        return Math.trunc(this.toolhead.max_x_velocity ?? 300)
     }
 
     get y_velocity(): number {
-        return Math.trunc(this.$store.state.printer?.toolhead?.max_y_velocity ?? 300)
+        return Math.trunc(this.toolhead.max_y_velocity ?? 300)
     }
 
     get accel(): number {
@@ -213,11 +213,11 @@ export default class MachineSettingsPanel extends Mixins(BaseMixin) {
     }
 
     get x_accel(): number {
-        return Math.trunc(this.$store.state.printer?.toolhead?.max_x_accel ?? 3000)
+        return Math.trunc(this.toolhead.max_x_accel ?? 3000)
     }
 
     get y_accel(): number {
-        return Math.trunc(this.$store.state.printer?.toolhead?.max_y_accel ?? 3000)
+        return Math.trunc(this.toolhead.max_y_accel ?? 3000)
     }
 
     get independent_accel(): boolean {
@@ -250,11 +250,11 @@ export default class MachineSettingsPanel extends Mixins(BaseMixin) {
     }
 
     get defaultXVelocity(): number {
-        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_x_velocity ?? this.defaultVelocity)
+        return Math.trunc(this.configPrinter.max_x_velocity ?? this.defaultVelocity)
     }
 
     get defaultYVelocity(): number {
-        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_y_velocity ?? this.defaultVelocity)
+        return Math.trunc(this.configPrinter.max_y_velocity ?? this.defaultVelocity)
     }
 
     get defaultAccel(): number {
@@ -262,11 +262,11 @@ export default class MachineSettingsPanel extends Mixins(BaseMixin) {
     }
 
     get defaultXAccel(): number {
-        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_x_accel ?? this.defaultAccel)
+        return Math.trunc(this.configPrinter.max_x_accel ?? this.defaultAccel)
     }
 
     get defaultYAccel(): number {
-        return Math.trunc(this.$store.state.printer?.configfile?.settings?.printer?.max_y_accel ?? this.defaultAccel)
+        return Math.trunc(this.configPrinter.max_y_accel ?? this.defaultAccel)
     }
 
     get defaultAccelToDecel(): number {

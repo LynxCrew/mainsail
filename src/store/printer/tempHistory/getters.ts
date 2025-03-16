@@ -6,6 +6,7 @@ import {
     PrinterTempHistoryStateSourceEntry,
 } from '@/store/printer/tempHistory/types'
 import { RootState } from '@/store/types'
+import {d} from "@codemirror/legacy-modes/mode/d";
 
 export const getters: GetterTree<PrinterTempHistoryState, RootState> = {
     getDatasetColor: (_, getters) => (name: string) => {
@@ -130,6 +131,24 @@ export const getters: GetterTree<PrinterTempHistoryState, RootState> = {
             // add default value for this datasetType; all percent series are hidden per default
             selected[serie.name] = !datasetTypesInPercents.includes(datasetType)
         })
+
+        Object.keys(selected)
+            .filter((seriesName) => {
+                const settings = rootState.printer?.configfile?.settings ?? {}
+                const datasetName = seriesName.slice(0, seriesName.lastIndexOf('-'))
+                const settingsObject = settings[datasetName.toLowerCase()]
+                const sensor_type = settingsObject.sensor_type ?? ''
+
+                if (rootState.printer == undefined) return false
+                if (sensor_type != "temperature_mcu") return false
+                if (!(("mcu " + settingsObject.sensor_mcu) in rootState.printer)) return false
+
+                const mcu = rootState.printer["mcu " + settingsObject.sensor_mcu]
+                return mcu.non_critical_disconnected ?? false
+            })
+            .forEach((seriesName) => {
+                selected[seriesName] = false
+            })
 
         // hide MCU & Host sensors, if the option is set to true
         const hideMcuHostSensors = rootState.gui?.view?.tempchart?.hideMcuHostSensors ?? false
