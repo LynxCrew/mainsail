@@ -1,7 +1,7 @@
 <template>
-    <tr>
+    <tr v-longpress:600="(e) => openContextMenu(e)" @contextmenu.prevent="openContextMenu($event)">
         <td class="icon">
-            <template @click="showEditDialog = true">
+            <template @click="openEditDialog">
                 <DynamicIcon
                     :name="name"
                     :default-source="iconSource"
@@ -10,11 +10,11 @@
                     :class="iconClass"
                     tabindex="-1"
                     enable-click
-                    @click="showEditDialog = true"/>
+                    @click="openEditDialog"/>
             </template>
         </td>
         <td class="name">
-            <span class="cursor-pointer" @click="showEditDialog = true">{{ formatName }}</span>
+            <span class="cursor-pointer" @click="openEditDialog">{{ formatName }}</span>
         </td>
         <td v-if="!isResponsiveMobile && !hideHeaterProfiles" class="heater-profile">
             <form @submit.prevent="setHeaterProfile"
@@ -91,7 +91,19 @@
             :icon="icon"
             :icon-color="iconColor"
             :color="color"
-            @close-dialog="showEditDialog = false"/>
+            @close-dialog="showEditDialog = false" />
+        <v-menu v-model="showContextMenu" :position-x="contextMenuX" :position-y="contextMenuY" absolute offset-y>
+            <v-list>
+                <v-list-item v-if="isHeater" :disabled="!isHeaterActive" @click="turnOffHeater">
+                    <v-icon left>{{ mdiSnowflake }}</v-icon>
+                    {{ $t('Panels.TemperaturePanel.TurnHeaterOff') }}
+                </v-list-item>
+                <v-list-item @click="openEditDialog">
+                    <v-icon left>{{ mdiCog }}</v-icon>
+                    {{ $t('Panels.TemperaturePanel.Settings') }}
+                </v-list-item>
+            </v-list>
+        </v-menu>
     </tr>
 </template>
 
@@ -101,6 +113,7 @@ import {Mixins, Prop, Watch} from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { convertName } from '@/plugins/helpers'
 import {
+    mdiCog,
     mdiFan,
     mdiFire,
     mdiMemory,
@@ -108,6 +121,7 @@ import {
     mdiPrinter3dNozzleAlert,
     mdiRadiator,
     mdiRadiatorDisabled,
+    mdiSnowflake,
     mdiThermometer,
     mdiRefresh,
     mdiPrinter3dNozzleOff,
@@ -120,16 +134,23 @@ import {
     opacityStepperInactive,
 } from '@/store/variables'
 import DynamicIcon from "@/components/icons/DynamicIcon.vue";
+import { CLOSE_TEMPERATURE_CONTEXT_MENU, EventBus } from '@/plugins/eventBus'
 
 @Component({
     components: {DynamicIcon},
 })
 export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     mdiRefresh = mdiRefresh
+    mdiCog = mdiCog
+    mdiSnowflake = mdiSnowflake
 
     @Prop({ type: String, required: true }) readonly objectName!: string
     @Prop({ type: Boolean, required: true }) readonly isResponsiveMobile!: boolean
 
+    
+    showContextMenu = false
+    contextMenuX = 0
+    contextMenuY = 0
     showEditDialog = false
     focused = false
     heaterProfile = this.printerObject.heater_profile ?? null
@@ -424,6 +445,49 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
 
     get hideHeaterProfiles(): boolean {
         return this.$store.state.gui.view.tempchart.hideHeaterProfiles ?? false
+    }
+
+    get availableHeaters() {
+        return this.$store.state.printer.heaters?.available_heaters ?? []
+    }
+
+    get isHeater() {
+        return this.availableHeaters.includes(this.objectName)
+    }
+
+    get isHeaterActive() {
+        return this.target > 0
+    }
+
+    mounted() {
+        EventBus.$on(CLOSE_TEMPERATURE_CONTEXT_MENU, this.closeContextMenu)
+    }
+
+    beforeDestroy() {
+        EventBus.$off(CLOSE_TEMPERATURE_CONTEXT_MENU, this.closeContextMenu)
+    }
+
+    openContextMenu(event: MouseEvent) {
+        EventBus.$emit(CLOSE_TEMPERATURE_CONTEXT_MENU)
+
+        this.showContextMenu = true
+        this.contextMenuX = event?.clientX || event?.pageX || window.screenX / 2
+        this.contextMenuY = event?.clientY || event?.pageY || window.screenY / 2
+    }
+
+    closeContextMenu() {
+        this.showContextMenu = false
+    }
+
+    openEditDialog() {
+        this.closeContextMenu()
+        this.showEditDialog = true
+    }
+
+    turnOffHeater() {
+        const gcode = `SET_HEATER_TEMPERATURE HEATER=${this.name} TARGET=0`
+        this.$store.dispatch('server/addEvent', { message: gcode, type: 'command' })
+        this.$socket.emit('printer.gcode.script', { script: gcode })
     }
 }
 </script>

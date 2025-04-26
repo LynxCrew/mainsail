@@ -64,6 +64,7 @@ export interface GuiState {
         saveAndClose: boolean
         klipperRestartMethod: 'FIRMWARE_RESTART' | 'RESTART'
         tabSize: number
+        fileStructureSidebar: boolean
     }
     gcodeViewer: {
         extruderColors: string[]

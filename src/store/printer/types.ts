@@ -132,16 +132,20 @@ export interface PrinterStateMiscellaneous {
     max_power?: number
 }
 
-export interface PrinterStateDisplayTemplates {
+export interface PrinterStateMiscellaneousSensor {
+    type: string
     name: string
+    value: number
+    unit: string
 }
 
 export interface PrinterStateFilamentSensors {
+    type: string
     name: string
     info: string
     enabled: boolean
     filament_detected: boolean
-    type: "switch" | "motion" | ""
+    filament_diameter?: number
 }
 
 export interface PrinterStateBedMesh {
