@@ -23,7 +23,6 @@ import { convertName } from '@/plugins/helpers'
 import { Component, Mixins, Prop } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import { mdiPrinter3dNozzleAlert, mdiToggleSwitch, mdiToggleSwitchOffOutline } from '@mdi/js'
-import {PrinterStateFilamentSensors} from "@/store/printer/types";
 
 @Component
 export default class FilamentSensor extends Mixins(BaseMixin) {
@@ -42,7 +41,6 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
     @Prop({type: String, required: true }) declare readonly info: string
     @Prop({ type: Boolean, required: true }) declare readonly enabled: boolean
     @Prop({ type: Boolean, required: true }) declare readonly filament_detected: boolean
-    @Prop({ type: String, required: true }) declare readonly type: string
     @Prop({ type: Number }) declare readonly filament_diameter: number
 
     get statusColor() {
@@ -52,11 +50,11 @@ export default class FilamentSensor extends Mixins(BaseMixin) {
     }
 
     get infoText() {
-        if (this.type == 'switch' && this.showRunoutDistance && (this.enabled || !this.hideRunoutDistanceOnDisabled)) {
+        if (this.type == 'filament_switch_sensor' && this.showRunoutDistance && (this.enabled || !this.hideRunoutDistanceOnDisabled)) {
             return this.info
         }
 
-        if (this.type == 'motion' && this.showDetectionLength && (this.enabled || !this.hideDetectionLengthOnDisabled)) {
+        if (this.type == 'filament_motion_sensor' && this.showDetectionLength && (this.enabled || !this.hideDetectionLengthOnDisabled)) {
             return this.info
         }
 
