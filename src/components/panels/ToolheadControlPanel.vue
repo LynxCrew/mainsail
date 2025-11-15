@@ -158,7 +158,7 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
     }
 
     get lynxLayout(): boolean {
-        return (this.$store.state.gui.control.lynxLayout ?? false) && this.controlStyle == 'circle'
+        return (this.$store.state.gui.control.lynxLayout ?? false) && this.controlStyle === 'circle'
     }
 
     get speedFactor(): number {
