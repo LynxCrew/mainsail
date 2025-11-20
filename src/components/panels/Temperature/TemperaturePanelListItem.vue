@@ -142,14 +142,7 @@ export default class TemperaturePanelListItem extends Mixins(BaseMixin) {
     }
 
     heaterProfileExists(name: string) {
-        if (name == 'autotune') return true;
-        const heaterProfiles = this.getHeaterProfiles
-        for (let i = 0; i < heaterProfiles.length; i++) {
-            if (name == heaterProfiles[i]) {
-                return true
-            }
-        }
-        return false
+        return name == 'autotune' || this.getHeaterProfiles.includes(name);
     }
 
     get printerObject() {
